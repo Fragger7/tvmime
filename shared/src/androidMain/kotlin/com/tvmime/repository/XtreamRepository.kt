@@ -34,13 +34,14 @@ sealed interface SyncProgress {
 
 class XtreamRepository(
     private val database: AppDatabase,
-    private val xtreamClient: XtreamClient = XtreamClient(),
+    private val xtreamClient: XtreamClient = XtreamClient()
+) {
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .followRedirects(true)
         .build()
-) {
+
     private val _syncProgress = MutableStateFlow<SyncProgress>(SyncProgress.Idle)
     val syncProgress: StateFlow<SyncProgress> = _syncProgress.asStateFlow()
 

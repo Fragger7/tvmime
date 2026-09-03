@@ -1,11 +1,13 @@
 package com.tvmime.tv.ui.settings
 
-import android.content.Context
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +62,7 @@ fun SettingsScreen(
                         .background(Color(0xFFF59E0B), RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    androidx.compose.material3.Icon(
+                    Icon(
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Settings",
                         tint = Color.White,
@@ -84,19 +86,14 @@ fun SettingsScreen(
                 }
             }
 
-            // Diagnostic Info Card
-            Surface(
-                colors = ClickableSurfaceDefaults.colors(
-                    containerColor = cardBg,
-                    focusedContainerColor = Color(0xFF222230)
-                ),
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                modifier = Modifier.fillMaxWidth()
+            // Diagnostic Info Card (Non-clickable Box)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(cardBg, RoundedCornerShape(12.dp))
+                    .padding(20.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
                         text = "SYSTEM STATUS",
                         color = crimson,
@@ -117,19 +114,14 @@ fun SettingsScreen(
                 }
             }
 
-            // OTA Update Card
-            Surface(
-                colors = ClickableSurfaceDefaults.colors(
-                    containerColor = cardBg,
-                    focusedContainerColor = Color(0xFF222230)
-                ),
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                modifier = Modifier.fillMaxWidth()
+            // OTA Update Card (Non-clickable Box with clickable action button)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(cardBg, RoundedCornerShape(12.dp))
+                    .padding(20.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
                         text = "OTA CONTINUOUS DELIVERY",
                         color = crimson,
@@ -158,11 +150,15 @@ fun SettingsScreen(
                             isCheckingUpdate = true
                             updateStatus = "Checking GitHub release server..."
                             coroutineScope.launch {
-                                val manager = UpdateManager(context)
-                                val available = manager.checkUpdateAvailable()
-                                if (available) {
-                                    updateStatus = "Update found! Downloading APK..."
-                                    manager.downloadAndInstall()
+                                val activity = context as? Activity
+                                val updateInfo = UpdateManager.checkForUpdate(context)
+                                if (updateInfo.hasUpdate) {
+                                    if (activity != null) {
+                                        updateStatus = "Update found (${updateInfo.latestVersionName})! Downloading APK..."
+                                        UpdateManager.downloadAndInstall(activity, updateInfo.downloadUrl)
+                                    } else {
+                                        updateStatus = "Update available (${updateInfo.latestVersionName})"
+                                    }
                                 } else {
                                     updateStatus = "TVMime is currently up to date (v1.0.0)"
                                 }
@@ -181,7 +177,7 @@ fun SettingsScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            androidx.compose.material3.Icon(
+                            Icon(
                                 imageVector = Icons.Default.SystemUpdate,
                                 contentDescription = null,
                                 tint = Color.White,
@@ -204,12 +200,12 @@ fun SettingsScreen(
 @Composable
 private fun InfoItem(label: String, value: String) {
     Column {
-        androidx.compose.material3.Text(
+        Text(
             text = label,
             color = Color(0xFF9CA3AF),
             fontSize = 11.sp
         )
-        androidx.compose.material3.Text(
+        Text(
             text = value,
             color = Color.White,
             fontWeight = FontWeight.Bold,

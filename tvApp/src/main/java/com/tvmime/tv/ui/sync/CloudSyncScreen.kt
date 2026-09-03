@@ -85,16 +85,13 @@ fun CloudSyncScreen(
             }
 
             // Active Portal Card
-            Surface(
-                colors = ClickableSurfaceDefaults.colors(
-                    containerColor = cardBg,
-                    focusedContainerColor = Color(0xFF222230)
-                ),
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                modifier = Modifier.fillMaxWidth()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(cardBg, RoundedCornerShape(12.dp))
+                    .padding(20.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(

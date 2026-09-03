@@ -30,6 +30,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+        freeCompilerArgs += listOf(
+            "-opt-in=androidx.tv.material3.ExperimentalTvMaterial3Api",
+            "-opt-in=androidx.media3.common.util.UnstableApi"
+        )
     }
 
     signingConfigs {
@@ -61,14 +65,15 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.okhttp)
 
-
-    // Compose BOM & TV Compose
+    // Compose BOM, Material3 & TV Compose
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.material3)
     implementation(libs.compose.material.icons)
     implementation(libs.tv.foundation)
     implementation(libs.tv.material)
