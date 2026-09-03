@@ -25,11 +25,12 @@ data class UpdateInfo(
 )
 
 object UpdateManager {
-    private const val VERSION_API_URL = "https://tivimime.vercel.app/api/version"
-    private const val DIRECT_TV_APK_URL = "https://tivimime.vercel.app/tv.apk"
+    private const val PRIMARY_VERSION_URL = "https://tvmime.vercel.app/api/version"
+    private const val FALLBACK_VERSION_URL = "https://tivimime.vercel.app/api/version"
+    private const val DIRECT_TV_APK_URL = "https://tvmime.vercel.app/tv.apk"
 
     /**
-     * Checks if a newer version is available by querying tivimime.vercel.app/api/version
+     * Checks if a newer version is available by querying the version API
      */
     suspend fun checkForUpdate(context: Context): UpdateInfo = withContext(Dispatchers.IO) {
         try {
@@ -40,13 +41,24 @@ object UpdateManager {
                 context.packageManager.getPackageInfo(context.packageName, 0).versionCode
             }
 
-            val connection = URL(VERSION_API_URL).openConnection() as HttpURLConnection
-            connection.connectTimeout = 5000
-            connection.readTimeout = 5000
+            var connection = URL(PRIMARY_VERSION_URL).openConnection() as HttpURLConnection
+            connection.connectTimeout = 4000
+            connection.readTimeout = 4000
             connection.setRequestProperty("User-Agent", XtreamClient.EVASION_USER_AGENT)
             connection.setRequestProperty("Accept", "application/json")
 
+            var responseCode = try { connection.responseCode } catch (e: Exception) { -1 }
+            if (responseCode != 200) {
+                connection.disconnect()
+                connection = URL(FALLBACK_VERSION_URL).openConnection() as HttpURLConnection
+                connection.connectTimeout = 4000
+                connection.readTimeout = 4000
+                connection.setRequestProperty("User-Agent", XtreamClient.EVASION_USER_AGENT)
+                connection.setRequestProperty("Accept", "application/json")
+                responseCode = try { connection.responseCode } catch (e: Exception) { -1 }
+            }
             if (connection.responseCode == 200) {
+
                 val jsonStr = connection.inputStream.bufferedReader().use { it.readText() }
                 val json = JSONObject(jsonStr)
                 val remoteCode = json.optInt("versionCode", currentCode)

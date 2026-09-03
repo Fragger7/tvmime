@@ -6,8 +6,8 @@ export default function handler(req: any, res: any) {
   res.status(200).json({
     versionCode: 1,
     versionName: '1.0.0',
-    tvApkUrl: 'https://github.com/Fragger7/tivimime/releases/download/latest/tivimime_tv_v1.0.0.apk',
-    mobileApkUrl: 'https://github.com/Fragger7/tivimime/releases/download/latest/tivimime_mobile_v1.0.0.apk',
-    changelog: 'Initial TiviMime standalone build with streaming catalog parser, cloud sync, and in-place OTA updater.'
+    tvApkUrl: 'https://github.com/Fragger7/tvmime/releases/download/latest/tvmime_tv_v1.0.0.apk',
+    mobileApkUrl: 'https://github.com/Fragger7/tvmime/releases/download/latest/tvmime_mobile_v1.0.0.apk',
+    changelog: 'Initial TVMime standalone build with streaming catalog parser, cloud sync, and in-place OTA updater.'
   });
 }

@@ -1,4 +1,4 @@
-name: Build TiviMime APKs (Android TV & Mobile)
+name: Build TVMime APKs (Android TV & Mobile)
 
 on:
   push:
@@ -43,38 +43,38 @@ jobs:
       - name: Stage Release Artifacts
         run: |
           mkdir -p release-artifacts
-          cp tvApp/build/outputs/apk/debug/*.apk release-artifacts/tivimime_tv_v1.0.0.apk
-          cp androidApp/build/outputs/apk/debug/*.apk release-artifacts/tivimime_mobile_v1.0.0.apk
-          cp release-artifacts/tivimime_tv_v1.0.0.apk release-artifacts/tv.apk
-          cp release-artifacts/tivimime_mobile_v1.0.0.apk release-artifacts/mobile.apk
+          cp tvApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_tv_v1.0.0.apk
+          cp androidApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_mobile_v1.0.0.apk
+          cp release-artifacts/tvmime_tv_v1.0.0.apk release-artifacts/tv.apk
+          cp release-artifacts/tvmime_mobile_v1.0.0.apk release-artifacts/mobile.apk
 
       - name: Upload Android TV APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tivimime-tv-debug-apk
-          path: release-artifacts/tivimime_tv_v1.0.0.apk
+          name: tvmime-tv-debug-apk
+          path: release-artifacts/tvmime_tv_v1.0.0.apk
 
       - name: Upload Android Mobile APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tivimime-mobile-debug-apk
-          path: release-artifacts/tivimime_mobile_v1.0.0.apk
+          name: tvmime-mobile-debug-apk
+          path: release-artifacts/tvmime_mobile_v1.0.0.apk
 
       - name: Publish Rolling Release APKs
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
           tag_name: latest
-          name: "TiviMime Rolling Release v1.0.0"
+          name: "TVMime Rolling Release v1.0.0"
           body: |
-            ## TiviMime Rolling Continuous Delivery Build
-            - **Android TV APK**: `tivimime_tv_v1.0.0.apk` (also available as `tv.apk`)
-            - **Android Mobile APK**: `tivimime_mobile_v1.0.0.apk` (also available as `mobile.apk`)
-            - **Direct Downloader URL**: `https://tivimime.vercel.app/tv.apk`
+            ## TVMime Continuous Delivery Build
+            - **Android TV APK**: `tvmime_tv_v1.0.0.apk` (also available as `tv.apk`)
+            - **Android Mobile APK**: `tvmime_mobile_v1.0.0.apk` (also available as `mobile.apk`)
+            - **Direct Downloader URL**: `https://tvmime.vercel.app/tv.apk`
           prerelease: true
           files: |
-            release-artifacts/tivimime_tv_v1.0.0.apk
-            release-artifacts/tivimime_mobile_v1.0.0.apk
+            release-artifacts/tvmime_tv_v1.0.0.apk
+            release-artifacts/tvmime_mobile_v1.0.0.apk
             release-artifacts/tv.apk
             release-artifacts/mobile.apk
         env:
