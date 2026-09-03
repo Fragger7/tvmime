@@ -1,0 +1,81 @@
+name: Build TiviMime APKs (Android TV & Mobile)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'shared/**'
+      - 'tvApp/**'
+      - 'androidApp/**'
+      - 'gradle/**'
+      - '*.gradle.kts'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compile TV & Mobile APKs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
+
+      - name: Build Android TV & Mobile APKs
+        run: gradle :tvApp:assembleDebug :androidApp:assembleDebug --stacktrace
+
+      - name: Stage Release Artifacts
+        run: |
+          mkdir -p release-artifacts
+          cp tvApp/build/outputs/apk/debug/*.apk release-artifacts/tivimime_tv_v1.0.0.apk
+          cp androidApp/build/outputs/apk/debug/*.apk release-artifacts/tivimime_mobile_v1.0.0.apk
+          cp release-artifacts/tivimime_tv_v1.0.0.apk release-artifacts/tv.apk
+          cp release-artifacts/tivimime_mobile_v1.0.0.apk release-artifacts/mobile.apk
+
+      - name: Upload Android TV APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tivimime-tv-debug-apk
+          path: release-artifacts/tivimime_tv_v1.0.0.apk
+
+      - name: Upload Android Mobile APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tivimime-mobile-debug-apk
+          path: release-artifacts/tivimime_mobile_v1.0.0.apk
+
+      - name: Publish Rolling Release APKs
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: latest
+          name: "TiviMime Rolling Release v1.0.0"
+          body: |
+            ## TiviMime Rolling Continuous Delivery Build
+            - **Android TV APK**: `tivimime_tv_v1.0.0.apk` (also available as `tv.apk`)
+            - **Android Mobile APK**: `tivimime_mobile_v1.0.0.apk` (also available as `mobile.apk`)
+            - **Direct Downloader URL**: `https://tivimime.vercel.app/tv.apk`
+          prerelease: true
+          files: |
+            release-artifacts/tivimime_tv_v1.0.0.apk
+            release-artifacts/tivimime_mobile_v1.0.0.apk
+            release-artifacts/tv.apk
+            release-artifacts/mobile.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
