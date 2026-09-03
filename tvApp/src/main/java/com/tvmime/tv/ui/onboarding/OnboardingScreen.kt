@@ -1,0 +1,584 @@
+package com.tvmime.tv.ui.onboarding
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
+import androidx.tv.material3.Surface
+import com.tvmime.db.AppDatabase
+import com.tvmime.db.entity.PortalEntity
+import com.tvmime.model.StreamType
+import com.tvmime.sync.FirebaseSyncClient
+import com.tvmime.theme.DesignSystemTokens
+import com.tvmime.tv.hardware.DeviceCapabilityDetector
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+
+enum class OnboardingTab {
+    QUICK_PAIR,
+    DIRECT_LOGIN,
+    DEMO_MODE
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun OnboardingScreen(
+    onComplete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val syncClient = remember { FirebaseSyncClient() }
+    val database = remember { AppDatabase.getDatabase(context) }
+    val capabilities = remember { DeviceCapabilityDetector.detect(context) }
+
+    var selectedTab by remember { mutableStateOf(OnboardingTab.QUICK_PAIR) }
+
+    // Quick Pair State
+    var pairCode by remember { mutableStateOf("") }
+    var isPairingRegistered by remember { mutableStateOf(false) }
+    var pairStatusText by remember { mutableStateOf("Generating secure pairing code...") }
+    var isPairSuccess by remember { mutableStateOf(false) }
+
+    // Direct Login State
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var loginStatusText by remember { mutableStateOf<String?>(null) }
+    var isLoggingIn by remember { mutableStateOf(false) }
+
+    val bgMain = Color(DesignSystemTokens.Colors.Background)
+    val cardBg = Color(DesignSystemTokens.Colors.Card)
+    val crimson = Color(DesignSystemTokens.Colors.Crimson)
+    val crimsonBright = Color(DesignSystemTokens.Colors.CrimsonBright)
+    val textPrimary = Color(DesignSystemTokens.Colors.TextPrimary)
+    val textSecondary = Color(DesignSystemTokens.Colors.TextSecondary)
+
+    // Generate and register code on initial launch
+    LaunchedEffect(Unit) {
+        val randomNum = (1000..9999).random()
+        val code = "MIME-$randomNum"
+        pairCode = code
+
+        val regResult = syncClient.registerTvPairingCode(code, System.currentTimeMillis())
+        if (regResult.isSuccess) {
+            isPairingRegistered = true
+            pairStatusText = "Waiting for authorization from tvmime.vercel.app/pair..."
+
+            // Polling loop
+            while (isActive && !isPairSuccess) {
+                delay(2500)
+                val check = syncClient.checkTvPairingStatus(code)
+                if (check.isSuccess && check.getOrNull()?.isAuthorized == true) {
+                    val status = check.getOrNull()!!
+                    isPairSuccess = true
+                    pairStatusText = "Device authorized by ${status.userEmail ?: "Admin"}! Syncing playlists..."
+
+                    if (!status.userId.isNullOrBlank()) {
+                        val portalsResult = syncClient.getUserPortals(status.userId!!)
+                        if (portalsResult.isSuccess) {
+                            val configs = portalsResult.getOrNull() ?: emptyList()
+                            for (cfg in configs) {
+                                database.portalDao().insertPortal(
+                                    PortalEntity(
+                                        id = cfg.id,
+                                        name = cfg.name,
+                                        serverUrl = cfg.serverUrl,
+                                        username = cfg.username,
+                                        password = cfg.password,
+                                        isActive = cfg.isActive,
+                                        syncLive = cfg.syncLive,
+                                        syncMovies = cfg.syncMovies,
+                                        syncSeries = cfg.syncSeries,
+                                        lastSyncedAt = System.currentTimeMillis()
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    delay(1200)
+                    onComplete()
+                    break
+                }
+            }
+        } else {
+            pairStatusText = "Unable to connect to pairing service. Try Direct Login or Demo Mode."
+        }
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(bgMain)
+            .padding(36.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Header Banner & Device Capability Chip
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(crimson),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "TV",
+                            color = Color.White,
+                            fontWeight = FontWeight.Black,
+                            fontSize = 20.sp
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "TVMIME SETUP WIZARD",
+                            color = textPrimary,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 2.sp
+                        )
+                        Text(
+                            text = "Connect your IPTV playlists to start watching in 60 FPS",
+                            color = textSecondary,
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+
+                // Device Intelligence Badge
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFF181822), RoundedCornerShape(10.dp))
+                        .border(1.dp, Color(0xFF262634), RoundedCornerShape(10.dp))
+                        .padding(horizontal = 14.dp, vertical = 8.dp)
+                ) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "DETECTED HARDWARE",
+                            color = crimsonBright,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                        Text(
+                            text = "${capabilities.model} • ${capabilities.totalRamMb}MB RAM",
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = capabilities.recommendedBufferProfile,
+                            color = Color(0xFF10B981),
+                            fontSize = 10.sp
+                        )
+                    }
+                }
+            }
+
+            // Main Content Area (Split: Left Tabs, Right Card)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(vertical = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                // Left Navigation Tabs
+                Column(
+                    modifier = Modifier.width(260.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    TabButton(
+                        title = "Quick TV Pair",
+                        subtitle = "Scan QR or enter code on phone",
+                        icon = Icons.Default.QrCode,
+                        isSelected = selectedTab == OnboardingTab.QUICK_PAIR,
+                        onClick = { selectedTab = OnboardingTab.QUICK_PAIR }
+                    )
+
+                    TabButton(
+                        title = "Direct Login",
+                        subtitle = "Sign in with TVMime email/pass",
+                        icon = Icons.Default.AccountCircle,
+                        isSelected = selectedTab == OnboardingTab.DIRECT_LOGIN,
+                        onClick = { selectedTab = OnboardingTab.DIRECT_LOGIN }
+                    )
+
+                    TabButton(
+                        title = "Demo Test Drive",
+                        subtitle = "Try free public streams instantly",
+                        icon = Icons.Default.PlayArrow,
+                        isSelected = selectedTab == OnboardingTab.DEMO_MODE,
+                        onClick = { selectedTab = OnboardingTab.DEMO_MODE }
+                    )
+                }
+
+                // Right Detail Container
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(cardBg, RoundedCornerShape(16.dp))
+                        .border(1.dp, Color(0xFF262634), RoundedCornerShape(16.dp))
+                        .padding(28.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    when (selectedTab) {
+                        OnboardingTab.QUICK_PAIR -> {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Text(
+                                    text = "FAST TV PAIRING",
+                                    color = crimson,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.5.sp
+                                )
+
+                                Text(
+                                    text = "On your phone or computer, visit:",
+                                    color = textSecondary,
+                                    fontSize = 13.sp
+                                )
+
+                                Box(
+                                    modifier = Modifier
+                                        .background(Color(0xFF181822), RoundedCornerShape(8.dp))
+                                        .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
+                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                ) {
+                                    Text(
+                                        text = "tvmime.vercel.app/pair",
+                                        color = Color(0xFF38BDF8),
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = FontFamily.Monospace
+                                    )
+                                }
+
+                                Text(
+                                    text = "And enter this authorization code:",
+                                    color = textSecondary,
+                                    fontSize = 13.sp
+                                )
+
+                                // Huge Pairing Code Box
+                                Box(
+                                    modifier = Modifier
+                                        .background(Color(0x22E50914), RoundedCornerShape(12.dp))
+                                        .border(2.dp, crimsonBright, RoundedCornerShape(12.dp))
+                                        .padding(horizontal = 32.dp, vertical = 14.dp)
+                                ) {
+                                    Text(
+                                        text = if (pairCode.isNotEmpty()) pairCode else "......",
+                                        color = Color.White,
+                                        fontSize = 36.sp,
+                                        fontWeight = FontWeight.Black,
+                                        letterSpacing = 6.sp,
+                                        fontFamily = FontFamily.Monospace
+                                    )
+                                }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = if (isPairSuccess) Icons.Default.CheckCircle else Icons.Default.Sync,
+                                        contentDescription = null,
+                                        tint = if (isPairSuccess) Color(0xFF10B981) else Color(0xFFF59E0B),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = pairStatusText,
+                                        color = if (isPairSuccess) Color(0xFF10B981) else Color(0xFF9CA3AF),
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+                        }
+
+                        OnboardingTab.DIRECT_LOGIN -> {
+                            Column(
+                                modifier = Modifier.width(380.dp),
+                                verticalArrangement = Arrangement.spacedBy(14.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "SIGN IN TO TVMIME ACCOUNT",
+                                    color = crimson,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp
+                                )
+
+                                OutlinedTextField(
+                                    value = email,
+                                    onValueChange = { email = it },
+                                    label = { Text("Email Address", color = Color.Gray, fontSize = 12.sp) },
+                                    singleLine = true,
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedTextColor = Color.White,
+                                        unfocusedTextColor = Color.White,
+                                        focusedBorderColor = crimson,
+                                        unfocusedBorderColor = Color(0xFF383848)
+                                    ),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+
+                                OutlinedTextField(
+                                    value = password,
+                                    onValueChange = { password = it },
+                                    label = { Text("Password", color = Color.Gray, fontSize = 12.sp) },
+                                    singleLine = true,
+                                    visualTransformation = PasswordVisualTransformation(),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedTextColor = Color.White,
+                                        unfocusedTextColor = Color.White,
+                                        focusedBorderColor = crimson,
+                                        unfocusedBorderColor = Color(0xFF383848)
+                                    ),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+
+                                if (loginStatusText != null) {
+                                    Text(
+                                        text = loginStatusText ?: "",
+                                        color = Color(0xFFEF4444),
+                                        fontSize = 11.sp
+                                    )
+                                }
+
+                                Surface(
+                                    onClick = {
+                                        if (email.isBlank() || password.isBlank()) {
+                                            loginStatusText = "Please enter email and password."
+                                            return@Surface
+                                        }
+                                        isLoggingIn = true
+                                        loginStatusText = "Signing in and syncing playlists..."
+
+                                        coroutineScope.launch {
+                                            val res = syncClient.signInWithEmail(email, password)
+                                            if (res.isSuccess) {
+                                                val session = res.getOrNull()!!
+                                                val portalsRes = syncClient.getUserPortals(session.userId)
+                                                if (portalsRes.isSuccess) {
+                                                    val configs = portalsRes.getOrNull() ?: emptyList()
+                                                    for (cfg in configs) {
+                                                        database.portalDao().insertPortal(
+                                                            PortalEntity(
+                                                                id = cfg.id,
+                                                                name = cfg.name,
+                                                                serverUrl = cfg.serverUrl,
+                                                                username = cfg.username,
+                                                                password = cfg.password,
+                                                                isActive = cfg.isActive,
+                                                                syncLive = cfg.syncLive,
+                                                                syncMovies = cfg.syncMovies,
+                                                                syncSeries = cfg.syncSeries,
+                                                                lastSyncedAt = System.currentTimeMillis()
+                                                            )
+                                                        )
+                                                    }
+                                                }
+                                                onComplete()
+                                            } else {
+                                                loginStatusText = "Sign in failed: ${res.exceptionOrNull()?.message ?: "Check credentials"}"
+                                                isLoggingIn = false
+                                            }
+                                        }
+                                    },
+                                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                    colors = ClickableSurfaceDefaults.colors(
+                                        containerColor = crimson,
+                                        focusedContainerColor = crimsonBright
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(44.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                        Text(
+                                            text = if (isLoggingIn) "Signing In..." else "Sign In & Load Playlists",
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        OnboardingTab.DEMO_MODE -> {
+                            Column(
+                                modifier = Modifier.width(420.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(52.dp)
+                                        .background(Color(0xFF10B981).copy(alpha = 0.15f), RoundedCornerShape(14.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.PlayCircleOutline,
+                                        contentDescription = null,
+                                        tint = Color(0xFF10B981),
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                }
+
+                                Text(
+                                    text = "INSTANT DEMO TEST DRIVE",
+                                    color = Color(0xFF10B981),
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp
+                                )
+
+                                Text(
+                                    text = "Load legal public demo IPTV channels (Big Buck Bunny, Sintel, Tears of Steel, NASA TV) to verify 60fps hardware acceleration with zero setup.",
+                                    color = textSecondary,
+                                    fontSize = 12.sp,
+                                    lineHeight = 18.sp
+                                )
+
+                                Surface(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            database.portalDao().insertPortal(
+                                                PortalEntity(
+                                                    id = "demo_portal",
+                                                    name = "TVMime Public Demo",
+                                                    serverUrl = "http://demo.tvmime.local:8080",
+                                                    username = "demo",
+                                                    password = "demo",
+                                                    isActive = true,
+                                                    lastSyncedAt = System.currentTimeMillis()
+                                                )
+                                            )
+                                            onComplete()
+                                        }
+                                    },
+                                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                    colors = ClickableSurfaceDefaults.colors(
+                                        containerColor = Color(0xFF10B981),
+                                        focusedContainerColor = Color(0xFF059669)
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(44.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                        Text(
+                                            text = "Launch Demo Player Now",
+                                            color = Color.White,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Footer
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "TVMime v1.0.0 • Architecture by Faraz Ahmad",
+                    color = Color(0xFF6B7280),
+                    fontSize = 11.sp
+                )
+                Text(
+                    text = "Use D-Pad remote to navigate options",
+                    color = Color(0xFF6B7280),
+                    fontSize = 11.sp
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+private fun TabButton(
+    title: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
+            containerColor = if (isSelected) Color(0xFF1F1F2C) else Color(0xFF121217),
+            focusedContainerColor = Color(0xFFE50914)
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (isSelected) Color(0xFFFF1E27) else Color.White,
+                modifier = Modifier.size(22.dp)
+            )
+            Column {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = subtitle,
+                    color = Color(0xFF9CA3AF),
+                    fontSize = 11.sp
+                )
+            }
+        }
+    }
+}

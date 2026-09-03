@@ -17,6 +17,8 @@ import {
   getFirestore, 
   collection, 
   doc, 
+  setDoc,
+  getDoc,
   addDoc, 
   updateDoc, 
   deleteDoc, 
@@ -112,6 +114,71 @@ export async function deletePortal(id: string): Promise<void> {
   await deleteDoc(docRef);
 }
 
+// TV Device Quick Pairing
+export interface TvPairingDoc {
+  code: string;
+  status: 'pending' | 'authorized' | 'expired';
+  userId?: string;
+  userEmail?: string;
+  createdAt: number;
+  authorizedAt?: number;
+}
+
+export async function authorizeTvPairing(code: string, userId: string, userEmail: string): Promise<void> {
+  const cleanCode = code.trim().toUpperCase();
+  const pairRef = doc(db, 'tv_pairings', cleanCode);
+  await setDoc(pairRef, {
+    code: cleanCode,
+    status: 'authorized',
+    userId,
+    userEmail,
+    authorizedAt: Date.now()
+  }, { merge: true });
+}
+
+export async function getTvPairing(code: string): Promise<TvPairingDoc | null> {
+  const cleanCode = code.trim().toUpperCase();
+  const pairRef = doc(db, 'tv_pairings', cleanCode);
+  const snap = await getDoc(pairRef);
+  if (!snap.exists()) return null;
+  return snap.data() as TvPairingDoc;
+}
+
+// Stream Issue Reporting
+export interface StreamIssueReport {
+  id?: string;
+  timestamp: number;
+  channelName: string;
+  channelNum?: number;
+  streamUrl?: string;
+  errorCode: string;
+  errorMessage: string;
+  deviceSpecs?: string;
+  userNote?: string;
+  status: 'open' | 'investigating' | 'resolved';
+}
+
+export async function reportStreamIssue(report: Omit<StreamIssueReport, 'id'>): Promise<string> {
+  const reportsRef = collection(db, 'stream_reports');
+  const docRef = await addDoc(reportsRef, {
+    ...report,
+    timestamp: report.timestamp || Date.now(),
+    status: 'open'
+  });
+  return docRef.id;
+}
+
+export function subscribeToStreamReports(onUpdate: (reports: StreamIssueReport[]) => void): Unsubscribe {
+  const reportsRef = collection(db, 'stream_reports');
+  return onSnapshot(reportsRef, (snap) => {
+    const reports: StreamIssueReport[] = [];
+    snap.forEach((d) => {
+      reports.push({ id: d.id, ...(d.data() as Omit<StreamIssueReport, 'id'>) });
+    });
+    reports.sort((a, b) => b.timestamp - a.timestamp);
+    onUpdate(reports);
+  });
+}
 
 export {
   signInAnonymously,

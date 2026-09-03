@@ -30,6 +30,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val capabilities = remember { com.tvmime.tv.hardware.DeviceCapabilityDetector.detect(context) }
 
     val bgMain = Color(DesignSystemTokens.Colors.Background)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
@@ -111,6 +112,53 @@ fun SettingsScreen(
                         InfoItem(label = "Cached Categories", value = "$categoryCount categories")
                         InfoItem(label = "Hardware Decoder", value = "Media3 (Preferred)")
                     }
+                }
+            }
+
+            // Hardware & Performance Intelligence Card
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(cardBg, RoundedCornerShape(12.dp))
+                    .padding(20.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "HARDWARE & PERFORMANCE INTELLIGENCE",
+                            color = crimson,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                        Text(
+                            text = "Auto-Tuned for ${capabilities.model}",
+                            color = Color(0xFF10B981),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        InfoItem(label = "Device Model", value = capabilities.model)
+                        InfoItem(label = "System RAM", value = "${capabilities.totalRamMb} MB")
+                        InfoItem(label = "VPU Capability", value = capabilities.recommendedDecoderMode)
+                        InfoItem(label = "Active Buffer", value = capabilities.recommendedBufferProfile)
+                    }
+
+                    Text(
+                        text = "Optimization note: ${capabilities.recommendedBufferReason}",
+                        color = Color(0xFF9CA3AF),
+                        fontSize = 11.sp,
+                        lineHeight = 16.sp
+                    )
                 }
             }
 

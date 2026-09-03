@@ -23,7 +23,8 @@ import {
   KeyRound,
   Download,
   Smartphone,
-  ExternalLink
+  ExternalLink,
+  QrCode
 } from 'lucide-react';
 
 import { 
@@ -40,7 +41,10 @@ import {
   subscribeToUserPortals, 
   addPortal, 
   updatePortal, 
-  deletePortal, 
+  deletePortal,
+  authorizeTvPairing,
+  subscribeToStreamReports,
+  type StreamIssueReport,
   type XtreamPortal, 
   type User 
 } from './lib/firebase';
@@ -137,6 +141,48 @@ export function App() {
   const [accountLoading, setAccountLoading] = useState(false);
   const [accountMessage, setAccountMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // TV Pairing State
+  const [isPairModalOpen, setIsPairModalOpen] = useState(
+    window.location.pathname === '/pair' || new URLSearchParams(window.location.search).has('code')
+  );
+  const [pairCode, setPairCode] = useState(
+    new URLSearchParams(window.location.search).get('code') || ''
+  );
+  const [pairLoading, setPairLoading] = useState(false);
+  const [pairSuccess, setPairSuccess] = useState<string | null>(null);
+  const [pairError, setPairError] = useState<string | null>(null);
+
+  // Stream Reports State
+  const [streamReports, setStreamReports] = useState<StreamIssueReport[]>([]);
+  const [isReportsModalOpen, setIsReportsModalOpen] = useState(false);
+
+  const handleAuthorizeTv = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!pairCode.trim()) {
+      setPairError('Please enter a valid 6-character code from your TV screen.');
+      return;
+    }
+    if (!user) {
+      setPairError('Please sign in or use Quick Access first to link your TV.');
+      return;
+    }
+
+    setPairLoading(true);
+    setPairError(null);
+    setPairSuccess(null);
+
+    try {
+      await authorizeTvPairing(pairCode, user.uid, user.email || user.displayName || 'TVMime Admin');
+      setPairSuccess(`🎉 Android TV successfully authorized! Your TV will now download your ${portals.length} IPTV playlist(s).`);
+    } catch (err: unknown) {
+      console.error('Pairing error:', err);
+      const msg = err instanceof Error ? err.message : String(err);
+      setPairError(`Authorization failed: ${msg}`);
+    } finally {
+      setPairLoading(false);
+    }
+  };
+
   const handleUpdateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -202,6 +248,18 @@ export function App() {
     }
     const unsub = subscribeToUserPortals(user.uid, (fetched) => {
       setPortals(fetched);
+    });
+    return () => unsub();
+  }, [user]);
+
+  // Listen to Stream Error Reports
+  useEffect(() => {
+    if (!user) {
+      setStreamReports([]);
+      return;
+    }
+    const unsub = subscribeToStreamReports((fetched) => {
+      setStreamReports(fetched);
     });
     return () => unsub();
   }, [user]);
@@ -648,6 +706,31 @@ export function App() {
               <KeyRound className="w-4 h-4 text-emerald-400" />
               <span className="hidden md:inline">Account & Password</span>
             </button>
+
+            <button
+              onClick={() => {
+                setPairCode('');
+                setPairError(null);
+                setPairSuccess(null);
+                setIsPairModalOpen(true);
+              }}
+              title="Pair Android TV Device"
+              className="flex items-center gap-1.5 px-3 py-2 bg-[#181822] hover:bg-[#20202c] border border-[#262632] hover:border-blue-500/60 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+            >
+              <QrCode className="w-4 h-4 text-blue-400" />
+              <span className="hidden lg:inline">Pair Android TV</span>
+            </button>
+
+            {streamReports.length > 0 && (
+              <button
+                onClick={() => setIsReportsModalOpen(true)}
+                title="View Stream Issue Reports"
+                className="flex items-center gap-1.5 px-3 py-2 bg-red-950/40 hover:bg-red-950/70 border border-red-800/60 text-red-200 rounded-xl text-xs font-semibold transition cursor-pointer"
+              >
+                <AlertCircle className="w-4 h-4 text-[#ff1e27]" />
+                <span className="hidden lg:inline">{streamReports.length} Issue{streamReports.length > 1 ? 's' : ''}</span>
+              </button>
+            )}
 
             <button 
               onClick={() => signOut(auth)}
@@ -1465,6 +1548,173 @@ export function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* TV Device Pairing Modal */}
+      {isPairModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#121217] border border-[#262632] w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-[#262632] pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-blue-500/20 text-blue-400 rounded-xl border border-blue-500/30">
+                  <QrCode className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Pair Android TV Device</h3>
+                  <p className="text-xs text-gray-400">Link your TV without typing credentials on a remote</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setIsPairModalOpen(false);
+                  setPairSuccess(null);
+                  setPairError(null);
+                }}
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#181822] transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {pairSuccess ? (
+              <div className="bg-emerald-950/40 border border-emerald-800 rounded-xl p-4 text-center space-y-2">
+                <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
+                <p className="font-semibold text-sm text-emerald-200">{pairSuccess}</p>
+                <button
+                  onClick={() => setIsPairModalOpen(false)}
+                  className="mt-3 px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleAuthorizeTv} className="space-y-4">
+                <div className="bg-[#181822] rounded-xl p-3 border border-[#262632] space-y-1 text-xs">
+                  <p className="text-gray-300 font-medium">How it works:</p>
+                  <p className="text-gray-400">
+                    1. On your TV, open the TVMime app and select <strong>"Quick Pair"</strong>.
+                  </p>
+                  <p className="text-gray-400">
+                    2. Enter the 6-character code shown on your TV screen below.
+                  </p>
+                </div>
+
+                {pairError && (
+                  <div className="p-3 bg-red-950/50 border border-red-800 rounded-xl text-xs text-red-200 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-[#e50914]" />
+                    <span>{pairError}</span>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-300 mb-1">TV Pairing Code</label>
+                  <input
+                    type="text"
+                    value={pairCode}
+                    onChange={(e) => setPairCode(e.target.value.toUpperCase())}
+                    placeholder="e.g. MIME-4829"
+                    maxLength={12}
+                    className="w-full bg-[#181822] border border-[#262632] focus:border-blue-500 rounded-xl px-4 py-3 text-center text-lg font-mono tracking-widest text-white uppercase placeholder-gray-600 focus:outline-none transition"
+                  />
+                </div>
+
+                {user && (
+                  <div className="text-xs text-gray-400 flex items-center justify-between px-1">
+                    <span>Linking to Account:</span>
+                    <span className="font-mono text-gray-200 truncate max-w-[200px]">{user.email || user.displayName || 'Current User'}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#262632]">
+                  <button
+                    type="button"
+                    onClick={() => setIsPairModalOpen(false)}
+                    className="px-4 py-2 text-gray-400 hover:text-white text-xs font-semibold rounded-xl transition cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={pairLoading || !pairCode.trim()}
+                    className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition shadow-lg shadow-blue-600/25 flex items-center gap-2 cursor-pointer"
+                  >
+                    {pairLoading && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+                    <span>{pairLoading ? 'Authorizing...' : 'Authorize TV Device'}</span>
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Stream Reports Modal */}
+      {isReportsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#121217] border border-[#262632] w-full max-w-2xl max-h-[85vh] rounded-2xl p-6 shadow-2xl flex flex-col space-y-4">
+            <div className="flex items-center justify-between border-b border-[#262632] pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-red-950/50 text-[#ff1e27] rounded-xl border border-red-800/60">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Stream Issue Reports ({streamReports.length})</h3>
+                  <p className="text-xs text-gray-400">Critical playback and decoder failure reports logged from TV clients</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsReportsModalOpen(false)}
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#181822] transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+              {streamReports.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 text-xs">
+                  No stream errors reported yet. All channels are operating cleanly.
+                </div>
+              ) : (
+                streamReports.map((r) => (
+                  <div key={r.id || Math.random()} className="bg-[#181822] border border-[#262632] rounded-xl p-3.5 space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-white text-sm">{r.channelName}</span>
+                        {r.channelNum && (
+                          <span className="bg-[#121217] text-gray-400 font-mono text-[10px] px-1.5 py-0.5 rounded border border-[#262632]">
+                            CH {r.channelNum}
+                          </span>
+                        )}
+                      </div>
+                      <span className="font-mono text-[10px] text-red-400 bg-red-950/40 border border-red-800/50 px-2 py-0.5 rounded-full font-bold">
+                        {r.errorCode}
+                      </span>
+                    </div>
+
+                    <p className="text-red-200 font-mono text-[11px] bg-[#121217] p-2 rounded-lg border border-[#262632]/80">
+                      {r.errorMessage}
+                    </p>
+
+                    <div className="flex items-center justify-between text-[11px] text-gray-400 pt-1">
+                      <span>{r.deviceSpecs || 'Android TV Client'}</span>
+                      <span>{new Date(r.timestamp).toLocaleString()}</span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="flex justify-end pt-3 border-t border-[#262632]">
+              <button
+                onClick={() => setIsReportsModalOpen(false)}
+                className="px-4 py-2 bg-[#181822] hover:bg-[#20202c] border border-[#262632] text-gray-200 rounded-xl text-xs font-semibold transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

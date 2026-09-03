@@ -5,14 +5,46 @@ import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import com.tvmime.network.XtreamClient
 
+enum class BufferProfile(
+    val label: String,
+    val minBufferMs: Int,
+    val maxBufferMs: Int,
+    val bufferForPlaybackMs: Int,
+    val bufferForPlaybackAfterRebufferMs: Int
+) {
+    FAST_ZAP(
+        label = "Fast Zap (Low Latency)",
+        minBufferMs = 2500,
+        maxBufferMs = 6000,
+        bufferForPlaybackMs = 800,
+        bufferForPlaybackAfterRebufferMs = 1500
+    ),
+    BALANCED(
+        label = "Balanced (Standard)",
+        minBufferMs = 5000,
+        maxBufferMs = 15000,
+        bufferForPlaybackMs = 1500,
+        bufferForPlaybackAfterRebufferMs = 3000
+    ),
+    STABLE_4K(
+        label = "Stable 4K Buffer (Deep)",
+        minBufferMs = 10000,
+        maxBufferMs = 30000,
+        bufferForPlaybackMs = 3000,
+        bufferForPlaybackAfterRebufferMs = 5000
+    )
+}
+
 /**
  * Media3 / ExoPlayer hardware-accelerated IPTV configuration.
- * Automatically injects anti-bot evasion headers into video chunk network requests.
+ * Automatically injects anti-bot evasion headers into video chunk network requests
+ * and applies tuned LoadControl buffer profiles.
  */
 object Media3PlayerConfig {
 
@@ -28,13 +60,31 @@ object Media3PlayerConfig {
             .setAllowCrossProtocolRedirects(true)
     }
 
+    @OptIn(UnstableApi::class)
+    fun buildLoadControl(profile: BufferProfile = BufferProfile.FAST_ZAP): DefaultLoadControl {
+        return DefaultLoadControl.Builder()
+            .setBufferDurationsMs(
+                profile.minBufferMs,
+                profile.maxBufferMs,
+                profile.bufferForPlaybackMs,
+                profile.bufferForPlaybackAfterRebufferMs
+            )
+            .setPrioritizeTimeOverSizeThresholds(true)
+            .build()
+    }
+
     /**
      * Instantiates an ExoPlayer configured with:
      * 1. Hardware video decoder prioritization (EXTENSION_RENDERER_MODE_PREFER)
-     * 2. Evasion HTTP DataSource
+     * 2. Decoder fallback enabled (graceful recovery if hardware decoder crashes)
+     * 3. Tuned Buffer LoadControl
+     * 4. Evasion HTTP DataSource
      */
     @OptIn(UnstableApi::class)
-    fun buildPlayer(context: Context): ExoPlayer {
+    fun buildPlayer(
+        context: Context,
+        bufferProfile: BufferProfile = BufferProfile.FAST_ZAP
+    ): ExoPlayer {
         val renderersFactory = DefaultRenderersFactory(context)
             .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
             .setEnableDecoderFallback(true)
@@ -45,6 +95,7 @@ object Media3PlayerConfig {
 
         return ExoPlayer.Builder(context, renderersFactory)
             .setMediaSourceFactory(mediaSourceFactory)
+            .setLoadControl(buildLoadControl(bufferProfile))
             .build()
     }
 }

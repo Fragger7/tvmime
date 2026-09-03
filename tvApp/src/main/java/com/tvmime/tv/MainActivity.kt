@@ -48,6 +48,19 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         viewModel.setFullscreen(false)
     }
 
+    // First-Run Wizard: If no portal is configured, route to OnboardingScreen
+    var dismissedOnboarding by remember { mutableStateOf(false) }
+    if (activePortal == null && !dismissedOnboarding) {
+        com.tvmime.tv.ui.onboarding.OnboardingScreen(
+            onComplete = {
+                dismissedOnboarding = true
+                viewModel.syncCurrentPortal()
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+        return
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

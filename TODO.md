@@ -38,6 +38,10 @@
 - [x] Implement Live TV EPG Timeline (Translucent Strips).
 - [x] Implement VOD Section (Netflix style, TMDB metadata - `VodScreen.kt`).
 - [x] Implement About TVMime Screen (`AboutScreen.kt` crediting Faraz Ahmad, architecture & portal endpoints).
+- [x] Implement First-Run Setup Wizard (`OnboardingScreen.kt`) with Quick TV Pairing & Direct Login.
+- [x] Implement Device Capability & Hardware Intelligence Engine (`DeviceCapabilityDetector.kt`).
+- [x] Implement Dynamic Buffer LoadControl profiles (Fast Zap vs Balanced 4K).
+- [x] Implement 1-Click Stream Issue Reporting with Firestore Logging & Web Admin Console.
 
 ### Phase 5: CI/CD Pipeline & Standalone Repository
 - [x] Migrate to dedicated standalone repository (`https://github.com/Fragger7/tvmime.git`).

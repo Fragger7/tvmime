@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.PlayArrow
@@ -24,17 +25,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.HttpDataSource
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import com.tvmime.db.entity.ChannelEntity
+import com.tvmime.player.BufferProfile
 import com.tvmime.player.Media3PlayerConfig
+import com.tvmime.sync.FirebaseSyncClient
 import com.tvmime.theme.DesignSystemTokens
+import com.tvmime.tv.hardware.DeviceCapabilityDetector
+import kotlinx.coroutines.launch
 
 @Composable
 fun TvVideoPlayer(
@@ -44,15 +46,22 @@ fun TvVideoPlayer(
     onToggleFullscreen: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
-    val borderCol = Color(DesignSystemTokens.Colors.Border)
+    val borderCol = Color(DesignSystemTokens.Colors.CardBorder)
+
+    val capabilities = remember { DeviceCapabilityDetector.detect(context) }
+    val bufferProfile = if (capabilities.isLowRamDevice) BufferProfile.FAST_ZAP else BufferProfile.BALANCED
 
     var playbackError by remember { mutableStateOf<String?>(null) }
+    var errorCode by remember { mutableStateOf<String>("STREAM_ERROR") }
     var isBuffering by remember { mutableStateOf(false) }
+    var reportStatus by remember { mutableStateOf<String?>(null) }
+    var isReporting by remember { mutableStateOf(false) }
 
     val exoPlayer = remember {
-        Media3PlayerConfig.buildPlayer(context).apply {
+        Media3PlayerConfig.buildPlayer(context, bufferProfile).apply {
             repeatMode = Player.REPEAT_MODE_OFF
             playWhenReady = true
         }
@@ -64,24 +73,34 @@ fun TvVideoPlayer(
                 isBuffering = (playbackState == Player.STATE_BUFFERING)
                 if (playbackState == Player.STATE_READY) {
                     playbackError = null
+                    reportStatus = null
                 }
             }
 
             override fun onPlayerError(error: PlaybackException) {
                 val cause = error.cause
-                val msg = when {
+                when {
                     cause is HttpDataSource.InvalidResponseCodeException && (cause.responseCode == 456 || cause.responseCode == 884) -> {
-                        "Stream Egress Disabled by Provider (HTTP ${cause.responseCode})"
+                        errorCode = "HTTP_${cause.responseCode}_LIMIT_EXCEEDED"
+                        playbackError = "Stream Egress Disabled (HTTP ${cause.responseCode}): Max connection limit reached on provider account."
                     }
                     cause is HttpDataSource.InvalidResponseCodeException && cause.responseCode == 403 -> {
-                        "Access Forbidden (HTTP 403) - Evasion Block"
+                        errorCode = "HTTP_403_FORBIDDEN"
+                        playbackError = "Access Forbidden (HTTP 403): Provider subscription expired or anti-bot IP block."
+                    }
+                    cause is HttpDataSource.InvalidResponseCodeException && cause.responseCode == 404 -> {
+                        errorCode = "HTTP_404_NOT_FOUND"
+                        playbackError = "Stream Offline (HTTP 404): Channel satellite downlink is temporarily down."
                     }
                     cause is HttpDataSource.HttpDataSourceException -> {
-                        "Connection dropped: ${cause.message ?: "Network error"}"
+                        errorCode = "NETWORK_TIMEOUT"
+                        playbackError = "Network connection dropped or timed out: ${cause.message ?: "Connection reset"}"
                     }
-                    else -> error.localizedMessage ?: "Playback failure"
+                    else -> {
+                        errorCode = error.errorCodeName
+                        playbackError = error.localizedMessage ?: "Hardware decoder / playback failure."
+                    }
                 }
-                playbackError = msg
             }
         }
         exoPlayer.addListener(listener)
@@ -94,6 +113,7 @@ fun TvVideoPlayer(
     // React to channel change
     LaunchedEffect(channel?.directSourceUrl) {
         playbackError = null
+        reportStatus = null
         if (channel != null && channel.directSourceUrl.isNotBlank()) {
             val mediaItem = MediaItem.fromUri(channel.directSourceUrl)
             exoPlayer.setMediaItem(mediaItem)
@@ -151,61 +171,132 @@ fun TvVideoPlayer(
             }
         }
 
-        // Overlay: Error State
+        // Overlay: Human-Friendly Error State with Reporting
         if (playbackError != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xDD121217))
-                    .padding(16.dp),
+                    .background(Color(0xEE0A0A10))
+                    .padding(20.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxWidth(0.85f)
                 ) {
                     androidx.compose.material3.Icon(
                         imageVector = Icons.Default.ErrorOutline,
                         contentDescription = "Error",
                         tint = crimson,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(44.dp)
+                    )
+
+                    Text(
+                        text = "STREAM PLAYBACK ISSUE",
+                        color = crimson,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 13.sp,
+                        letterSpacing = 1.sp
                     )
 
                     Text(
                         text = playbackError ?: "Stream Unavailable",
                         color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp
                     )
 
-                    Surface(
-                        onClick = {
-                            playbackError = null
-                            channel?.let {
-                                exoPlayer.setMediaItem(MediaItem.fromUri(it.directSourceUrl))
-                                exoPlayer.prepare()
-                                exoPlayer.playWhenReady = true
-                            }
-                        },
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
-                            containerColor = crimson,
-                            focusedContainerColor = Color(0xFFFF1E27)
-                        ),
-                        modifier = Modifier.height(36.dp)
+                    if (reportStatus != null) {
+                        Text(
+                            text = reportStatus ?: "",
+                            color = Color(0xFF10B981),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(top = 6.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        // Retry Button
+                        Surface(
+                            onClick = {
+                                playbackError = null
+                                channel?.let {
+                                    exoPlayer.setMediaItem(MediaItem.fromUri(it.directSourceUrl))
+                                    exoPlayer.prepare()
+                                    exoPlayer.playWhenReady = true
+                                }
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = crimson,
+                                focusedContainerColor = Color(0xFFFF1E27)
+                            ),
+                            modifier = Modifier.height(36.dp)
                         ) {
-                            androidx.compose.material3.Icon(
-                                Icons.Default.Refresh,
-                                contentDescription = "Retry",
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text("Retry Stream", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            Row(
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    Icons.Default.Refresh,
+                                    contentDescription = "Retry",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text("Retry Stream", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Report Issue Button
+                        Surface(
+                            onClick = {
+                                if (isReporting) return@Surface
+                                isReporting = true
+                                reportStatus = "Logging issue to admin console..."
+                                coroutineScope.launch {
+                                    val client = FirebaseSyncClient()
+                                    val res = client.reportStreamIssue(
+                                        channelName = channel?.name ?: "Unknown Channel",
+                                        channelNum = channel?.num,
+                                        errorCode = errorCode,
+                                        errorMessage = playbackError ?: "Stream failed",
+                                        deviceSpecs = "${capabilities.model} • ${capabilities.recommendedBufferProfile}",
+                                        timestamp = System.currentTimeMillis()
+                                    )
+                                    if (res.isSuccess) {
+                                        reportStatus = "✓ Issue reported to TVMime Admin! Engineering notified."
+                                    } else {
+                                        reportStatus = "Failed to send report. Please check network."
+                                    }
+                                    isReporting = false
+                                }
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = Color(0xFF1F1F2C),
+                                focusedContainerColor = Color(0xFF2E2E40)
+                            ),
+                            modifier = Modifier.height(36.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    Icons.Default.BugReport,
+                                    contentDescription = "Report",
+                                    tint = Color(0xFFF59E0B),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text("Report Stream Issue", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }
@@ -227,7 +318,7 @@ fun TvVideoPlayer(
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "CH ${channel.num} • ${channel.containerExtension.uppercase()}",
+                        text = "CH ${channel.num} • ${channel.containerExtension.uppercase()} • ${bufferProfile.label}",
                         color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold

@@ -149,6 +149,99 @@ class FirebaseSyncClient(
         }
     }
 
+    /**
+     * Registers a new pairing code in Firestore so the web portal can authorize it.
+     */
+    suspend fun registerTvPairingCode(code: String, timestamp: Long = 0L): Result<Unit> {
+        return try {
+            val url = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/tv_pairings/$code"
+            val response: HttpResponse = httpClient.patch(url) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    buildJsonObject {
+                        put("fields", buildJsonObject {
+                            put("code", buildJsonObject { put("stringValue", code) })
+                            put("status", buildJsonObject { put("stringValue", "pending") })
+                            put("createdAt", buildJsonObject { put("integerValue", timestamp.toString()) })
+                        })
+                    }.toString()
+                )
+            }
+            if (response.status.isSuccess()) Result.success(Unit)
+            else Result.failure(Exception("Failed to register code: ${response.status}"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Polls the status of a TV pairing code.
+     */
+    suspend fun checkTvPairingStatus(code: String): Result<TvPairingStatus> {
+        return try {
+            val url = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/tv_pairings/$code"
+            val response: HttpResponse = httpClient.get(url)
+            if (!response.status.isSuccess()) {
+                return Result.success(TvPairingStatus(isAuthorized = false, status = "pending"))
+            }
+
+            val body = response.bodyAsText()
+            val fields = Json.parseToJsonElement(body).jsonObject["fields"]?.jsonObject
+            val status = fields?.get("status")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: "pending"
+            val userId = fields?.get("userId")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content
+            val userEmail = fields?.get("userEmail")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content
+
+            Result.success(
+                TvPairingStatus(
+                    isAuthorized = status.equals("authorized", ignoreCase = true) && !userId.isNullOrBlank(),
+                    status = status,
+                    userId = userId,
+                    userEmail = userEmail
+                )
+            )
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Submits a stream playback or decoder failure report to Firestore stream_reports collection.
+     */
+    suspend fun reportStreamIssue(
+        channelName: String,
+        channelNum: Int? = null,
+        errorCode: String,
+        errorMessage: String,
+        deviceSpecs: String,
+        timestamp: Long = 0L
+    ): Result<Unit> {
+        return try {
+            val url = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/stream_reports"
+            val response: HttpResponse = httpClient.post(url) {
+                contentType(ContentType.Application.Json)
+                setBody(
+                    buildJsonObject {
+                        put("fields", buildJsonObject {
+                            put("channelName", buildJsonObject { put("stringValue", channelName) })
+                            if (channelNum != null) {
+                                put("channelNum", buildJsonObject { put("integerValue", channelNum.toString()) })
+                            }
+                            put("errorCode", buildJsonObject { put("stringValue", errorCode) })
+                            put("errorMessage", buildJsonObject { put("stringValue", errorMessage) })
+                            put("deviceSpecs", buildJsonObject { put("stringValue", deviceSpecs) })
+                            put("timestamp", buildJsonObject { put("integerValue", timestamp.toString()) })
+                            put("status", buildJsonObject { put("stringValue", "open") })
+                        })
+                    }.toString()
+                )
+            }
+            if (response.status.isSuccess()) Result.success(Unit)
+            else Result.failure(Exception("Failed to report issue: ${response.status}"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     private fun parseFirebaseError(jsonStr: String): String {
         return try {
             val json = Json.parseToJsonElement(jsonStr).jsonObject
@@ -164,4 +257,12 @@ data class FirebaseSession(
     val idToken: String,
     val userId: String,
     val email: String
+)
+
+@Serializable
+data class TvPairingStatus(
+    val isAuthorized: Boolean,
+    val status: String,
+    val userId: String? = null,
+    val userEmail: String? = null
 )
