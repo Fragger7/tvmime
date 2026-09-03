@@ -13,6 +13,7 @@
 - [x] Deploy `adminWeb` to Vercel production ([tvmime.vercel.app](https://tvmime.vercel.app)).
 - [x] Build serverless proxy (`/api/test-portal`) for zero-CORS / mixed-content IPTV testing.
 - [x] Whitelist `tvmime.vercel.app` in Firebase Authentication Authorized Domains.
+- [x] Implement Account Profile & Password Management Modal in `adminWeb`.
 
 ### Phase 2: Shared Core & Data Layer (Xtream Codes)
 - [x] Scaffold KMP Multi-module architecture (`shared`, `tvApp`, `androidApp`, version catalog `libs.versions.toml`).
@@ -36,6 +37,7 @@
 - [x] Implement Cloud Portal Sync & Demo loader UI (`CloudSyncScreen.kt`).
 - [x] Implement Live TV EPG Timeline (Translucent Strips).
 - [x] Implement VOD Section (Netflix style, TMDB metadata - `VodScreen.kt`).
+- [x] Implement About TVMime Screen (`AboutScreen.kt` crediting Faraz Ahmad, architecture & portal endpoints).
 
 ### Phase 5: CI/CD Pipeline & Standalone Repository
 - [x] Migrate to dedicated standalone repository (`https://github.com/Fragger7/tvmime.git`).

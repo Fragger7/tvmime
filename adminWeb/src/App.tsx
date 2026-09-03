@@ -19,7 +19,8 @@ import {
   Film, 
   Video, 
   X,
-  Sparkles
+  Sparkles,
+  KeyRound
 } from 'lucide-react';
 
 import { 
@@ -29,6 +30,10 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
+  updatePassword,
+  updateProfile,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   subscribeToUserPortals, 
   addPortal, 
   updatePortal, 
@@ -118,6 +123,64 @@ export function App() {
   const [credsPortal, setCredsPortal] = useState<XtreamPortal | null>(null);
   const [credsShowPassword, setCredsShowPassword] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  // Account Settings Modal State
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+  const [accountDisplayName, setAccountDisplayName] = useState('');
+  const [currentPasswordForChange, setCurrentPasswordForChange] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [accountLoading, setAccountLoading] = useState(false);
+  const [accountMessage, setAccountMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleUpdateAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    setAccountLoading(true);
+    setAccountMessage(null);
+
+    try {
+      // 1. Update Display Name if changed
+      if (accountDisplayName.trim() && accountDisplayName.trim() !== (user.displayName || '')) {
+        await updateProfile(user, { displayName: accountDisplayName.trim() });
+      }
+
+      // 2. Update Password if entered
+      if (newPassword) {
+        if (newPassword.length < 6) {
+          throw new Error('New password must be at least 6 characters long.');
+        }
+        if (newPassword !== confirmNewPassword) {
+          throw new Error('New passwords do not match.');
+        }
+
+        // If user has email and provided current password, re-authenticate first
+        if (currentPasswordForChange && user.email) {
+          const credential = EmailAuthProvider.credential(user.email, currentPasswordForChange);
+          await reauthenticateWithCredential(user, credential);
+        }
+
+        await updatePassword(user, newPassword);
+      }
+
+      setAccountMessage({ type: 'success', text: 'Account and password updated successfully!' });
+      setCurrentPasswordForChange('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (err: unknown) {
+      console.error('Account update error:', err);
+      let msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('auth/requires-recent-login')) {
+        msg = 'For security, please enter your current password to confirm this change.';
+      } else if (msg.includes('auth/wrong-password') || msg.includes('auth/invalid-credential')) {
+        msg = 'Current password is incorrect.';
+      }
+      setAccountMessage({ type: 'error', text: msg });
+    } finally {
+      setAccountLoading(false);
+    }
+  };
 
   // Listen to Auth
   useEffect(() => {
@@ -422,18 +485,34 @@ export function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
               <p className="text-xs text-gray-400">Authenticated User</p>
               <p className="text-xs font-mono text-gray-200 truncate max-w-[200px]">
-                {user.email || `Anon (${user.uid.slice(0, 8)})`}
+                {user.displayName ? `${user.displayName} (${user.email || user.uid.slice(0, 6)})` : user.email || `Anon (${user.uid.slice(0, 8)})`}
               </p>
             </div>
 
             <button 
+              onClick={() => {
+                setAccountDisplayName(user.displayName || '');
+                setCurrentPasswordForChange('');
+                setNewPassword('');
+                setConfirmNewPassword('');
+                setAccountMessage(null);
+                setIsAccountModalOpen(true);
+              }}
+              title="Account & Password Settings"
+              className="flex items-center gap-1.5 px-3 py-2 bg-[#181822] hover:bg-[#20202c] border border-[#262632] hover:border-[#ff1e27]/60 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
+            >
+              <KeyRound className="w-4 h-4 text-[#ff1e27]" />
+              <span className="hidden md:inline">Account & Password</span>
+            </button>
+
+            <button 
               onClick={() => signOut(auth)}
               title="Sign Out"
-              className="p-2 hover:bg-[#181822] text-gray-400 hover:text-white rounded-lg transition border border-transparent hover:border-[#262632] cursor-pointer"
+              className="p-2 hover:bg-[#181822] text-gray-400 hover:text-white rounded-xl transition border border-transparent hover:border-[#262632] cursor-pointer"
             >
               <Power className="w-5 h-5" />
             </button>
@@ -1102,6 +1181,150 @@ export function App() {
                 Done
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Account Settings & Change Password Modal */}
+      {isAccountModalOpen && user && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#121217] border border-[#262632] w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-5">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-[#262632] pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-[#e50914]/20 text-[#ff1e27] rounded-xl border border-[#e50914]/30">
+                  <KeyRound className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Account & Password</h3>
+                  <p className="text-xs text-gray-400">Manage your profile credentials and security</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsAccountModalOpen(false)}
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-[#181822] transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Account Info Box */}
+            <div className="bg-[#181822] rounded-xl p-3 border border-[#262632] space-y-1.5 text-xs font-mono">
+              <div className="flex items-center justify-between text-gray-400">
+                <span className="text-gray-500">Email:</span>
+                <span className="text-gray-200">{user.email || 'Anonymous Session'}</span>
+              </div>
+              <div className="flex items-center justify-between text-gray-400">
+                <span className="text-gray-500">User ID:</span>
+                <span className="text-gray-300 truncate max-w-[200px]">{user.uid}</span>
+              </div>
+            </div>
+
+            {/* Feedback Message */}
+            {accountMessage && (
+              <div
+                className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+                  accountMessage.type === 'success'
+                    ? 'bg-emerald-950/40 border-emerald-800 text-emerald-200'
+                    : 'bg-red-950/40 border-red-800 text-red-200'
+                }`}
+              >
+                {accountMessage.type === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                )}
+                <span>{accountMessage.text}</span>
+              </div>
+            )}
+
+            {/* Form */}
+            <form onSubmit={handleUpdateAccount} className="space-y-4">
+              {/* Display Name */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-300 mb-1">Display Name</label>
+                <input
+                  type="text"
+                  value={accountDisplayName}
+                  onChange={(e) => setAccountDisplayName(e.target.value)}
+                  placeholder="e.g. Faraz Ahmad"
+                  className="w-full bg-[#181822] border border-[#262632] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#e50914] transition"
+                />
+              </div>
+
+              {/* Password Section */}
+              <div className="pt-2 border-t border-[#262632]/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-semibold text-gray-300">Change Password</p>
+                  <span className="text-[10px] text-gray-500">Leave blank to keep unchanged</span>
+                </div>
+
+                {user.email && (
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Current Password (Required to set new password)</label>
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={currentPasswordForChange}
+                      onChange={(e) => setCurrentPasswordForChange(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-[#181822] border border-[#262632] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#e50914] transition"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[11px] text-gray-400">New Password (Min 6 chars)</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="text-[11px] text-gray-400 hover:text-white flex items-center gap-1 transition cursor-pointer"
+                    >
+                      {showNewPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                      <span>{showNewPassword ? 'Hide' : 'Show'}</span>
+                    </button>
+                  </div>
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                    className="w-full bg-[#181822] border border-[#262632] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#e50914] transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-gray-400 mb-1">Confirm New Password</label>
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    placeholder="Re-enter new password"
+                    className="w-full bg-[#181822] border border-[#262632] rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#e50914] transition"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#262632]">
+                <button
+                  type="button"
+                  onClick={() => setIsAccountModalOpen(false)}
+                  className="px-4 py-2 text-gray-400 hover:text-white text-xs font-semibold rounded-xl transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={accountLoading}
+                  className="px-5 py-2.5 bg-[#e50914] hover:bg-[#ff1e27] text-white text-xs font-semibold rounded-xl transition shadow-lg shadow-[#e50914]/25 flex items-center gap-2 cursor-pointer"
+                >
+                  {accountLoading && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
+                  <span>{accountLoading ? 'Saving...' : 'Save Account Settings'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

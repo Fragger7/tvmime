@@ -159,6 +159,14 @@ fun TvNavigationDrawer(
                 isExpanded = isDrawerFocused,
                 onClick = { onDestinationSelected(TvNavDestination.SETTINGS) }
             )
+
+            NavItemRow(
+                icon = Icons.Default.Info,
+                label = TvNavDestination.ABOUT.label,
+                isSelected = currentDestination == TvNavDestination.ABOUT,
+                isExpanded = isDrawerFocused,
+                onClick = { onDestinationSelected(TvNavDestination.ABOUT) }
+            )
         }
     }
 }

@@ -21,7 +21,8 @@ enum class TvNavDestination(val label: String) {
     SERIES("TV Series"),
     FAVORITES("Favorites"),
     CLOUD_SYNC("Cloud Sync"),
-    SETTINGS("Settings & Updates")
+    SETTINGS("Settings & Updates"),
+    ABOUT("About TVMime")
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

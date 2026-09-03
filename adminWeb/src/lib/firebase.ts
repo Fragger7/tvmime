@@ -4,6 +4,11 @@ import {
   signInAnonymously, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
+  updatePassword,
+  updateProfile,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   signOut, 
   onAuthStateChanged,
   type User 
@@ -112,6 +117,11 @@ export {
   signInAnonymously,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updatePassword,
+  updateProfile,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   signOut,
   onAuthStateChanged,
   type User

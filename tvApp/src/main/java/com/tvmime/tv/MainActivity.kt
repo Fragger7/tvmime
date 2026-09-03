@@ -128,6 +128,11 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
+                        TvNavDestination.ABOUT -> {
+                            com.tvmime.tv.ui.about.AboutScreen(
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
                     }
                 }
             }
