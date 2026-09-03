@@ -1,69 +1,158 @@
 package com.tvmime.tv.ui.player
 
+import android.view.KeyEvent
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionOverride
+import androidx.media3.common.Tracks
 import androidx.media3.datasource.HttpDataSource
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
-import androidx.tv.material3.Text
 import com.tvmime.db.entity.ChannelEntity
 import com.tvmime.player.BufferProfile
 import com.tvmime.player.Media3PlayerConfig
 import com.tvmime.sync.FirebaseSyncClient
 import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.hardware.DeviceCapabilityDetector
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
+private enum class AspectRatioMode(val label: String, val mode: Int) {
+    FIT("16:9 Fit", AspectRatioFrameLayout.RESIZE_MODE_FIT),
+    FILL("Stretch Fill", AspectRatioFrameLayout.RESIZE_MODE_FILL),
+    ZOOM("Zoom Crop", AspectRatioFrameLayout.RESIZE_MODE_ZOOM)
+}
+
+private enum class PlaybackOverlayModal {
+    AUDIO_TRACKS,
+    SUBTITLES
+}
+
+private data class TrackOption(
+    val group: Tracks.Group,
+    val trackIndex: Int,
+    val label: String,
+    val isSelected: Boolean
+)
+
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun TvVideoPlayer(
     channel: ChannelEntity?,
     modifier: Modifier = Modifier,
     isFullscreen: Boolean = false,
-    onToggleFullscreen: () -> Unit = {}
+    onToggleFullscreen: () -> Unit = {},
+    onToggleFavorite: ((ChannelEntity) -> Unit)? = null
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
+    val crimsonBright = Color(DesignSystemTokens.Colors.CrimsonBright)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val borderCol = Color(DesignSystemTokens.Colors.Border)
+    val textPrimary = Color(DesignSystemTokens.Colors.TextPrimary)
+    val textSecondary = Color(DesignSystemTokens.Colors.TextSecondary)
 
     val capabilities = remember { DeviceCapabilityDetector.detect(context) }
     val bufferProfile = if (capabilities.isLowRamDevice) BufferProfile.FAST_ZAP else BufferProfile.BALANCED
 
-    var playbackError by remember { mutableStateOf<String?>(null) }
-    var errorCode by remember { mutableStateOf<String>("STREAM_ERROR") }
+    // Player States
+    var isPlaying by remember { mutableStateOf(true) }
     var isBuffering by remember { mutableStateOf(false) }
+    var playbackError by remember { mutableStateOf<String?>(null) }
+    var errorCode by remember { mutableStateOf("STREAM_ERROR") }
     var reportStatus by remember { mutableStateOf<String?>(null) }
     var isReporting by remember { mutableStateOf(false) }
+
+    // OSD & Controls State
+    var isOsdVisible by remember { mutableStateOf(true) }
+    var activeModal by remember { mutableStateOf<PlaybackOverlayModal?>(null) }
+    var currentAspectMode by remember { mutableStateOf(AspectRatioMode.FIT) }
+    var showStatsHud by remember { mutableStateOf(false) }
+    var lastInteractionTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
+
+    // Telemetry stats
+    var videoResolution by remember { mutableStateOf("Auto") }
+    var videoFps by remember { mutableStateOf("--") }
+    var videoCodec by remember { mutableStateOf("Hardware Decoder") }
+    var audioCodec by remember { mutableStateOf("Audio DSP") }
+    var bufferedSeconds by remember { mutableLongStateOf(0L) }
+
+    // Tracks
+    var audioTracks by remember { mutableStateOf<List<TrackOption>>(emptyList()) }
+    var subtitleTracks by remember { mutableStateOf<List<TrackOption>>(emptyList()) }
 
     val exoPlayer = remember {
         Media3PlayerConfig.buildPlayer(context, bufferProfile).apply {
             repeatMode = Player.REPEAT_MODE_OFF
             playWhenReady = true
+        }
+    }
+
+    // Keep player stats refreshed
+    LaunchedEffect(exoPlayer, isPlaying) {
+        while (true) {
+            val vFormat = exoPlayer.videoFormat
+            if (vFormat != null) {
+                videoResolution = if (vFormat.width > 0 && vFormat.height > 0) "${vFormat.width}x${vFormat.height}" else "Auto"
+                videoFps = if (vFormat.frameRate > 0) "${vFormat.frameRate.toInt()} fps" else "--"
+                videoCodec = vFormat.sampleMimeType?.substringAfterLast("/")?.uppercase() ?: "HEVC/H.264"
+            }
+            val aFormat = exoPlayer.audioFormat
+            if (aFormat != null) {
+                val channels = if (aFormat.channelCount == 6) "5.1 Surround" else "${aFormat.channelCount}ch"
+                val mime = aFormat.sampleMimeType?.substringAfterLast("/")?.uppercase() ?: "AAC"
+                audioCodec = "$mime • $channels"
+            }
+            bufferedSeconds = ((exoPlayer.bufferedPosition - exoPlayer.currentPosition).coerceAtLeast(0) / 1000)
+            delay(1000)
+        }
+    }
+
+    // Auto-hide OSD after 5 seconds of inactivity in fullscreen
+    LaunchedEffect(isOsdVisible, lastInteractionTime, activeModal) {
+        if (isFullscreen && isOsdVisible && activeModal == null) {
+            delay(5000)
+            isOsdVisible = false
         }
     }
 
@@ -75,6 +164,49 @@ fun TvVideoPlayer(
                     playbackError = null
                     reportStatus = null
                 }
+            }
+
+            override fun onIsPlayingChanged(playing: Boolean) {
+                isPlaying = playing
+            }
+
+            override fun onTracksChanged(tracks: Tracks) {
+                val audios = mutableListOf<TrackOption>()
+                val subs = mutableListOf<TrackOption>()
+
+                for (group in tracks.groups) {
+                    if (group.type == C.TRACK_TYPE_AUDIO) {
+                        for (t in 0 until group.length) {
+                            val fmt = group.getTrackFormat(t)
+                            val lang = fmt.language?.uppercase() ?: "AUDIO"
+                            val channels = if (fmt.channelCount == 6) "5.1 AC3" else if (fmt.channelCount == 2) "Stereo" else "${fmt.channelCount}ch"
+                            val mime = fmt.sampleMimeType?.substringAfterLast("/")?.uppercase() ?: ""
+                            audios.add(
+                                TrackOption(
+                                    group = group,
+                                    trackIndex = t,
+                                    label = "$lang ($channels $mime)",
+                                    isSelected = group.isTrackSelected(t)
+                                )
+                            )
+                        }
+                    } else if (group.type == C.TRACK_TYPE_TEXT) {
+                        for (t in 0 until group.length) {
+                            val fmt = group.getTrackFormat(t)
+                            val lang = fmt.language?.uppercase() ?: "SUBTITLE"
+                            subs.add(
+                                TrackOption(
+                                    group = group,
+                                    trackIndex = t,
+                                    label = lang,
+                                    isSelected = group.isTrackSelected(t)
+                                )
+                            )
+                        }
+                    }
+                }
+                audioTracks = audios
+                subtitleTracks = subs
             }
 
             override fun onPlayerError(error: PlaybackException) {
@@ -125,6 +257,8 @@ fun TvVideoPlayer(
         }
     }
 
+    val timeFormat = remember { SimpleDateFormat("h:mm a", Locale.getDefault()) }
+
     Box(
         modifier = modifier
             .clip(if (isFullscreen) RoundedCornerShape(0.dp) else RoundedCornerShape(12.dp))
@@ -134,24 +268,62 @@ fun TvVideoPlayer(
                 color = if (isFullscreen) Color.Transparent else borderCol,
                 shape = RoundedCornerShape(12.dp)
             )
+            .focusable(isFullscreen)
+            .onKeyEvent { keyEvent ->
+                if (!isFullscreen) return@onKeyEvent false
+                if (keyEvent.type == KeyEventType.KeyDown) {
+                    lastInteractionTime = System.currentTimeMillis()
+                    when (keyEvent.nativeKeyEvent.keyCode) {
+                        KeyEvent.KEYCODE_DPAD_CENTER,
+                        KeyEvent.KEYCODE_ENTER,
+                        KeyEvent.KEYCODE_DPAD_DOWN,
+                        KeyEvent.KEYCODE_DPAD_UP -> {
+                            if (!isOsdVisible) {
+                                isOsdVisible = true
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        KeyEvent.KEYCODE_BACK -> {
+                            if (activeModal != null) {
+                                activeModal = null
+                                true
+                            } else if (isOsdVisible) {
+                                isOsdVisible = false
+                                true
+                            } else {
+                                onToggleFullscreen()
+                                true
+                            }
+                        }
+                        else -> false
+                    }
+                } else false
+            }
     ) {
+        // --- 1. ExoPlayer Video Surface ---
         if (channel != null && channel.directSourceUrl.isNotBlank()) {
             AndroidView(
                 factory = { ctx ->
                     PlayerView(ctx).apply {
                         player = exoPlayer
                         useController = false
+                        resizeMode = currentAspectMode.mode
                         layoutParams = FrameLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT
                         )
                     }
                 },
+                update = { view ->
+                    view.resizeMode = currentAspectMode.mode
+                },
                 modifier = Modifier.fillMaxSize()
             )
         }
 
-        // Overlay: Buffering indicator
+        // --- 2. Buffering Spinner ---
         if (isBuffering && playbackError == null) {
             Box(
                 modifier = Modifier
@@ -160,7 +332,7 @@ fun TvVideoPlayer(
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    androidx.compose.material3.CircularProgressIndicator(
+                    CircularProgressIndicator(
                         color = crimson,
                         modifier = Modifier.size(36.dp),
                         strokeWidth = 3.dp
@@ -171,7 +343,442 @@ fun TvVideoPlayer(
             }
         }
 
-        // Overlay: Human-Friendly Error State with Reporting
+        // --- 3. Telemetry Stats HUD Overlay ---
+        if (showStatsHud && isFullscreen) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 24.dp, top = 80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xCC0C0C12))
+                    .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
+                    .padding(12.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("STREAM TELEMETRY HUD", color = crimsonBright, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
+                    Text("Resolution: $videoResolution ($videoFps)", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text("Video Decoder: $videoCodec", color = textSecondary, fontSize = 11.sp)
+                    Text("Audio Track: $audioCodec", color = textSecondary, fontSize = 11.sp)
+                    Text("Buffered: ${bufferedSeconds}s (${bufferProfile.label})", color = Color(0xFF10B981), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text("Aspect Mode: ${currentAspectMode.label}", color = textSecondary, fontSize = 11.sp)
+                }
+            }
+        }
+
+        // --- 4. Fullscreen OSD: Top Bar & Bottom Bar ---
+        if (isFullscreen) {
+            AnimatedVisibility(
+                visible = isOsdVisible,
+                enter = fadeIn() + slideInVertically { -it },
+                exit = fadeOut() + slideOutVertically { -it },
+                modifier = Modifier.align(Alignment.TopCenter)
+            ) {
+                // Top Information Bar
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xDD070709))
+                        .padding(horizontal = 24.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(crimson)
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "CH ${channel?.num ?: 0}",
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+
+                        Column {
+                            Text(
+                                text = channel?.name ?: "No Channel Playing",
+                                color = Color.White,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "${channel?.containerExtension?.uppercase() ?: "HLS"} • ${bufferProfile.label} • $videoResolution",
+                                color = textSecondary,
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(Color(0xFF1F1F2C))
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = timeFormat.format(Date()),
+                                color = Color.White,
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = isOsdVisible,
+                enter = fadeIn() + slideInVertically { it },
+                exit = fadeOut() + slideOutVertically { it },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                // Bottom Quick Actions Bar
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xEE0A0A10))
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Play / Pause Toggle
+                        Surface(
+                            onClick = {
+                                lastInteractionTime = System.currentTimeMillis()
+                                if (isPlaying) exoPlayer.pause() else exoPlayer.play()
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = if (isPlaying) Color(0xFF1E1E2C) else crimson,
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+                                    contentDescription = "Play/Pause",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(if (isPlaying) "Pause" else "Play", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Aspect Ratio Cycle
+                        Surface(
+                            onClick = {
+                                lastInteractionTime = System.currentTimeMillis()
+                                currentAspectMode = when (currentAspectMode) {
+                                    AspectRatioMode.FIT -> AspectRatioMode.FILL
+                                    AspectRatioMode.FILL -> AspectRatioMode.ZOOM
+                                    AspectRatioMode.ZOOM -> AspectRatioMode.FIT
+                                }
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = Color(0xFF1E1E2C),
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Default.AspectRatio, contentDescription = "Aspect", tint = Color.White, modifier = Modifier.size(16.dp))
+                                Text(currentAspectMode.label, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Audio Track Selector
+                        Surface(
+                            onClick = {
+                                lastInteractionTime = System.currentTimeMillis()
+                                activeModal = if (activeModal == PlaybackOverlayModal.AUDIO_TRACKS) null else PlaybackOverlayModal.AUDIO_TRACKS
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = if (activeModal == PlaybackOverlayModal.AUDIO_TRACKS) crimson else Color(0xFF1E1E2C),
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Default.Audiotrack, contentDescription = "Audio", tint = Color.White, modifier = Modifier.size(16.dp))
+                                Text("Audio (${audioTracks.size})", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Subtitles Selector
+                        Surface(
+                            onClick = {
+                                lastInteractionTime = System.currentTimeMillis()
+                                activeModal = if (activeModal == PlaybackOverlayModal.SUBTITLES) null else PlaybackOverlayModal.SUBTITLES
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = if (activeModal == PlaybackOverlayModal.SUBTITLES) crimson else Color(0xFF1E1E2C),
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Default.Subtitles, contentDescription = "Subtitles", tint = Color.White, modifier = Modifier.size(16.dp))
+                                Text("Subtitles", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Stats HUD Toggle
+                        Surface(
+                            onClick = {
+                                lastInteractionTime = System.currentTimeMillis()
+                                showStatsHud = !showStatsHud
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = if (showStatsHud) Color(0xFF10B981) else Color(0xFF1E1E2C),
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Default.Analytics, contentDescription = "Stats", tint = Color.White, modifier = Modifier.size(16.dp))
+                                Text("HUD", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Favorite Toggle
+                        if (channel != null && onToggleFavorite != null) {
+                            Surface(
+                                onClick = {
+                                    lastInteractionTime = System.currentTimeMillis()
+                                    onToggleFavorite(channel)
+                                },
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                colors = ClickableSurfaceDefaults.colors(
+                                    containerColor = Color(0xFF1E1E2C),
+                                    focusedContainerColor = crimsonBright
+                                ),
+                                modifier = Modifier.height(38.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 12.dp)) {
+                                    Icon(
+                                        imageVector = if (channel.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        contentDescription = "Favorite",
+                                        tint = if (channel.isFavorite) crimsonBright else Color.White,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        // Exit Fullscreen / Back to Guide
+                        Surface(
+                            onClick = onToggleFullscreen,
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = Color(0xFF1E1E2C),
+                                focusedContainerColor = crimson
+                            ),
+                            modifier = Modifier.height(38.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(Icons.Default.FullscreenExit, contentDescription = "Exit", tint = Color.White, modifier = Modifier.size(16.dp))
+                                Text("Guide", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // --- 5. Audio / Subtitles Modal Dialog Sheet ---
+            if (activeModal != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0x88000000)),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(bottom = 80.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF12121A))
+                            .border(1.dp, crimson, RoundedCornerShape(12.dp))
+                            .padding(16.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = if (activeModal == PlaybackOverlayModal.AUDIO_TRACKS) "SELECT AUDIO TRACK" else "SELECT SUBTITLES",
+                                    color = crimsonBright,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Black,
+                                    letterSpacing = 1.sp
+                                )
+
+                                Surface(
+                                    onClick = { activeModal = null },
+                                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                                    colors = ClickableSurfaceDefaults.colors(
+                                        containerColor = Color(0xFF222230),
+                                        focusedContainerColor = crimson
+                                    ),
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                                        Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.White, modifier = Modifier.size(14.dp))
+                                    }
+                                }
+                            }
+
+                            if (activeModal == PlaybackOverlayModal.AUDIO_TRACKS) {
+                                if (audioTracks.isEmpty()) {
+                                    Text("Single default audio stream detected", color = textSecondary, fontSize = 12.sp)
+                                } else {
+                                    LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.heightIn(max = 200.dp)) {
+                                        items(audioTracks) { track ->
+                                            Surface(
+                                                onClick = {
+                                                    exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                                                        .buildUpon()
+                                                        .setOverrideForType(TrackSelectionOverride(track.group.mediaTrackGroup, listOf(track.trackIndex)))
+                                                        .build()
+                                                    activeModal = null
+                                                },
+                                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                                                colors = ClickableSurfaceDefaults.colors(
+                                                    containerColor = if (track.isSelected) Color(0xFF261214) else Color(0xFF1E1E28),
+                                                    focusedContainerColor = crimson
+                                                ),
+                                                modifier = Modifier.fillMaxWidth().height(36.dp)
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    horizontalArrangement = Arrangement.SpaceBetween
+                                                ) {
+                                                    Text(track.label, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                                    if (track.isSelected) {
+                                                        Icon(Icons.Default.Check, contentDescription = null, tint = crimsonBright, modifier = Modifier.size(16.dp))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                // Subtitle options
+                                LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.heightIn(max = 200.dp)) {
+                                    item {
+                                        Surface(
+                                            onClick = {
+                                                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                                                    .buildUpon()
+                                                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+                                                    .build()
+                                                activeModal = null
+                                            },
+                                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                                            colors = ClickableSurfaceDefaults.colors(
+                                                containerColor = Color(0xFF1E1E28),
+                                                focusedContainerColor = crimson
+                                            ),
+                                            modifier = Modifier.fillMaxWidth().height(36.dp)
+                                        ) {
+                                            Row(
+                                                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text("Off (Disable Subtitles)", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                            }
+                                        }
+                                    }
+
+                                    items(subtitleTracks) { sub ->
+                                        Surface(
+                                            onClick = {
+                                                exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+                                                    .buildUpon()
+                                                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                                                    .setOverrideForType(TrackSelectionOverride(sub.group.mediaTrackGroup, listOf(sub.trackIndex)))
+                                                    .build()
+                                                activeModal = null
+                                            },
+                                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                                            colors = ClickableSurfaceDefaults.colors(
+                                                containerColor = if (sub.isSelected) Color(0xFF261214) else Color(0xFF1E1E28),
+                                                focusedContainerColor = crimson
+                                            ),
+                                            modifier = Modifier.fillMaxWidth().height(36.dp)
+                                        ) {
+                                            Row(
+                                                modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.SpaceBetween
+                                            ) {
+                                                Text(sub.label, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                                if (sub.isSelected) {
+                                                    Icon(Icons.Default.Check, contentDescription = null, tint = crimsonBright, modifier = Modifier.size(16.dp))
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- 6. Error State Overlay with 1-Click Firestore Reporting ---
         if (playbackError != null) {
             Box(
                 modifier = Modifier
@@ -185,7 +792,7 @@ fun TvVideoPlayer(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxWidth(0.85f)
                 ) {
-                    androidx.compose.material3.Icon(
+                    Icon(
                         imageVector = Icons.Default.ErrorOutline,
                         contentDescription = "Error",
                         tint = crimson,
@@ -221,7 +828,6 @@ fun TvVideoPlayer(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.padding(top = 6.dp)
                     ) {
-                        // Retry Button
                         Surface(
                             onClick = {
                                 playbackError = null
@@ -243,17 +849,11 @@ fun TvVideoPlayer(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                androidx.compose.material3.Icon(
-                                    Icons.Default.Refresh,
-                                    contentDescription = "Retry",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(16.dp)
-                                )
+                                Icon(Icons.Default.Refresh, contentDescription = "Retry", tint = Color.White, modifier = Modifier.size(16.dp))
                                 Text("Retry Stream", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                             }
                         }
 
-                        // Report Issue Button
                         Surface(
                             onClick = {
                                 if (isReporting) return@Surface
@@ -289,12 +889,7 @@ fun TvVideoPlayer(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                androidx.compose.material3.Icon(
-                                    Icons.Default.BugReport,
-                                    contentDescription = "Report",
-                                    tint = Color(0xFFF59E0B),
-                                    modifier = Modifier.size(16.dp)
-                                )
+                                Icon(Icons.Default.BugReport, contentDescription = "Report", tint = Color(0xFFF59E0B), modifier = Modifier.size(16.dp))
                                 Text("Report Stream Issue", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                             }
                         }
@@ -303,7 +898,7 @@ fun TvVideoPlayer(
             }
         }
 
-        // Overlay Header: Channel pill and Fullscreen toggle (in preview mode)
+        // --- 7. Non-fullscreen Preview Header (when embedded in screen) ---
         if (!isFullscreen && channel != null) {
             Row(
                 modifier = Modifier
@@ -335,12 +930,7 @@ fun TvVideoPlayer(
                     modifier = Modifier.size(28.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        androidx.compose.material3.Icon(
-                            imageVector = Icons.Default.Fullscreen,
-                            contentDescription = "Fullscreen",
-                            tint = Color.White,
-                            modifier = Modifier.size(18.dp)
-                        )
+                        Icon(Icons.Default.Fullscreen, contentDescription = "Fullscreen", tint = Color.White, modifier = Modifier.size(18.dp))
                     }
                 }
             }

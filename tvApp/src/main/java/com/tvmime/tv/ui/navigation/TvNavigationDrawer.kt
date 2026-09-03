@@ -115,6 +115,14 @@ fun TvNavigationDrawer(
             )
 
             NavItemRow(
+                icon = Icons.Default.Dvr,
+                label = TvNavDestination.TV_GUIDE.label,
+                isSelected = currentDestination == TvNavDestination.TV_GUIDE,
+                isExpanded = isDrawerFocused,
+                onClick = { onDestinationSelected(TvNavDestination.TV_GUIDE) }
+            )
+
+            NavItemRow(
                 icon = Icons.Default.Movie,
                 label = TvNavDestination.MOVIES.label,
                 isSelected = currentDestination == TvNavDestination.MOVIES,

@@ -294,6 +294,9 @@ class XtreamRepository(
         )
     }
 
+    fun getEpgProgramsInWindow(portalId: String, windowStart: Long, windowEnd: Long): Flow<List<EpgProgramEntity>> =
+        database.epgDao().getProgramsInWindow(portalId, windowStart, windowEnd)
+
     suspend fun addDemoPortal(): PortalEntity = withContext(Dispatchers.IO) {
         val demo = PortalEntity(
             id = "demo_portal",
@@ -326,6 +329,7 @@ class XtreamRepository(
                 num = 1,
                 name = "Big Buck Bunny (HLS 60fps)",
                 type = "LIVE",
+                epgChannelId = "demo_epg_1",
                 categoryId = "demo_cat",
                 containerExtension = "m3u8",
                 directSourceUrl = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
@@ -337,6 +341,7 @@ class XtreamRepository(
                 num = 2,
                 name = "Sintel (HLS)",
                 type = "LIVE",
+                epgChannelId = "demo_epg_2",
                 categoryId = "demo_cat",
                 containerExtension = "m3u8",
                 directSourceUrl = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
@@ -348,12 +353,72 @@ class XtreamRepository(
                 num = 3,
                 name = "Tears of Steel (4K HLS)",
                 type = "LIVE",
+                epgChannelId = "demo_epg_3",
                 categoryId = "demo_cat",
                 containerExtension = "m3u8",
                 directSourceUrl = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
             )
         )
         database.channelDao().insertChannelsBatch(demoChannels)
+
+        val now = System.currentTimeMillis()
+        val demoPrograms = listOf(
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_1_p1",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_1",
+                title = "Big Buck Bunny: The 60fps Cut",
+                description = "Open-source animated short film following a giant bunny fighting forest bullies in 4K 60fps.",
+                startEpoch = now - 45 * 60 * 1000L,
+                endEpoch = now + 45 * 60 * 1000L
+            ),
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_1_p2",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_1",
+                title = "Blender Open VFX Showcase",
+                description = "Deep dive into 3D rendering, lighting, and spatial audio pipelines.",
+                startEpoch = now + 45 * 60 * 1000L,
+                endEpoch = now + 165 * 60 * 1000L
+            ),
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_2_p1",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_2",
+                title = "Sintel: Quest for the Dragon",
+                description = "A lonely young woman searches for a wounded baby dragon she once nursed back to health.",
+                startEpoch = now - 30 * 60 * 1000L,
+                endEpoch = now + 60 * 60 * 1000L
+            ),
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_2_p2",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_2",
+                title = "Cosmos Laundromat (First Cycle)",
+                description = "On a desolate island, a suicidal sheep named Franck is visited by a mysterious salesman.",
+                startEpoch = now + 60 * 60 * 1000L,
+                endEpoch = now + 180 * 60 * 1000L
+            ),
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_3_p1",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_3",
+                title = "Tears of Steel: Sci-Fi Premiere",
+                description = "A dystopian future in Amsterdam where scientists battle against robotic invaders in Dolby Surround.",
+                startEpoch = now - 60 * 60 * 1000L,
+                endEpoch = now + 30 * 60 * 1000L
+            ),
+            EpgProgramEntity(
+                id = "${demo.id}_demo_epg_3_p2",
+                portalId = demo.id,
+                epgChannelId = "demo_epg_3",
+                title = "Caminandes: Llama Chronicles",
+                description = "Hilarious animated adventures of Koro the llama attempting to cross a desert highway.",
+                startEpoch = now + 30 * 60 * 1000L,
+                endEpoch = now + 150 * 60 * 1000L
+            )
+        )
+        database.epgDao().insertProgramsBatch(demoPrograms)
 
         demo
     }

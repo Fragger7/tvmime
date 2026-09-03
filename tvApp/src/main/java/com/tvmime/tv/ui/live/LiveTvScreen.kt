@@ -54,6 +54,7 @@ fun LiveTvScreen(
             channel = playingChannel,
             isFullscreen = true,
             onToggleFullscreen = onToggleFullscreen,
+            onToggleFavorite = onToggleFavorite,
             modifier = Modifier.fillMaxSize()
         )
         return

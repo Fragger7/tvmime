@@ -15,6 +15,9 @@ interface EpgDao {
     @Query("SELECT * FROM epg_programs WHERE portalId = :portalId AND epgChannelId = :epgChannelId AND startEpoch <= :currentEpoch AND endEpoch >= :currentEpoch LIMIT 1")
     suspend fun getCurrentProgram(portalId: String, epgChannelId: String, currentEpoch: Long): EpgProgramEntity?
 
+    @Query("SELECT * FROM epg_programs WHERE portalId = :portalId AND endEpoch >= :windowStart AND startEpoch <= :windowEnd ORDER BY startEpoch ASC")
+    fun getProgramsInWindow(portalId: String, windowStart: Long, windowEnd: Long): Flow<List<EpgProgramEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProgramsBatch(programs: List<EpgProgramEntity>)
 

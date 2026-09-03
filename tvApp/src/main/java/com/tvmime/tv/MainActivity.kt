@@ -42,6 +42,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val selectedChannel by viewModel.selectedChannel.collectAsStateWithLifecycle()
     val playingChannel by viewModel.playingChannel.collectAsStateWithLifecycle()
     val isFullscreen by viewModel.isFullscreen.collectAsStateWithLifecycle()
+    val epgPrograms by viewModel.epgPrograms.collectAsStateWithLifecycle()
 
     // Handle Back Button in Fullscreen
     BackHandler(enabled = isFullscreen) {
@@ -53,8 +54,8 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     if (activePortal == null && !dismissedOnboarding) {
         com.tvmime.tv.ui.onboarding.OnboardingScreen(
             viewModel = viewModel,
-            onComplete = {
-                dismissedOnboarding = true
+            onComplete = { 
+                dismissedOnboarding = true 
                 viewModel.syncCurrentPortal()
             },
             modifier = Modifier.fillMaxSize()
@@ -107,6 +108,20 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 onToggleFavorite = { viewModel.toggleFavorite(it) },
                                 isFullscreen = false,
                                 onToggleFullscreen = { viewModel.toggleFullscreen() },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        TvNavDestination.TV_GUIDE -> {
+                            com.tvmime.tv.ui.guide.TvGuideScreen(
+                                categories = categories,
+                                selectedCategory = selectedCategory,
+                                onSelectCategory = { viewModel.selectCategory(it) },
+                                channels = channels,
+                                selectedChannel = selectedChannel,
+                                playingChannel = playingChannel,
+                                onPlayChannel = { viewModel.playChannel(it) },
+                                onToggleFullscreen = { viewModel.toggleFullscreen() },
+                                epgPrograms = epgPrograms,
                                 modifier = Modifier.fillMaxSize()
                             )
                         }

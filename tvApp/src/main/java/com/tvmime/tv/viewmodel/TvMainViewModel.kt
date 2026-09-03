@@ -12,11 +12,13 @@ import com.tvmime.model.StreamType
 import com.tvmime.repository.SyncProgress
 import com.tvmime.repository.XtreamRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.tvmime.db.entity.EpgProgramEntity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 enum class TvNavDestination(val label: String) {
     LIVE_TV("Live TV"),
+    TV_GUIDE("TV Guide"),
     MOVIES("Movies"),
     SERIES("TV Series"),
     FAVORITES("Favorites"),
@@ -36,6 +38,15 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val syncProgress: StateFlow<SyncProgress> = repository.syncProgress
+
+    val epgPrograms: StateFlow<List<EpgProgramEntity>> = activePortal.flatMapLatest { portal ->
+        if (portal == null) flowOf(emptyList())
+        else repository.getEpgProgramsInWindow(
+            portal.id,
+            System.currentTimeMillis() - 2 * 3600 * 1000L,
+            System.currentTimeMillis() + 6 * 3600 * 1000L
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // Navigation & Screen State
     private val _currentDestination = MutableStateFlow(TvNavDestination.LIVE_TV)
