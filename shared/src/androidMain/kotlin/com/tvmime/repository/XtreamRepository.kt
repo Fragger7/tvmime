@@ -245,11 +245,13 @@ class XtreamRepository(
     suspend fun checkPairingAndSync(code: String): Result<Boolean> = withContext(Dispatchers.IO) {
         val firebase = com.tvmime.sync.FirebaseSyncClient()
         val statusRes = firebase.checkTvPairingStatus(code)
-        val status = statusRes.getOrElse { return@withContext Result.failure(it) }
+        if (statusRes.isFailure) return@withContext Result.failure(statusRes.exceptionOrNull() ?: Exception("Pairing check failed"))
+        val status = statusRes.getOrNull() ?: return@withContext Result.success(false)
 
         if (status.isAuthorized && !status.userId.isNullOrBlank()) {
-            val portalsRes = firebase.getUserPortals(status.userId)
-            val portals = portalsRes.getOrElse { return@withContext Result.failure(it) }
+            val portalsRes = firebase.fetchPortalsByUserId(status.userId)
+            if (portalsRes.isFailure) return@withContext Result.failure(portalsRes.exceptionOrNull() ?: Exception("Failed to fetch portals"))
+            val portals = portalsRes.getOrNull() ?: emptyList()
             for ((idx, cfg) in portals.withIndex()) {
                 val entity = PortalEntity(
                     id = cfg.id,

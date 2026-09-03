@@ -149,6 +149,80 @@ class FirebaseSyncClient(
         }
     }
 
+    suspend fun fetchPortalsByUserId(userId: String): Result<List<PortalConfig>> {
+        return try {
+            val url = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents:runQuery"
+            val queryBody = buildJsonObject {
+                put("structuredQuery", buildJsonObject {
+                    put("from", buildJsonArray {
+                        add(buildJsonObject { put("collectionId", "user_portals") })
+                    })
+                    put("where", buildJsonObject {
+                        put("fieldFilter", buildJsonObject {
+                            put("field", buildJsonObject { put("fieldPath", "userId") })
+                            put("op", "EQUAL")
+                            put("value", buildJsonObject { put("stringValue", userId) })
+                        })
+                    })
+                })
+            }
+
+            val response: HttpResponse = httpClient.post(url) {
+                contentType(ContentType.Application.Json)
+                setBody(queryBody.toString())
+            }
+
+            if (response.status != HttpStatusCode.OK) {
+                return Result.failure(Exception("Failed to fetch cloud portals: HTTP ${response.status.value}"))
+            }
+
+            val rawArray = Json.parseToJsonElement(response.bodyAsText()).jsonArray
+            val portals = mutableListOf<PortalConfig>()
+
+            for (element in rawArray) {
+                val docObj = element.jsonObject["document"]?.jsonObject ?: continue
+                val docName = docObj["name"]?.jsonPrimitive?.content ?: ""
+                val docId = docName.substringAfterLast("/")
+                val fields = docObj["fields"]?.jsonObject ?: continue
+
+                val name = fields["name"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: "Portal"
+                val serverUrl = fields["serverUrl"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: ""
+                val username = fields["username"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: ""
+                val password = fields["password"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: ""
+                val m3uUrl = fields["m3uUrl"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.contentOrNull
+                val type = fields["type"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: "xtream"
+                val isActive = fields["isActive"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
+                val syncLive = fields["syncLive"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
+                val syncMovies = fields["syncMovies"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
+                val syncSeries = fields["syncSeries"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
+                val expiryDate = fields["expiryDate"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.contentOrNull
+
+                if (serverUrl.isNotBlank() && username.isNotBlank()) {
+                    portals.add(
+                        PortalConfig(
+                            id = docId,
+                            name = name,
+                            serverUrl = serverUrl,
+                            username = username,
+                            password = password,
+                            m3uUrl = m3uUrl,
+                            type = type,
+                            isActive = isActive,
+                            syncLive = syncLive,
+                            syncMovies = syncMovies,
+                            syncSeries = syncSeries,
+                            expiryDate = expiryDate
+                        )
+                    )
+                }
+            }
+
+            Result.success(portals)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     /**
      * Registers a new pairing code in Firestore so the web portal can authorize it.
      */
