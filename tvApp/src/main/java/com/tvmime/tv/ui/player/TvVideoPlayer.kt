@@ -2,7 +2,6 @@ package com.tvmime.tv.ui.player
 
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -37,7 +36,6 @@ import com.tvmime.db.entity.ChannelEntity
 import com.tvmime.player.Media3PlayerConfig
 import com.tvmime.theme.DesignSystemTokens
 
-@OptIn(UnstableApi::class, ExperimentalTvMaterial3Api::class)
 @Composable
 fun TvVideoPlayer(
     channel: ChannelEntity?,
