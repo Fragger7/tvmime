@@ -49,5 +49,12 @@
 - [x] Lock cryptographic signing key (`keystore/debug.keystore`) for 100% in-place update compatibility.
 - [x] Configure automated rolling GitHub Releases with raw APKs attached (`tvmime_tv_v1.0.0.apk`, `tv.apk`).
 - [x] Set up direct Firestick Downloader redirects (`https://tvmime.vercel.app/tv.apk`).
+- [x] Verified live production Android TV APK build (20.9MB) and Mobile APK build (23.1MB) via rolling release.
+
+### Next Session Priorities
+- [ ] User testing on physical Android TV / Firestick devices via `https://tvmime.vercel.app/tv.apk`.
+- [ ] Implement Mobile EPG & channel grid in `androidApp`.
+- [ ] Complete `androidx.media3:media3-cast` receiver discovery & playback transfer.
+
 
 
