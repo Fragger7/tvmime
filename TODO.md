@@ -19,9 +19,8 @@
 - [x] Implement centralized Design System Tokens in Kotlin (`DesignSystemTokens.kt`).
 - [x] Implement Ktor Network Client with User-Agent spoofing (`IPTVSmartersPro/1.1.1`) and fast-fail hedging (`XtreamClient.kt`).
 - [x] Implement zero-OOM token-by-token streaming catalog parser (`StreamingCatalogParser.kt`).
-- [x] Configure hardware-accelerated Media3 player and evasion DataSource (`Media3PlayerConfig.kt`).
-- [ ] Implement KMP Room Database for caching channels/EPG.
-- [ ] Sync User Portals from Firebase to local Room DB.
+- [x] Implement KMP Room Database for caching channels/EPG (`AppDatabase.kt`, DAOs & Entities).
+- [x] Sync User Portals from Firebase to local Room DB (`FirebaseSyncClient.kt`, `XtreamRepository.kt`).
 
 ### Phase 3: Android Mobile App & Chromecast
 - [x] Scaffold Mobile Jetpack Compose baseline (`MainActivity.kt`).
@@ -31,10 +30,12 @@
 ### Phase 4: Android TV UI (Compose for TV)
 - [x] Scaffold Android TV Leanback Compose baseline (`MainActivity.kt`).
 - [x] Implement in-place OTA Updater (`UpdateManager.kt`) and TV settings permissions.
-- [ ] Implement Left-Side Navigation Drawer with D-Pad focus.
+- [x] Implement Left-Side Navigation Drawer with D-Pad focus (`TvNavigationDrawer.kt`).
+- [x] Implement Live TV Channel & Category Split Browser (`LiveTvScreen.kt`).
+- [x] Implement ExoPlayer hardware-accelerated playback overlay (`TvVideoPlayer.kt`).
+- [x] Implement Cloud Portal Sync & Demo loader UI (`CloudSyncScreen.kt`).
 - [ ] Implement Live TV EPG Timeline (Translucent Strips).
 - [ ] Implement VOD Section (Netflix style, TMDB metadata).
-- [ ] Implement ExoPlayer hardware-accelerated playback overlay.
 
 ### Phase 5: CI/CD Pipeline & Standalone Repository
 - [x] Migrate to dedicated standalone repository (`https://github.com/Fragger7/tvmime.git`).

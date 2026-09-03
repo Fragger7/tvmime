@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -33,12 +34,19 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.media3.exoplayer)
             implementation(libs.media3.exoplayer.hls)
+            implementation(libs.room.runtime)
+            implementation(libs.room.ktx)
+            implementation(libs.okhttp)
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.room.compiler)
 }
 
 android {

@@ -2,18 +2,22 @@ package com.tvmime.tv
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.tv.material3.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tvmime.theme.DesignSystemTokens
+import com.tvmime.tv.ui.live.LiveTvScreen
+import com.tvmime.tv.ui.navigation.TvNavigationDrawer
+import com.tvmime.tv.ui.settings.SettingsScreen
+import com.tvmime.tv.ui.sync.CloudSyncScreen
+import com.tvmime.tv.viewmodel.TvMainViewModel
+import com.tvmime.tv.viewmodel.TvNavDestination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,151 +28,95 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun TVMimeTvApp() {
+fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val bgColor = Color(DesignSystemTokens.Colors.Background)
-    val cardColor = Color(DesignSystemTokens.Colors.Card)
-    val crimson = Color(DesignSystemTokens.Colors.Crimson)
-    val textPrimary = Color(DesignSystemTokens.Colors.TextPrimary)
-    val textSecondary = Color(DesignSystemTokens.Colors.TextSecondary)
+
+    val currentDestination by viewModel.currentDestination.collectAsStateWithLifecycle()
+    val activePortal by viewModel.activePortal.collectAsStateWithLifecycle()
+    val syncProgress by viewModel.syncProgress.collectAsStateWithLifecycle()
+
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
+    val channels by viewModel.channels.collectAsStateWithLifecycle()
+    val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
+    val selectedChannel by viewModel.selectedChannel.collectAsStateWithLifecycle()
+    val playingChannel by viewModel.playingChannel.collectAsStateWithLifecycle()
+    val isFullscreen by viewModel.isFullscreen.collectAsStateWithLifecycle()
+
+    // Handle Back Button in Fullscreen
+    BackHandler(enabled = isFullscreen) {
+        viewModel.setFullscreen(false)
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(bgColor)
-            .padding(32.dp),
-        contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Header Logo
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(crimson, shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("TV", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
-                }
-
-                Text(
-                    text = "TVMIME",
-                    color = textPrimary,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp
-                )
-            }
-
-            Text(
-                text = "Next-Gen IPTV Streaming Player for Android TV",
-                color = textSecondary,
-                fontSize = 14.sp
+        if (isFullscreen) {
+            LiveTvScreen(
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onSelectCategory = { viewModel.selectCategory(it) },
+                channels = channels,
+                selectedChannel = selectedChannel,
+                playingChannel = playingChannel,
+                onPlayChannel = { viewModel.playChannel(it) },
+                onToggleFavorite = { viewModel.toggleFavorite(it) },
+                isFullscreen = true,
+                onToggleFullscreen = { viewModel.toggleFullscreen() },
+                modifier = Modifier.fillMaxSize()
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // TV Action Cards
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                TvCard(
-                    title = "Live TV",
-                    subtitle = "Browse Catalogs & EPG",
-                    color = cardColor,
-                    accent = crimson,
-                    onClick = { }
-                )
-
-                TvCard(
-                    title = "Movies (VOD)",
-                    subtitle = "On-Demand Cinema",
-                    color = cardColor,
-                    accent = Color(0xFF3B82F6),
-                    onClick = { }
-                )
-
-                TvCard(
-                    title = "TV Series",
-                    subtitle = "Seasons & Episodes",
-                    color = cardColor,
-                    accent = Color(0xFFA855F7),
-                    onClick = { }
-                )
-
-                TvCard(
-                    title = "Cloud Sync",
-                    subtitle = "tivimime.vercel.app",
-                    color = cardColor,
-                    accent = Color(0xFF10B981),
-                    onClick = { }
-                )
-
-                TvCard(
-                    title = "OTA Updates",
-                    subtitle = "Check for New APK",
-                    color = cardColor,
-                    accent = Color(0xFFF59E0B),
-                    onClick = {
-                        // Triggers in-place OTA update check & installer
+        } else {
+            Row(modifier = Modifier.fillMaxSize()) {
+                // Collapsible Left-Side Navigation Drawer
+                TvNavigationDrawer(
+                    currentDestination = currentDestination,
+                    onDestinationSelected = { dest ->
+                        viewModel.navigateTo(dest)
                     }
                 )
+
+                // Screen Content Area
+                Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                    when (currentDestination) {
+                        TvNavDestination.LIVE_TV,
+                        TvNavDestination.MOVIES,
+                        TvNavDestination.SERIES,
+                        TvNavDestination.FAVORITES -> {
+                            LiveTvScreen(
+                                categories = categories,
+                                selectedCategory = selectedCategory,
+                                onSelectCategory = { viewModel.selectCategory(it) },
+                                channels = channels,
+                                selectedChannel = selectedChannel,
+                                playingChannel = playingChannel,
+                                onPlayChannel = { viewModel.playChannel(it) },
+                                onToggleFavorite = { viewModel.toggleFavorite(it) },
+                                isFullscreen = false,
+                                onToggleFullscreen = { viewModel.toggleFullscreen() },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        TvNavDestination.CLOUD_SYNC -> {
+                            CloudSyncScreen(
+                                activePortal = activePortal,
+                                syncProgress = syncProgress,
+                                onSyncCurrentPortal = { viewModel.syncCurrentPortal() },
+                                onLoadDemoPortal = { viewModel.addDemoPortal() },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        TvNavDestination.SETTINGS -> {
+                            SettingsScreen(
+                                channelCount = channels.size,
+                                categoryCount = categories.size,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                }
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Composable
-private fun TvCard(
-    title: String,
-    subtitle: String,
-    color: Color,
-    accent: Color,
-    onClick: () -> Unit = {}
-) {
-    Card(
-        onClick = onClick,
-
-        colors = CardDefaults.colors(
-            containerColor = color,
-            focusedContainerColor = Color(0xFF222230)
-        ),
-        border = CardDefaults.border(
-            focusedBorder = Border(
-                border = androidx.compose.foundation.BorderStroke(2.dp, accent)
-            )
-        ),
-        scale = CardDefaults.scale(focusedScale = 1.06f),
-        modifier = Modifier
-            .width(180.dp)
-            .height(110.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = title,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = subtitle,
-                color = Color.Gray,
-                fontSize = 11.sp
-            )
         }
     }
 }
