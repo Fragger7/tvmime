@@ -10,11 +10,9 @@
 - [x] Setup Firebase Project via Web Console (`tvmime-65909`).
 - [x] Create `adminWeb` React project styled with Deep Black & Crimson Red design tokens.
 - [x] Implement Firebase Auth & Firestore schema (`UserPortals`).
-- [x] Deploy `adminWeb` to Vercel production ([tivimime.vercel.app](https://tivimime.vercel.app)).
+- [x] Deploy `adminWeb` to Vercel production ([tvmime.vercel.app](https://tvmime.vercel.app)).
 - [x] Build serverless proxy (`/api/test-portal`) for zero-CORS / mixed-content IPTV testing.
-- [x] Whitelist `tivimime.vercel.app` in Firebase Authentication Authorized Domains.
-
-
+- [x] Whitelist `tvmime.vercel.app` in Firebase Authentication Authorized Domains.
 
 ### Phase 2: Shared Core & Data Layer (Xtream Codes)
 - [x] Scaffold KMP Multi-module architecture (`shared`, `tvApp`, `androidApp`, version catalog `libs.versions.toml`).
@@ -32,12 +30,17 @@
 
 ### Phase 4: Android TV UI (Compose for TV)
 - [x] Scaffold Android TV Leanback Compose baseline (`MainActivity.kt`).
+- [x] Implement in-place OTA Updater (`UpdateManager.kt`) and TV settings permissions.
 - [ ] Implement Left-Side Navigation Drawer with D-Pad focus.
 - [ ] Implement Live TV EPG Timeline (Translucent Strips).
 - [ ] Implement VOD Section (Netflix style, TMDB metadata).
 - [ ] Implement ExoPlayer hardware-accelerated playback overlay.
 
-### Phase 5: CI/CD Pipeline
-- [x] Create `.github/workflows/tvmime-build.yml`.
-- [x] Configure automatic `assembleDebug` and artifact publishing for TV (`tvmime-tv-debug-apk`) and Mobile (`tvmime-mobile-debug-apk`).
+### Phase 5: CI/CD Pipeline & Standalone Repository
+- [x] Migrate to dedicated standalone repository (`https://github.com/Fragger7/tvmime.git`).
+- [x] Create GitHub Actions automated build workflow (`.github/workflows/build.yml`).
+- [x] Lock cryptographic signing key (`keystore/debug.keystore`) for 100% in-place update compatibility.
+- [x] Configure automated rolling GitHub Releases with raw APKs attached (`tvmime_tv_v1.0.0.apk`, `tv.apk`).
+- [x] Set up direct Firestick Downloader redirects (`https://tvmime.vercel.app/tv.apk`).
+
 
