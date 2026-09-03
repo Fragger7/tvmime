@@ -191,6 +191,42 @@ fun LiveTvScreen(
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
+
+                                // Translucent EPG Program Timeline Strip
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color(0xAA181822), RoundedCornerShape(6.dp))
+                                        .border(1.dp, Color(0xFF262632), RoundedCornerShape(6.dp))
+                                        .padding(horizontal = 8.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .background(crimson, RoundedCornerShape(3.dp))
+                                            .padding(horizontal = 5.dp, vertical = 1.dp)
+                                    ) {
+                                        Text("NOW", color = Color.White, fontWeight = FontWeight.Black, fontSize = 8.sp)
+                                    }
+
+                                    Text(
+                                        text = "Live Stream • ${ch.containerExtension.uppercase()} HD",
+                                        color = textPrimary,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 11.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        modifier = Modifier.weight(1f)
+                                    )
+
+                                    Text(
+                                        text = "60 FPS",
+                                        color = Color(0xFF10B981),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 9.sp
+                                    )
+                                }
                             }
 
                             Row(

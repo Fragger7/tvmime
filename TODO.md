@@ -34,8 +34,8 @@
 - [x] Implement Live TV Channel & Category Split Browser (`LiveTvScreen.kt`).
 - [x] Implement ExoPlayer hardware-accelerated playback overlay (`TvVideoPlayer.kt`).
 - [x] Implement Cloud Portal Sync & Demo loader UI (`CloudSyncScreen.kt`).
-- [ ] Implement Live TV EPG Timeline (Translucent Strips).
-- [ ] Implement VOD Section (Netflix style, TMDB metadata).
+- [x] Implement Live TV EPG Timeline (Translucent Strips).
+- [x] Implement VOD Section (Netflix style, TMDB metadata - `VodScreen.kt`).
 
 ### Phase 5: CI/CD Pipeline & Standalone Repository
 - [x] Migrate to dedicated standalone repository (`https://github.com/Fragger7/tvmime.git`).

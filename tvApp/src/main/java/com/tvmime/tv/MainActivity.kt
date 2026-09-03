@@ -81,8 +81,6 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                 Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
                     when (currentDestination) {
                         TvNavDestination.LIVE_TV,
-                        TvNavDestination.MOVIES,
-                        TvNavDestination.SERIES,
                         TvNavDestination.FAVORITES -> {
                             LiveTvScreen(
                                 categories = categories,
@@ -95,6 +93,22 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 onToggleFavorite = { viewModel.toggleFavorite(it) },
                                 isFullscreen = false,
                                 onToggleFullscreen = { viewModel.toggleFullscreen() },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        TvNavDestination.MOVIES,
+                        TvNavDestination.SERIES -> {
+                            com.tvmime.tv.ui.vod.VodScreen(
+                                title = if (currentDestination == TvNavDestination.MOVIES) "Movies" else "TV Series",
+                                categories = categories,
+                                selectedCategory = selectedCategory,
+                                onSelectCategory = { viewModel.selectCategory(it) },
+                                items = channels,
+                                onPlayItem = { item ->
+                                    viewModel.playChannel(item)
+                                    viewModel.setFullscreen(true)
+                                },
+                                onToggleFavorite = { viewModel.toggleFavorite(it) },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
