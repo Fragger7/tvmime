@@ -1,6 +1,13 @@
 # AI Agent Context (TVMime) 🤖
 
+> **Repository**: `https://github.com/Fragger7/tvmime.git`  
+> **Canonical Root**: `/Users/admin/Development/tvmime`  
+> **Production Web**: `https://tvmime.vercel.app`  
+> **Direct TV APK**: `https://tvmime.vercel.app/tv.apk`  
+> **Releases Page**: `https://github.com/Fragger7/tvmime/releases`  
+
 **ATTENTION ALL AI AGENTS:** Read this document before modifying the TVMime codebase.
+
 
 ## 1. Project Paradigm
 - **Goal:** Build the fastest, most beautiful IPTV Player for Android TV.
