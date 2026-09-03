@@ -20,7 +20,10 @@ import {
   Video, 
   X,
   Sparkles,
-  KeyRound
+  KeyRound,
+  Download,
+  Smartphone,
+  ExternalLink
 } from 'lucide-react';
 
 import { 
@@ -382,87 +385,214 @@ export function App() {
   // Not Logged In View
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#070709] text-white flex flex-col justify-center items-center p-4">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#e50914]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="min-h-screen bg-[#070709] text-white flex flex-col justify-between p-4 sm:p-8 relative overflow-hidden">
+        {/* Ambient Glows */}
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#e50914]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative w-full max-w-md bg-[#121217] border border-[#262632] rounded-2xl p-8 shadow-2xl">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="p-3 bg-[#e50914] rounded-xl text-white shadow-lg shadow-[#e50914]/30">
-              <Tv className="w-8 h-8" />
+        {/* Top Header */}
+        <header className="max-w-6xl w-full mx-auto flex items-center justify-between py-4 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#e50914] rounded-xl text-white shadow-lg shadow-[#e50914]/30">
+              <Tv className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-wider">TVMIME</h1>
-              <p className="text-xs text-gray-400 font-mono tracking-widest uppercase">Admin Cloud Vault</p>
+              <div className="flex items-center gap-2">
+                <span className="font-black text-xl tracking-wider text-white">TVMIME</span>
+                <span className="text-[10px] bg-[#e50914]/20 text-[#ff1e27] border border-[#e50914]/40 px-2 py-0.5 rounded-full font-mono font-bold">v1.0.0</span>
+              </div>
+              <p className="text-[11px] text-gray-400">Zero-OOM IPTV Streaming Suite</p>
             </div>
           </div>
 
-          <p className="text-sm text-gray-400 text-center mb-6">
-            Manage your IPTV portals in the cloud. Credentials sync automatically to your Android TV & Mobile player.
-          </p>
-
-          {authError && (
-            <div className="mb-4 p-3 bg-red-950/50 border border-red-800/80 rounded-xl text-xs text-red-200 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-[#e50914]" />
-              <span>{authError}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleEmailAuth} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Email</label>
-              <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@tvmime.com"
-                required
-                className="w-full bg-[#181822] border border-[#262632] focus:border-[#e50914] focus:outline-none rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Password</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full bg-[#181822] border border-[#262632] focus:border-[#e50914] focus:outline-none rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 transition-colors"
-              />
-            </div>
-
-            <button 
-              type="submit"
-              className="w-full py-3 bg-[#e50914] hover:bg-[#ff1e27] text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-[#e50914]/25 cursor-pointer"
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/Fragger7/tvmime"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#121217] hover:bg-[#181822] border border-[#262632] hover:border-gray-600 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition"
             >
-              {isRegistering ? 'Create Admin Account' : 'Sign In'}
-            </button>
-          </form>
+              <span>GitHub</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </header>
 
-          <div className="relative my-6 text-center">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#262632]"></div></div>
-            <span className="relative bg-[#121217] px-3 text-xs text-gray-500 uppercase tracking-wider">Or</span>
+        {/* Hero & Content Split */}
+        <main className="max-w-6xl w-full mx-auto my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          
+          {/* Left Side: App Downloads & Highlights (7 cols) */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181822] border border-[#262632] text-xs text-gray-300">
+                <Sparkles className="w-3.5 h-3.5 text-[#ff1e27]" />
+                <span>Created by <strong className="text-white font-semibold">Faraz Ahmad</strong></span>
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                The Fastest, Most Elegant <span className="text-[#ff1e27]">IPTV Player</span> for Android TV.
+              </h1>
+
+              <p className="text-sm sm:text-base text-gray-400 max-w-xl leading-relaxed">
+                Stream 100,000+ channels with zero Out-Of-Memory crashes. Built with Kotlin Multiplatform, low-level token parsing, and hardware-accelerated Media3 decoding.
+              </p>
+            </div>
+
+            {/* Direct Download Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              {/* Android TV & Fire TV Card */}
+              <div className="bg-[#121217] border border-[#262632] hover:border-[#ff1e27]/50 rounded-2xl p-5 space-y-4 transition flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="p-2 bg-[#e50914]/20 text-[#ff1e27] rounded-xl border border-[#e50914]/30">
+                      <Tv className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 border border-emerald-800/60 px-2 py-0.5 rounded-full">
+                      TV Optimized
+                    </span>
+                  </div>
+                  <h2 className="text-base font-bold text-white">Android TV / Fire TV</h2>
+                  <p className="text-xs text-gray-400 mt-1">
+                    D-Pad navigation, Live EPG timelines, and cinematic VOD grid.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <a
+                    href="/tv.apk"
+                    download
+                    className="w-full py-2.5 bg-[#e50914] hover:bg-[#ff1e27] text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-[#e50914]/25 flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download TV APK</span>
+                  </a>
+
+                  <div className="bg-[#181822] rounded-xl p-2.5 border border-[#262632] text-[11px] font-mono text-gray-300">
+                    <p className="text-gray-500 font-sans text-[10px] font-semibold">Firestick Downloader App URL:</p>
+                    <p className="text-[#ff1e27] font-bold select-all truncate mt-0.5">tvmime.vercel.app/tv.apk</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Android Mobile Card */}
+              <div className="bg-[#121217] border border-[#262632] hover:border-[#383848] rounded-2xl p-5 space-y-4 transition flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="p-2 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
+                      <Smartphone className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-mono text-blue-400 bg-blue-950/50 border border-blue-800/60 px-2 py-0.5 rounded-full">
+                      Mobile & Tablet
+                    </span>
+                  </div>
+                  <h2 className="text-base font-bold text-white">Android Mobile</h2>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Touch interface with fast channel search and portrait/landscape playback.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <a
+                    href="/mobile.apk"
+                    download
+                    className="w-full py-2.5 bg-[#181822] hover:bg-[#222230] border border-[#262632] hover:border-gray-600 text-white font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download Mobile APK</span>
+                  </a>
+
+                  <div className="bg-[#181822] rounded-xl p-2.5 border border-[#262632] text-[11px] font-mono text-gray-300">
+                    <p className="text-gray-500 font-sans text-[10px] font-semibold">Direct Browser Download URL:</p>
+                    <p className="text-blue-400 font-bold select-all truncate mt-0.5">tvmime.vercel.app/mobile.apk</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <button 
-            type="button"
-            onClick={handleQuickAccess}
-            className="w-full py-3 bg-[#181822] hover:bg-[#20202c] border border-[#262632] text-gray-300 hover:text-white font-medium rounded-xl text-sm transition flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Shield className="w-4 h-4 text-emerald-400" />
-            <span>Instant Quick Access (Anonymous)</span>
-          </button>
+          {/* Right Side: Cloud Portal Auth (5 cols) */}
+          <div className="lg:col-span-5">
+            <div className="w-full bg-[#121217] border border-[#262632] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[#e50914]" />
+                  <h2 className="text-lg font-bold text-white tracking-wide">Admin Cloud Vault</h2>
+                </div>
+                <p className="text-xs text-gray-400">
+                  Manage Xtream playlists in the cloud. Syncs instantly to all your TV and mobile players.
+                </p>
+              </div>
 
-          <div className="mt-6 text-center">
-            <button
-              type="button"
-              onClick={() => setIsRegistering(!isRegistering)}
-              className="text-xs text-gray-400 hover:text-[#ff1e27] transition cursor-pointer"
-            >
-              {isRegistering ? 'Already have an account? Sign In' : 'Need an account? Register with Email'}
-            </button>
+              {authError && (
+                <div className="p-3 bg-red-950/50 border border-red-800/80 rounded-xl text-xs text-red-200 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-[#e50914]" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleEmailAuth} className="space-y-3.5">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="admin@tvmime.com"
+                    required
+                    className="w-full bg-[#181822] border border-[#262632] focus:border-[#e50914] focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1">Password</label>
+                  <input 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    className="w-full bg-[#181822] border border-[#262632] focus:border-[#e50914] focus:outline-none rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 transition-colors"
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full py-2.5 bg-[#e50914] hover:bg-[#ff1e27] text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-[#e50914]/25 cursor-pointer"
+                >
+                  {isRegistering ? 'Create Admin Account' : 'Sign In to Portal'}
+                </button>
+              </form>
+
+              <div className="relative my-4 text-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#262632]"></div></div>
+                <span className="relative bg-[#121217] px-3 text-[11px] text-gray-500 uppercase tracking-wider">Or</span>
+              </div>
+
+              <button 
+                type="button"
+                onClick={handleQuickAccess}
+                className="w-full py-2.5 bg-[#181822] hover:bg-[#20202c] border border-[#262632] text-gray-300 hover:text-white font-medium rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Shield className="w-4 h-4 text-emerald-400" />
+                <span>Instant Anonymous Access</span>
+              </button>
+
+              <div className="text-center pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsRegistering(!isRegistering)}
+                  className="text-xs text-gray-400 hover:text-[#ff1e27] transition cursor-pointer"
+                >
+                  {isRegistering ? 'Already have an account? Sign In' : 'Need an account? Register with Email'}
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="max-w-6xl w-full mx-auto text-center py-4 text-xs text-gray-500 relative z-10 border-t border-[#262632]/50">
+          <p>© 2026 TVMime • Creator: Faraz Ahmad • Open Source</p>
+        </footer>
       </div>
     );
   }
@@ -493,6 +623,16 @@ export function App() {
               </p>
             </div>
 
+            <a
+              href="/tv.apk"
+              download
+              title="Download TV APK (tv.apk)"
+              className="flex items-center gap-1.5 px-3 py-2 bg-[#181822] hover:bg-[#20202c] border border-[#262632] hover:border-[#ff1e27]/60 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition"
+            >
+              <Download className="w-4 h-4 text-[#ff1e27]" />
+              <span className="hidden md:inline">Download TV APK</span>
+            </a>
+
             <button 
               onClick={() => {
                 setAccountDisplayName(user.displayName || '');
@@ -505,7 +645,7 @@ export function App() {
               title="Account & Password Settings"
               className="flex items-center gap-1.5 px-3 py-2 bg-[#181822] hover:bg-[#20202c] border border-[#262632] hover:border-[#ff1e27]/60 text-gray-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
             >
-              <KeyRound className="w-4 h-4 text-[#ff1e27]" />
+              <KeyRound className="w-4 h-4 text-emerald-400" />
               <span className="hidden md:inline">Account & Password</span>
             </button>
 
