@@ -306,6 +306,55 @@ class XtreamRepository(
         )
         database.portalDao().insertOrUpdate(demo)
         database.portalDao().setActivePortal(demo.id)
+
+        val demoCat = com.tvmime.db.entity.CategoryEntity(
+            id = "demo_portal_LIVE_demo_cat",
+            portalId = demo.id,
+            categoryId = "demo_cat",
+            categoryName = "Demo Showcase",
+            parentId = 0,
+            type = "LIVE",
+            sortOrder = 1
+        )
+        database.categoryDao().insertCategories(listOf(demoCat))
+
+        val demoChannels = listOf(
+            ChannelEntity(
+                id = "demo_portal_LIVE_1",
+                portalId = demo.id,
+                streamId = 1,
+                num = 1,
+                name = "Big Buck Bunny (HLS 60fps)",
+                type = "LIVE",
+                categoryId = "demo_cat",
+                containerExtension = "m3u8",
+                directSourceUrl = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+            ),
+            ChannelEntity(
+                id = "demo_portal_LIVE_2",
+                portalId = demo.id,
+                streamId = 2,
+                num = 2,
+                name = "Sintel (HLS)",
+                type = "LIVE",
+                categoryId = "demo_cat",
+                containerExtension = "m3u8",
+                directSourceUrl = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+            ),
+            ChannelEntity(
+                id = "demo_portal_LIVE_3",
+                portalId = demo.id,
+                streamId = 3,
+                num = 3,
+                name = "Tears of Steel (4K HLS)",
+                type = "LIVE",
+                categoryId = "demo_cat",
+                containerExtension = "m3u8",
+                directSourceUrl = "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8"
+            )
+        )
+        database.channelDao().insertChannelsBatch(demoChannels)
+
         demo
     }
 }

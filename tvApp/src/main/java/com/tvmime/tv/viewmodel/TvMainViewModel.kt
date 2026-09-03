@@ -171,6 +171,12 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun addDemoPortal() {
+        viewModelScope.launch {
+            repository.addDemoPortal()
+        }
+    }
+
     suspend fun registerPairingCode(code: String): Result<Unit> {
         return repository.registerPairingCode(code)
     }
