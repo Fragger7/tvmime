@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -30,45 +32,90 @@ jobs:
         with:
           gradle-version: '8.7'
 
+      - name: Calculate Semantic Version & Build Code
+        id: semver
+        run: |
+          # 1. Total commits on HEAD guarantees strictly increasing versionCode
+          TOTAL_COMMITS=$(git rev-list --count HEAD)
+          echo "version_code=$TOTAL_COMMITS" >> "$GITHUB_OUTPUT"
+
+          # 2. Check if a git tag triggered this run
+          if [[ "${{ github.ref_name }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            CLEAN_VERSION="${GITHUB_REF_NAME#v}"
+            echo "version_name=$CLEAN_VERSION" >> "$GITHUB_OUTPUT"
+            echo "Computed version from tag: $CLEAN_VERSION (Build $TOTAL_COMMITS)"
+          else
+            # Get latest reachable tag or fallback to v1.0.0
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+            BASE_VER="${LATEST_TAG#v}"
+            
+            # Parse Major, Minor, Patch
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE_VER"
+            MAJOR=${MAJOR:-1}
+            MINOR=${MINOR:-0}
+            PATCH=${PATCH:-0}
+
+            # Inspect commit logs since latest tag
+            COMMITS_LOG=$(git log "${LATEST_TAG}..HEAD" --oneline 2>/dev/null || git log -n 30 --oneline)
+
+            if echo "$COMMITS_LOG" | grep -Eq "^[a-f0-9]+ (feat!|.*BREAKING CHANGE)"; then
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+            elif echo "$COMMITS_LOG" | grep -Eq "^[a-f0-9]+ feat(\(.*\))?:"; then
+              MINOR=$((MINOR + 1))
+              PATCH=0
+            elif echo "$COMMITS_LOG" | grep -Eq "^[a-f0-9]+ (fix|perf)(\(.*\))?:"; then
+              PATCH=$((PATCH + 1))
+            else
+              if [ "$MAJOR" -eq 1 ] && [ "$MINOR" -eq 0 ] && [ "$PATCH" -eq 0 ]; then
+                MINOR=1
+              fi
+            fi
+
+            VERSION_NAME="${MAJOR}.${MINOR}.${PATCH}"
+            echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+            echo "Computed semantic version: $VERSION_NAME (Build $TOTAL_COMMITS)"
+          fi
+
       - name: Build Android TV & Mobile APKs
-        run: gradle :tvApp:assembleDebug :androidApp:assembleDebug --stacktrace
+        run: gradle :tvApp:assembleDebug :androidApp:assembleDebug -PversionCode=${{ steps.semver.outputs.version_code }} -PversionName=${{ steps.semver.outputs.version_name }} --stacktrace
 
       - name: Stage Release Artifacts
         run: |
           mkdir -p release-artifacts
-          cp tvApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_tv_v1.0.0.apk
-          cp androidApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_mobile_v1.0.0.apk
-          cp release-artifacts/tvmime_tv_v1.0.0.apk release-artifacts/tv.apk
-          cp release-artifacts/tvmime_mobile_v1.0.0.apk release-artifacts/mobile.apk
+          VNAME="${{ steps.semver.outputs.version_name }}"
+          cp tvApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_tv_v${VNAME}.apk
+          cp androidApp/build/outputs/apk/debug/*.apk release-artifacts/tvmime_mobile_v${VNAME}.apk
+          cp release-artifacts/tvmime_tv_v${VNAME}.apk release-artifacts/tv.apk
+          cp release-artifacts/tvmime_mobile_v${VNAME}.apk release-artifacts/mobile.apk
 
       - name: Upload Android TV APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tvmime-tv-debug-apk
-          path: release-artifacts/tvmime_tv_v1.0.0.apk
+          path: release-artifacts/tv.apk
 
       - name: Upload Android Mobile APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tvmime-mobile-debug-apk
-          path: release-artifacts/tvmime_mobile_v1.0.0.apk
+          path: release-artifacts/mobile.apk
 
       - name: Publish Rolling Release APKs
         uses: softprops/action-gh-release@v2
         if: success()
         with:
           tag_name: latest
-          name: "TVMime Rolling Release v1.0.0"
+          name: "TVMime Release v${{ steps.semver.outputs.version_name }} (Build ${{ steps.semver.outputs.version_code }})"
           body: |
             ## TVMime Continuous Delivery Build
-            - **Android TV APK**: `tvmime_tv_v1.0.0.apk` (also available as `tv.apk`)
-            - **Android Mobile APK**: `tvmime_mobile_v1.0.0.apk` (also available as `mobile.apk`)
+            - **Version**: `v${{ steps.semver.outputs.version_name }}` (Build `${{ steps.semver.outputs.version_code }}`)
+            - **Android TV APK**: `tvmime_tv_v${{ steps.semver.outputs.version_name }}.apk` (also available as `tv.apk`)
+            - **Android Mobile APK**: `tvmime_mobile_v${{ steps.semver.outputs.version_name }}.apk` (also available as `mobile.apk`)
             - **Direct Downloader URL**: `https://tvmime.vercel.app/tv.apk`
           prerelease: true
           files: |
-            release-artifacts/tvmime_tv_v1.0.0.apk
-            release-artifacts/tvmime_mobile_v1.0.0.apk
-            release-artifacts/tv.apk
-            release-artifacts/mobile.apk
+            release-artifacts/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

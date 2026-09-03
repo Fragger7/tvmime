@@ -17,10 +17,30 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.os.Build
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.remember
 import com.tvmime.theme.DesignSystemTokens
 
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val (versionName, versionCode) = remember {
+        try {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            val vName = pInfo.versionName ?: "1.1.0"
+            val vCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                pInfo.longVersionCode
+            } else {
+                @Suppress("DEPRECATION")
+                pInfo.versionCode.toLong()
+            }
+            Pair(vName, vCode)
+        } catch (e: Exception) {
+            Pair("1.1.0", 2L)
+        }
+    }
+
     val bgMain = Color(DesignSystemTokens.Colors.Background)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
@@ -78,7 +98,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Text(
-                                text = "v1.0.0 (Build 1)",
+                                text = "v$versionName (Build $versionCode)",
                                 color = crimsonBright,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold

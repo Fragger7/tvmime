@@ -11,12 +11,13 @@ android {
         applicationId = "com.tvmime.tv"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: 2
+        versionName = (project.findProperty("versionName") as? String) ?: "1.1.0"
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
