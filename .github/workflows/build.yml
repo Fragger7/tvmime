@@ -2,15 +2,8 @@ name: Build TVMime APKs (Android TV & Mobile)
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'shared/**'
-      - 'tvApp/**'
-      - 'androidApp/**'
-      - 'gradle/**'
-      - '*.gradle.kts'
-      - '.github/workflows/build.yml'
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -62,7 +55,7 @@ jobs:
 
       - name: Publish Rolling Release APKs
         uses: softprops/action-gh-release@v2
-        if: github.ref == 'refs/heads/main'
+        if: success()
         with:
           tag_name: latest
           name: "TVMime Rolling Release v1.0.0"
