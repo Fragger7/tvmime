@@ -171,17 +171,26 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun addDemoPortal() {
-        viewModelScope.launch {
-            val demo = PortalConfig(
-                name = "Demo Xtream Portal",
-                serverUrl = "http://line.liveiptv.pro:80",
-                username = "demo",
-                password = "demo"
-            )
-            repository.savePortal(demo, setActive = true)
+    suspend fun registerPairingCode(code: String): Result<Unit> {
+        return repository.registerPairingCode(code)
+    }
+
+    suspend fun checkPairingAndSync(code: String): Result<Boolean> {
+        val res = repository.checkPairingAndSync(code)
+        if (res.getOrNull() == true) {
             repository.syncActivePortal()
         }
+        return res
+    }
+
+    suspend fun reportStreamIssue(
+        channelName: String,
+        channelNum: Int?,
+        errorCode: String,
+        errorMessage: String,
+        deviceSpecs: String
+    ): Result<Unit> {
+        return repository.reportStreamIssue(channelName, channelNum, errorCode, errorMessage, deviceSpecs)
     }
 }
 

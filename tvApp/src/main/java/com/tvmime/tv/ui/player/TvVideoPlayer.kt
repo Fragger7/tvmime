@@ -49,7 +49,7 @@ fun TvVideoPlayer(
     val coroutineScope = rememberCoroutineScope()
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
-    val borderCol = Color(DesignSystemTokens.Colors.CardBorder)
+    val borderCol = Color(DesignSystemTokens.Colors.Border)
 
     val capabilities = remember { DeviceCapabilityDetector.detect(context) }
     val bufferProfile = if (capabilities.isLowRamDevice) BufferProfile.FAST_ZAP else BufferProfile.BALANCED

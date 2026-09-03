@@ -236,4 +236,74 @@ class XtreamRepository(
 
         Result.success(entities)
     }
+
+    suspend fun registerPairingCode(code: String): Result<Unit> = withContext(Dispatchers.IO) {
+        val firebase = com.tvmime.sync.FirebaseSyncClient()
+        firebase.registerTvPairingCode(code, System.currentTimeMillis())
+    }
+
+    suspend fun checkPairingAndSync(code: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        val firebase = com.tvmime.sync.FirebaseSyncClient()
+        val statusRes = firebase.checkTvPairingStatus(code)
+        val status = statusRes.getOrElse { return@withContext Result.failure(it) }
+
+        if (status.isAuthorized && !status.userId.isNullOrBlank()) {
+            val portalsRes = firebase.getUserPortals(status.userId)
+            val portals = portalsRes.getOrElse { return@withContext Result.failure(it) }
+            for ((idx, cfg) in portals.withIndex()) {
+                val entity = PortalEntity(
+                    id = cfg.id,
+                    name = cfg.name,
+                    serverUrl = cfg.serverUrl,
+                    username = cfg.username,
+                    password = cfg.password,
+                    isActive = cfg.isActive,
+                    syncLive = cfg.syncLive,
+                    syncMovies = cfg.syncMovies,
+                    syncSeries = cfg.syncSeries,
+                    lastSyncedAt = System.currentTimeMillis()
+                )
+                database.portalDao().insertOrUpdate(entity)
+                if (idx == 0) {
+                    database.portalDao().setActivePortal(entity.id)
+                }
+            }
+            Result.success(true)
+        } else {
+            Result.success(false)
+        }
+    }
+
+    suspend fun reportStreamIssue(
+        channelName: String,
+        channelNum: Int?,
+        errorCode: String,
+        errorMessage: String,
+        deviceSpecs: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        val firebase = com.tvmime.sync.FirebaseSyncClient()
+        firebase.reportStreamIssue(
+            channelName = channelName,
+            channelNum = channelNum,
+            errorCode = errorCode,
+            errorMessage = errorMessage,
+            deviceSpecs = deviceSpecs,
+            timestamp = System.currentTimeMillis()
+        )
+    }
+
+    suspend fun addDemoPortal(): PortalEntity = withContext(Dispatchers.IO) {
+        val demo = PortalEntity(
+            id = "demo_portal",
+            name = "TVMime Public Demo",
+            serverUrl = "http://demo.tvmime.local:8080",
+            username = "demo",
+            password = "demo",
+            isActive = true,
+            lastSyncedAt = System.currentTimeMillis()
+        )
+        database.portalDao().insertOrUpdate(demo)
+        database.portalDao().setActivePortal(demo.id)
+        demo
+    }
 }

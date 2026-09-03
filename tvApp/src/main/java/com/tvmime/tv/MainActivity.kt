@@ -52,6 +52,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     var dismissedOnboarding by remember { mutableStateOf(false) }
     if (activePortal == null && !dismissedOnboarding) {
         com.tvmime.tv.ui.onboarding.OnboardingScreen(
+            viewModel = viewModel,
             onComplete = {
                 dismissedOnboarding = true
                 viewModel.syncCurrentPortal()

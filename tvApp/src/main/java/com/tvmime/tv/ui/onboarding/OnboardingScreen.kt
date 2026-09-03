@@ -24,12 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
-import com.tvmime.db.AppDatabase
-import com.tvmime.db.entity.PortalEntity
-import com.tvmime.model.StreamType
-import com.tvmime.sync.FirebaseSyncClient
 import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.hardware.DeviceCapabilityDetector
+import com.tvmime.tv.viewmodel.TvMainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -43,13 +40,12 @@ enum class OnboardingTab {
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
+    viewModel: TvMainViewModel,
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val syncClient = remember { FirebaseSyncClient() }
-    val database = remember { AppDatabase.getDatabase(context) }
     val capabilities = remember { DeviceCapabilityDetector.detect(context) }
 
     var selectedTab by remember { mutableStateOf(OnboardingTab.QUICK_PAIR) }
@@ -79,7 +75,7 @@ fun OnboardingScreen(
         val code = "MIME-$randomNum"
         pairCode = code
 
-        val regResult = syncClient.registerTvPairingCode(code, System.currentTimeMillis())
+        val regResult = viewModel.registerPairingCode(code)
         if (regResult.isSuccess) {
             isPairingRegistered = true
             pairStatusText = "Waiting for authorization from tvmime.vercel.app/pair..."
@@ -87,41 +83,17 @@ fun OnboardingScreen(
             // Polling loop
             while (isActive && !isPairSuccess) {
                 delay(2500)
-                val check = syncClient.checkTvPairingStatus(code)
-                if (check.isSuccess && check.getOrNull()?.isAuthorized == true) {
-                    val status = check.getOrNull()!!
+                val check = viewModel.checkPairingAndSync(code)
+                if (check.isSuccess && check.getOrNull() == true) {
                     isPairSuccess = true
-                    pairStatusText = "Device authorized by ${status.userEmail ?: "Admin"}! Syncing playlists..."
-
-                    if (!status.userId.isNullOrBlank()) {
-                        val portalsResult = syncClient.getUserPortals(status.userId!!)
-                        if (portalsResult.isSuccess) {
-                            val configs = portalsResult.getOrNull() ?: emptyList()
-                            for (cfg in configs) {
-                                database.portalDao().insertPortal(
-                                    PortalEntity(
-                                        id = cfg.id,
-                                        name = cfg.name,
-                                        serverUrl = cfg.serverUrl,
-                                        username = cfg.username,
-                                        password = cfg.password,
-                                        isActive = cfg.isActive,
-                                        syncLive = cfg.syncLive,
-                                        syncMovies = cfg.syncMovies,
-                                        syncSeries = cfg.syncSeries,
-                                        lastSyncedAt = System.currentTimeMillis()
-                                    )
-                                )
-                            }
-                        }
-                    }
+                    pairStatusText = "Device successfully linked! Ingesting your IPTV playlists..."
                     delay(1200)
                     onComplete()
                     break
                 }
             }
         } else {
-            pairStatusText = "Unable to connect to pairing service. Try Direct Login or Demo Mode."
+            pairStatusText = "Unable to register code with pairing service. Try Direct Login or Demo Mode."
         }
     }
 
@@ -168,7 +140,7 @@ fun OnboardingScreen(
                             letterSpacing = 2.sp
                         )
                         Text(
-                            text = "Connect your IPTV playlists to start watching in 60 FPS",
+                            text = "Connect your IPTV playlists to start streaming in 60 FPS",
                             color = textSecondary,
                             fontSize = 12.sp
                         )
@@ -390,34 +362,9 @@ fun OnboardingScreen(
                                         loginStatusText = "Signing in and syncing playlists..."
 
                                         coroutineScope.launch {
-                                            val res = syncClient.signInWithEmail(email, password)
-                                            if (res.isSuccess) {
-                                                val session = res.getOrNull()!!
-                                                val portalsRes = syncClient.getUserPortals(session.userId)
-                                                if (portalsRes.isSuccess) {
-                                                    val configs = portalsRes.getOrNull() ?: emptyList()
-                                                    for (cfg in configs) {
-                                                        database.portalDao().insertPortal(
-                                                            PortalEntity(
-                                                                id = cfg.id,
-                                                                name = cfg.name,
-                                                                serverUrl = cfg.serverUrl,
-                                                                username = cfg.username,
-                                                                password = cfg.password,
-                                                                isActive = cfg.isActive,
-                                                                syncLive = cfg.syncLive,
-                                                                syncMovies = cfg.syncMovies,
-                                                                syncSeries = cfg.syncSeries,
-                                                                lastSyncedAt = System.currentTimeMillis()
-                                                            )
-                                                        )
-                                                    }
-                                                }
-                                                onComplete()
-                                            } else {
-                                                loginStatusText = "Sign in failed: ${res.exceptionOrNull()?.message ?: "Check credentials"}"
-                                                isLoggingIn = false
-                                            }
+                                            viewModel.syncFromCloud(email, password)
+                                            delay(1000)
+                                            onComplete()
                                         }
                                     },
                                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
@@ -478,20 +425,8 @@ fun OnboardingScreen(
 
                                 Surface(
                                     onClick = {
-                                        coroutineScope.launch {
-                                            database.portalDao().insertPortal(
-                                                PortalEntity(
-                                                    id = "demo_portal",
-                                                    name = "TVMime Public Demo",
-                                                    serverUrl = "http://demo.tvmime.local:8080",
-                                                    username = "demo",
-                                                    password = "demo",
-                                                    isActive = true,
-                                                    lastSyncedAt = System.currentTimeMillis()
-                                                )
-                                            )
-                                            onComplete()
-                                        }
+                                        viewModel.addDemoPortal()
+                                        onComplete()
                                     },
                                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
                                     colors = ClickableSurfaceDefaults.colors(

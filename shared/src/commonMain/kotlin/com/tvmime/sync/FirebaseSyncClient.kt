@@ -18,10 +18,10 @@ import kotlinx.serialization.json.*
  * on any Android TV or Firestick device with minimal RAM overhead.
  */
 class FirebaseSyncClient(
-    private val httpClient: HttpClient = createClient(),
     private val apiKey: String = FIREBASE_API_KEY,
     private val projectId: String = FIREBASE_PROJECT_ID
 ) {
+    private val httpClient: HttpClient = createClient()
     companion object {
         const val FIREBASE_API_KEY = "AIzaSyDhPNLT3YUqW6I6KVIt5-Kbop9mlaSRufw"
         const val FIREBASE_PROJECT_ID = "tvmime-65909"
