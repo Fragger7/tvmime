@@ -1,5 +1,6 @@
 package com.tvmime.tv.ui.settings
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,12 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.material3.*
 import com.tvmime.theme.DesignSystemTokens
+import com.tvmime.tv.update.UpdateManager
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
@@ -32,6 +36,20 @@ fun SettingsScreen(
     onToggleLastChannelZap: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var isCheckingUpdate by remember { mutableStateOf(false) }
+    var updateStatus by remember { mutableStateOf<String?>(null) }
+    var downloadProgress by remember { mutableStateOf<Int?>(null) }
+    val versionName = remember {
+        try {
+            val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            pInfo.versionName ?: "1.1.0"
+        } catch (e: Exception) {
+            "1.1.0"
+        }
+    }
+
     val bgMain = Color.Transparent
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
@@ -122,6 +140,104 @@ fun SettingsScreen(
                         onClick = onToggleLastChannelZap,
                         crimsonBright = crimsonBright
                     )
+                }
+            }
+
+            // Software Updates (OTA)
+            item {
+                SettingsSection(title = "Software Updates & OTA", cardBg = cardBg, crimson = crimson) {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(
+                            text = "Installed Version: v$versionName",
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Download and apply signed updates directly from GitHub Releases without losing channels or settings.",
+                            color = textSecondary,
+                            fontSize = 12.sp
+                        )
+
+                        if (updateStatus != null) {
+                            Text(
+                                text = updateStatus ?: "",
+                                color = if (updateStatus?.contains("fail", ignoreCase = true) == true || updateStatus?.contains("error", ignoreCase = true) == true) Color(0xFFEF4444) else Color(0xFF10B981),
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        if (downloadProgress != null && downloadProgress!! in 1..99) {
+                            Text(
+                                text = "Downloading: $downloadProgress%",
+                                color = crimsonBright,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        Surface(
+                            onClick = {
+                                if (isCheckingUpdate) return@Surface
+                                isCheckingUpdate = true
+                                updateStatus = "Checking release server..."
+                                downloadProgress = null
+                                coroutineScope.launch {
+                                    val activity = context as? Activity
+                                    val updateInfo = UpdateManager.checkForUpdate(context)
+                                    if (updateInfo.hasUpdate) {
+                                        if (activity != null) {
+                                            updateStatus = "Update found (v${updateInfo.latestVersionName})! Downloading APK..."
+                                            val result = UpdateManager.downloadAndInstall(activity, updateInfo.downloadUrl) { progress ->
+                                                downloadProgress = progress
+                                            }
+                                            result.fold(
+                                                onSuccess = {
+                                                    updateStatus = "Installer launched! Follow TV screen prompt to complete update."
+                                                    downloadProgress = null
+                                                },
+                                                onFailure = { err ->
+                                                    updateStatus = "Update failed: ${err.message}"
+                                                    downloadProgress = null
+                                                }
+                                            )
+                                        } else {
+                                            updateStatus = "Update available: v${updateInfo.latestVersionName} (Build ${updateInfo.latestVersionCode})"
+                                        }
+                                    } else {
+                                        updateStatus = "TVMime is currently up to date (v$versionName)"
+                                    }
+                                    isCheckingUpdate = false
+                                }
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = crimson,
+                                focusedContainerColor = crimsonBright
+                            ),
+                            modifier = Modifier.height(40.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.SystemUpdate,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Text(
+                                    text = if (isCheckingUpdate) "Checking Server..." else "Check for Updates Now",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
