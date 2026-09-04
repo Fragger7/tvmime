@@ -138,3 +138,36 @@ IPTV portals often provide `http://` or `https://` entrypoints that issue `HTTP 
 **The Solution:**
 *   Explicitly define `network_security_config.xml` with `<base-config cleartextTrafficPermitted="true" />` and reference it in the `AndroidManifest.xml`.
 
+---
+
+## 12. Streaming Parser Null-Safety ("Expected a string but was NULL")
+
+**The Problem:**
+Different Xtream Codes / IPTV panel backends (e.g., Xtream UI, 1Stream, ZapX) omit or return raw `null` literals for optional channel fields such as `"stream_icon": null`, `"epg_channel_id": null`, `"category_id": null`, or `"custom_sid": null`.
+Calling low-level Gson `JsonReader.nextString()` on a `JsonToken.NULL` throws an unhandled `IllegalStateException: Expected a string but was NULL`. This unhandled exception abruptly terminates the entire catalog stream parser mid-ingestion, rolls back/aborts channel and VOD insertion, and leaves the app in a state where category groups appear with counts (from the earlier category sync) but channel/movie lists are completely empty.
+
+**The Solution:**
+*   Always inspect the token type before consuming string values:
+    ```kotlin
+    fun JsonReader.nextStringOrNull(): String? {
+        if (peek() == JsonToken.NULL) {
+            nextNull()
+            return null
+        }
+        return nextString()
+    }
+    ```
+*   Ensure that parsing individual channel entities has fallback isolation so that a corrupt row does not crash the entire ingestion stream.
+
+---
+
+## 13. Multi-Portal Aggregation vs. Single Active Portal Architecture
+
+**The Problem:**
+Users often subscribe to multiple IPTV services (e.g., one optimized for live sports, another for international channels or VOD). When multiple portals are activated in the web admin/cloud sync, displaying only a single active portal forces the user to constantly switch portals in Settings to see their content, which breaks the seamless TiviMate / IMPlayer experience.
+
+**The Solution:**
+*   **Unified Query Model:** In `XtreamRepository` and Room DAO, support querying across all portals where `isActive = true`.
+*   **Visual Grouping & Collision Prevention:** Prefix channel IDs by portal ID (already implemented as `${type}_${streamId}` -> should be `${portalId}_${type}_${streamId}`) to prevent collisions between identical stream IDs across different providers.
+*   **Group / Playlist Filtering:** In the Channel List overlay and TV Guide, display a Playlist selector pill or group categories by `[Playlist Name] Category Name` so channels from all active playlists can be navigated concurrently.
+

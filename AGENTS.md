@@ -102,17 +102,35 @@ All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventiona
 - **Android Version Code**: Strictly monotonic integer derived from `git rev-list --count HEAD` so every single commit anywhere guarantees a higher build number than previous builds.
 
 ## 7. Next Agent Hand-Off: What Is Left (Prioritized)
-1. **Error Recovery & Auto-Failover [COMPLETED in v1.2.2]**:
-   - Initial retry with alternate container format (`.ts` ⇄ `.m3u8`), proactive socket drop on zapping (`stop()` + `clearMediaItems()`), and descriptive on-screen error banner for HTTP 404/456/884.
-2. **Mobile App (`androidApp`) Touch EPG & Channel Grid**:
+### ⚠️ CRITICAL BUGS & USER FEEDBACK (To be investigated and fixed in next session):
+1. **Sync Failure "Expected a string but was NULL"**:
+   - **Symptom**: During portal sync (`syncActivePortal`), front-end shows `Sync Failed: Expected a string but was NULL`.
+   - **Root Cause Analysis**: In `StreamingCatalogParser.kt` (lines 123-142), `reader.nextString()` is called directly on fields like `"stream_icon"`, `"epg_channel_id"`, `"category_id"`, or `"name"`. If the IPTV provider's JSON returns `null` (e.g. `"stream_icon": null` or `"epg_channel_id": null`), Gson's `JsonReader.nextString()` throws `IllegalStateException: Expected a string but was NULL`.
+   - **Solution to implement**: Introduce a safe reader helper `JsonReader.nextStringOrNull()` that checks `reader.peek() == JsonToken.NULL` and consumes `reader.nextNull()`.
+
+2. **Category Groups load counts & names, but Channels list is empty**:
+   - **Symptom**: Category groups are populated with counts, but selecting a category shows 0 channels.
+   - **Root Cause Analysis**: Because the `JsonReader` threw an exception early during the streams array parsing, transaction was rolled back or aborted before inserting channels, leaving the database empty of channels while categories (which synced in step 1) were committed.
+
+3. **Multi-Portal Unified View vs. Single Active Portal ("Active" badge)**:
+   - **Symptom**: User has multiple active portals in CloudSync/AdminWeb, but app only displays the single top portal marked `isActive`.
+   - **User Request**: If multiple connections/portals are active, find a graceful way to display channels/content across all active connections (e.g. multi-portal group aggregation or portal switching tabs/headers like TiviMate).
+
+4. **Movies/VOD List Empty despite being enabled in portal**:
+   - **Symptom**: Portal has `syncMovies = true`, but VOD screen says "No titles available. Sync portal to download movies catalog."
+   - **Root Cause Analysis**: Sync failure in step 1 aborted the sync pipeline before reaching the VOD streams sync stage, or `get_vod_streams` requires the same null-safe parsing.
+
+---
+
+### Implementation Tasks (Prioritized):
+1. **Fix JsonReader Null Safety in `StreamingCatalogParser.kt`**:
+   - Add `fun JsonReader.nextStringOrNull(): String?`.
+2. **Multi-Portal Aggregation & Unified Channel Browser**:
+   - Group channels by portal or allow seamless multi-portal browsing.
+3. **Mobile App (`androidApp`) Touch EPG & Channel Grid**:
    - Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
-   - Channel grid with pull-to-refresh and category horizontal scroll chips.
-3. **Chromecast Receiver Integration (`androidApp`)**:
-   - Complete `androidx.media3:media3-cast` receiver discovery and media routing so streams can be cast from mobile to Android TV / Cast targets.
-4. **VOD Experience Upgrade (`tvApp/.../ui/vod/VodScreen.kt`)**:
-   - Replace basic column list with responsive poster grid featuring TMDB artwork metadata, backdrop art, and synopsis modal.
-5. **Physical Device TV Testing**:
-   - Test APK build artifacts on real Android TV / Fire TV stick hardware with physical remotes.
+4. **VOD TMDB Poster Grid & Catalog Flow**:
+   - Resolve VOD catalog sync and upgrade `VodScreen.kt` to poster grid.
 
 ## 8. Development Environment & Testing Guide
 - **Web Admin Development**:

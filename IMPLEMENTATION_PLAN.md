@@ -97,9 +97,18 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Long-Press Context Menu & Group Hiding:** Extended `TvPreferencesManager.kt` to persist a `Set<String>` of hidden category IDs to `SharedPreferences`. Modified `TvMainViewModel.kt`'s `categories` StateFlow to intercept and filter out hidden categories in real-time. Wired `onLongClick` in `LiveTvScreen.kt` CategoryCard.
 - **Channel State Integrity:** Restored `playChannel` with previous-channel tracking for instant D-Pad Right swap and watch-history tracking in Room.
 
-### Sprint 3: Resilience & Mobile Foundation [ACTIVE SPRINT]
+### Sprint 3: Resilience, Ingestion Hardening & Multi-Portal [ACTIVE SPRINT]
 - **Stream Auto-Recovery & Dummy Header Pruning [COMPLETED in v1.2.2]:** Filtered dummy separator headers in `StreamingCatalogParser.kt` to avoid 404 dead stream calls. Implemented proactive socket teardown (`stop()` + `clearMediaItems()`) for single-connection IPTV portals. Built auto-format recovery (`.ts` ⇄ `.m3u8`) and an on-screen guidance banner in `TvVideoPlayer.kt`.
 - **Cleartext Traffic Support [COMPLETED in v1.2.1]:** Created `network_security_config.xml` to allow cleartext HTTP traffic required by bare-IP edge CDN stream redirects.
+- **[CRITICAL BUG FIX #1] JsonReader Null-Safety in Catalog Ingestion:**
+  - *Issue*: `Expected a string but was NULL` crashes catalog ingestion when an IPTV provider sends `null` values for `stream_icon`, `epg_channel_id`, or `category_id`.
+  - *Fix Planned*: Add extension `fun JsonReader.nextStringOrNull(): String?` and wrap individual row parsing with try-catch fallback.
+- **[CRITICAL BUG FIX #2 & #4] Empty Channels & Movies List Resolution:**
+  - *Issue*: Category counts load but Channels and Movies show 0 items because the ingestion exception prematurely halts the transaction.
+  - *Fix Planned*: Ensure robust transaction isolation and verify VOD stream endpoint (`get_vod_streams`) ingestion completes.
+- **[CRITICAL ARCHITECTURE #3] Multi-Portal Unified Content Aggregation:**
+  - *Issue*: Currently, only the top portal marked active displays channels, leaving secondary active portals unbrowsable.
+  - *Design Planned*: Aggregate channels and categories across all enabled portals (`isActive = true`), prefixing IDs (`${portalId}_${type}_${streamId}`) to avoid collisions, and introduce playlist indicator chips or group nesting `[Playlist Name] Category`.
 - **Mobile Touch EPG [NEXT]:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
 - **Chromecast Streaming [UPCOMING]:** Wire `androidx.media3:media3-cast` into mobile player to route streams to smart TVs and Cast targets.
 
