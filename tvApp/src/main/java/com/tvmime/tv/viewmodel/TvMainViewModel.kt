@@ -155,7 +155,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         _selectedCategory.value = null
     }
 
-    fun selectCategory(cat: CategoryEntity) {
+    fun selectCategory(cat: CategoryEntity?) {
         _selectedCategory.value = cat
     }
 

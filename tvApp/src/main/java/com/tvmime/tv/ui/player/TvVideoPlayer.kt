@@ -81,6 +81,8 @@ private data class TrackOption(
 fun TvVideoPlayer(
     channel: ChannelEntity?,
     activePortal: PortalEntity? = null,
+    activeConnections: Int = 1,
+    maxConnections: Int = 1,
     showClockOverlay: Boolean = true,
     autoHideOsdSeconds: Int = 5,
     enableLastChannelZap: Boolean = true,
@@ -559,8 +561,8 @@ fun TvVideoPlayer(
                     }
 
                     // Right: Connection / Playlist Name & Active/Max Connections Badge
-                    val activeCons = activePortal?.activeConnections ?: 1
-                    val maxCons = activePortal?.maxConnections ?: 1
+                    val activeCons = activeConnections
+                    val maxCons = maxConnections
                     val isExceeded = activeCons > maxCons
 
                     Box(
