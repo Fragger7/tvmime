@@ -113,7 +113,7 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - [x] **Phase 4.4: M3U Fallback Pipeline** - Implement regex-based `#EXTM3U` parsing alongside the existing Xtream JSON parser to support raw playlist links.
 
 ### Sprint 5: Dual-Model Sync & Cross-Platform (In Progress)
-- [ ] **Phase 5.1: Auth Wizard Simplification** - Eliminate login flash and rip out the broken QR code UI.
+- [x] **Phase 5.1: Auth Wizard Simplification** - Eliminate login flash and rip out the broken QR code UI.
 - [ ] **Phase 5.2: Mobile App (`androidApp`) EPG** - Adapt the TV Grid to a touch-optimized UI.
 
 ---
