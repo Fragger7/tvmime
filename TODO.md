@@ -57,9 +57,26 @@
 - [x] Verified live production Android TV APK build (20.9MB) and Mobile APK build (23.1MB) via rolling release.
 
 ### Next Session Priorities
+- [ ] Overhaul `OnboardingScreen.kt` and `TvMainViewModel.kt` to enforce real Authentication via `XtreamClient.kt` instead of fake delays.
+- [ ] Move all heavy JSON parsing and Room DB operations to `Dispatchers.IO` to prevent UI thread blocking and crashes on Android TV.
+- [ ] Professionalize Android TV UI (Remove amateur footers, implement real password visibility toggles, restructure Settings screen logically based on TiviMate/IMPlayer standards).
 - [ ] User testing on physical Android TV / Firestick devices via `https://tvmime.vercel.app/tv.apk`.
-- [ ] Implement Mobile EPG & channel grid in `androidApp`.
-- [ ] Complete `androidx.media3:media3-cast` receiver discovery & playback transfer.
+
+### Product Backlog & Architectural Roadmap (TiviMate / IMPlayer Standards)
+#### Core Player Features
+- [ ] **Catch-up (Archive) Support**: Implement Xtream Codes catch-up playback for supported channels.
+- [ ] **Video Player Tweaks**: Implement AFR (Auto Frame Rate) matching, Audio Passthrough, and manual Decoder selection (Hardware / Software).
+- [ ] **EPG Timeline Offset**: Add manual timezone offsets for EPG data per playlist.
+
+#### Data & Playlist Management
+- [ ] **Multi-Playlist Management**: Allow users to switch between multiple portals seamlessly within the UI.
+- [ ] **Groups & Favorites Sync**: Save user favorites and custom groups to the local Room DB, and sync them to Firebase so the Mobile App reflects the same favorites as the TV App.
+- [ ] **Backup/Restore**: Implement a simple export/import of app settings and favorites to Google Drive or Firebase.
+- [ ] **Parental Controls**: Add a PIN code lock for specific categories (e.g., Adult content).
+
+#### Mobile & Casting
+- [ ] Implement touch-optimized Mobile EPG (Video player fixed at top, clean vertical scrolling channel list below).
+- [ ] Complete `androidx.media3:media3-cast` receiver discovery & playback transfer for casting to local WiFi devices.
 
 
 

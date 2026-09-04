@@ -73,3 +73,16 @@ All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventiona
 2. **Mobile EPG Grid (`androidApp`)**: Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
 3. **Chromecast Receiver Integration**: Complete `androidx.media3:media3-cast` receiver discovery and playback transfer in `androidApp`.
 
+## 8. Current Agent Philosophy & Fix Roadmap (Added Sep 2026)
+**ATTENTION FUTURE AGENTS:** The previous generative iteration built a beautiful UI shell but completely mocked or broke the underlying execution layers (e.g., `OnboardingScreen.kt` uses `delay(1000)` instead of actual Auth verification).
+
+### The Philosophy (Personal App, Free-Tier, High Quality)
+*   **Scale:** This is a personal/family app. We are optimizing for UX, speed, and reliability—not commercial scale, multi-tenant RBAC, or billing systems.
+*   **Cost:** We rely exclusively on free-tier tools (Firebase Free Tier, Vercel Free Tier, GitHub Actions Free Tier). Do NOT introduce paid services.
+*   **CI/CD Conservation:** Do NOT push `v*` tags or trigger builds unnecessarily. The free GitHub Actions quota is limited. Push commits without tags during iteration. The workflow (`build.yml`) will automatically calculate semantic versioning (`feat/fix/perf`) whenever a build is eventually triggered.
+
+### The Immediate Fix Roadmap (Android TV Core Overhaul)
+1.  **Authentication Reality Check:** Rip out fake `delay(1000)` mocks in onboarding. Implement real `Result` checking from `XtreamClient.kt`. Handle auth failures gracefully with red error text. Do not let unauthenticated users crash the main UI.
+2.  **Performance Overhaul (No Main-Thread Blocking):** Jetpack Compose is fast, but only if heavy JSON parsing and Room DB inserts happen on `Dispatchers.IO`. Fix the current state where the app hangs and crashes because it tries to parse massive lists on the UI thread.
+3.  **UI Professionalization:** Remove amateur elements (e.g., "Architecture by..." footers, generic tech babble). Rebuild `SettingsScreen.kt` based on actual IPTV user needs (Player Settings, EPG Update Frequency, User Agent toggles) instead of random generated toggles.
+
