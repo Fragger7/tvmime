@@ -29,54 +29,54 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 
 ---
 
-### Phase 1: Cloud Presence & Admin Foundation (Completed)
-As requested, we built the cloud presence first to make testing seamless across devices.
-#### [COMPLETED] `adminWeb/` (Hosted on Vercel at https://tivimime.vercel.app)
-- Setup a React 19 + Vite 6 + Tailwind CSS v4 admin UI matching the Deep Black & Crimson Red design tokens.
-- Setup Firebase Authentication (Email/Password and Anonymous Quick Access) under project `tvmime-65909`.
-- Setup Firestore database schema for `user_portals` (storing Xtream URLs, usernames, passwords, status).
-- Deployed `/api/test-portal` serverless proxy function to eliminate CORS and browser Mixed Content errors.
-- This allows us to load a list once in the cloud, and as we iterate on the TV app, it simply logs in and pulls the portals without re-typing.
+---
 
+### Phase 1: Cloud Presence & Admin Foundation [COMPLETED]
+- Built `adminWeb/` React 19 + Vite 6 + Tailwind CSS v4 hosted on Vercel at [tvmime.vercel.app](https://tvmime.vercel.app).
+- Firebase Authentication (Email/Password & Anonymous) under `tvmime-65909`.
+- Firestore database for `UserPortals` syncing across devices.
+- Serverless proxy `/api/test-portal` for CORS and mixed-content IPTV validation.
+- Direct TV and Mobile APK download cards on landing page.
 
 ---
 
-### Phase 2: Network & Data Layer (Xtream Codes - Shared KMP)
-#### [NEW] `shared/network/XtreamRepository.kt`
-- Implementation of Ktor HTTP clients to fetch IPTV data directly from the provider using the credentials pulled from Firebase in Phase 1.
-- Custom parsers to handle massive JSON arrays safely, syncing them into the local shared database.
-- *Stalker portal support will be deferred to a later phase once Xtream is rock solid.*
+### Phase 2: Network & Data Layer (Xtream Codes - Shared KMP) [COMPLETED]
+- **`shared/src/commonMain/.../repository/XtreamRepository.kt`**: Fetches categories, channels, and EPG data from Xtream Codes APIs with spoofed User-Agent (`IPTVSmartersPro/1.1.1`).
+- **`shared/src/commonMain/.../network/StreamingCatalogParser.kt`**: Zero-OOM token-by-token JSON parsing directly into local SQLite database.
+- **`shared/src/commonMain/.../db/AppDatabase.kt`**: Multiplatform Room Database caching categories, channels, and EPG schedules.
+- **`shared/src/commonMain/.../sync/FirebaseSyncClient.kt`**: Cloud portal synchronization with local Room storage.
 
 ---
 
-### Phase 3: Mobile App & Chromecast
-#### [NEW] `ui/mobile/MobileDashboardScreen.kt`
-- Touch-optimized dashboard for Android Mobile.
-#### [NEW] `player/CastManager.kt`
-- Integration of `androidx.media3:media3-cast`.
-- Adds the Google Cast button to the mobile app, allowing the user to cast the live stream or VOD directly to an Android TV or Chromecast.
+### Phase 3: Mobile App & Chromecast [IN PROGRESS]
+- [x] Scaffold Mobile Jetpack Compose foundation (`androidApp/src/main/java/com/tvmime/mobile/MainActivity.kt`).
+- [ ] Implement Mobile EPG and channel grid with touch optimization.
+- [ ] Complete `androidx.media3:media3-cast` receiver discovery and remote playback transfer.
 
 ---
 
-### Phase 4: Android TV UI (Compose)
-#### [NEW] `tvApp/ui/DashboardScreen.kt`
-- Leanback-inspired left-side navigation menu using Compose for TV. D-Pad focus handling.
-#### [NEW] `tvApp/ui/EPGScreen.kt`
-- Custom drawn LazyGrid for the TV Guide timeline and logos.
-#### [NEW] `shared/player/ExoPlayerManager.kt`
-- Hardware-accelerated ExoPlayer with TV controls wrapper (Channel +/-, Volume, Last Channel).
+### Phase 4: Android TV UI (Compose for TV) [COMPLETED]
+- **`tvApp/.../ui/navigation/TvNavigationDrawer.kt`**: Collapsible left navigation drawer with D-Pad focus handling.
+- **`tvApp/.../ui/live/LiveTvScreen.kt`**: Split channel browser with category column, channel list, and embedded preview player.
+- **`tvApp/.../ui/player/TvVideoPlayer.kt`**: Fullscreen hardware-accelerated Media3 player:
+  - Top information bar (CH number, name, live resolution, active playlist badge, and active/max connection ratio).
+  - Dedicated persistent top-right clock overlay pill.
+  - In-playback controls (Play/Pause, Aspect Ratio, Audio Tracks sheet, Subtitles sheet, Telemetry HUD, Favorite toggle, TV Guide launcher, Issue Reporting).
+  - D-Pad Right Last Channel Quick Zap with animated top-center toast.
+  - Live Telemetry HUD (bitrate, remote host/IP, buffer depth & % cached, decoders).
+- **`tvApp/.../ui/guide/TvGuideScreen.kt`**: TiviMate-style EPG grid guide with 30-minute time intervals and PIP mini-preview.
+- **`tvApp/.../ui/settings/SettingsScreen.kt` & `TvPreferencesManager.kt`**: Interactive D-Pad preferences (Clock toggle, OSD timeout picker, Last Channel zap toggle).
+- **`tvApp/.../ui/onboarding/OnboardingScreen.kt`**: Quick TV pairing wizard & demo portal loader.
+- **`tvApp/.../ui/about/AboutScreen.kt`**: Crediting Faraz Ahmad, architecture specifications, and dynamic runtime version code.
 
 ---
 
-### Phase 5: CI/CD & Project Structure
-To avoid the headache of installing the massive Android SDK locally for compiling APKs, we will use a **GitHub Actions CI/CD Pipeline** (similar to Project Strong).
-- **Git Strategy:** A single Monorepo hosted on GitHub.
-- **Folder Structure:**
-  - `/shared` (KMP Core Engine)
-  - `/androidApp` (Mobile UI)
-  - `/tvApp` (Android TV UI)
-  - `/adminWeb` (Firebase Web UI)
-- **CI/CD Pipeline:** Every push to the `main` branch will trigger a GitHub Action that automatically compiles `mobile-debug.apk` and `tv-debug.apk`. You can simply download these from the GitHub Artifacts page directly to your phone or TV.
+### Phase 5: CI/CD & Automated Semantic Versioning [COMPLETED]
+- Standalone repository: `https://github.com/Fragger7/tvmime.git`.
+- GitHub Actions workflow (`.github/workflows/build.yml`) compiling both Android TV and Mobile APKs.
+- Automatic semantic version bumping (`v1.x.0` via conventional commits) and strictly monotonic build codes (`git rev-list --count HEAD`).
+- Permanent TV APK download link redirecting to `https://tvmime.vercel.app/tv.apk`.
+- Cryptographic debug keystore locked to preserve 100% in-place OTA update compatibility.
 
 ## Verification Plan
 
