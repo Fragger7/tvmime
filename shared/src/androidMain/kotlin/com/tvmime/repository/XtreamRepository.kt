@@ -159,6 +159,11 @@ class XtreamRepository(
                 syncChannels(portal, type)
             }
 
+            // 4. Sync EPG if Live TV was synced
+            if (portal.syncLive) {
+                syncEpg(portal)
+            }
+
             val timestamp = System.currentTimeMillis()
             database.portalDao().updateLastSynced(portal.id, timestamp)
             _syncProgress.value = SyncProgress.Success(timestamp)
@@ -233,6 +238,47 @@ class XtreamRepository(
                 database.channelDao().insertChannelsBatch(batch)
                 _syncProgress.value = SyncProgress.SyncingChannels(type, totalProcessed)
             }
+        }
+    }
+
+    private suspend fun syncEpg(portal: PortalEntity) {
+        // Only fetch get_short_epg for the whole server if streamId is not specified
+        // Some servers support get_short_epg without stream_id to dump everything.
+        val url = "${portal.serverUrl.removeSuffix("/")}/player_api.php?username=${portal.username}&password=${portal.password}&action=get_short_epg"
+        val request = Request.Builder()
+            .url(url)
+            .header("User-Agent", XtreamClient.EVASION_USER_AGENT)
+            .header("Accept", "application/json")
+            .build()
+
+        try {
+            okHttpClient.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) {
+                    Napier.w("EPG sync returned HTTP ${response.code} for portal ${portal.name}. Skipping EPG.")
+                    return
+                }
+                val body = response.body ?: return
+
+                val batch = mutableListOf<EpgProgramEntity>()
+                StreamingCatalogParser.parseEpgStream(
+                    inputStream = body.byteStream(),
+                    portalId = portal.id,
+                    timeShiftHours = portal.timeShiftHours
+                ).collect { prog ->
+                    batch.add(EpgProgramEntity.fromDomain(prog, portal.id))
+
+                    if (batch.size >= 1000) {
+                        database.epgDao().insertProgramsBatch(batch)
+                        batch.clear()
+                    }
+                }
+
+                if (batch.isNotEmpty()) {
+                    database.epgDao().insertProgramsBatch(batch)
+                }
+            }
+        } catch (e: Exception) {
+            Napier.w("EPG sync failed for portal ${portal.name}", e)
         }
     }
 

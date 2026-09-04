@@ -15,7 +15,8 @@ data class PortalConfig(
     val syncLive: Boolean = true,
     val syncMovies: Boolean = true,
     val syncSeries: Boolean = true,
-    val expiryDate: String? = null
+    val expiryDate: String? = null,
+    val timeShiftHours: Float = 0f
 )
 
 @Serializable
@@ -44,6 +45,8 @@ data class Channel(
     val epgChannelId: String? = null,
     val categoryId: String,
     val containerExtension: String = "ts",
+    val hasArchive: Boolean = false,
+    val archiveDuration: Int = 0,
     val directSourceUrl: String = ""
 )
 

@@ -69,6 +69,13 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val channelListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
 
     // First-Run Wizard
+    val context = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(Unit) {
+        if (activePortals.isNotEmpty()) {
+            viewModel.syncCurrentPortal()
+            com.tvmime.tv.sync.SyncWorkManager.scheduleBackgroundSync(context, 12L)
+        }
+    }
     var dismissedOnboarding by remember { mutableStateOf(false) }
     if (activePortals.isEmpty() && !dismissedOnboarding) {
         com.tvmime.tv.ui.onboarding.OnboardingScreen(

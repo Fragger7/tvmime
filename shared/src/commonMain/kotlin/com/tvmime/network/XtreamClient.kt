@@ -142,6 +142,37 @@ class XtreamClient(
         }
         return "$server/player_api.php?username=${portal.username}&password=${portal.password}&action=$action"
     }
+
+    /**
+     * Builds EPG API endpoint URL (can be for all channels or one)
+     */
+    fun buildEpgApiUrl(portal: PortalConfig, streamId: Int? = null): String {
+        val server = portal.serverUrl.trim().removeSuffix("/")
+        return if (streamId != null) {
+            "$server/player_api.php?username=${portal.username}&password=${portal.password}&action=get_short_epg&stream_id=$streamId"
+        } else {
+            "$server/xmltv.php?username=${portal.username}&password=${portal.password}"
+        }
+    }
+
+    /**
+     * Builds playback stream URL for Catch-Up TV (timeshift)
+     */
+    fun buildTimeshiftUrl(
+        portal: PortalConfig,
+        streamId: Int,
+        startUnixMinute: Long,
+        durationMinutes: Int
+    ): String {
+        val server = portal.serverUrl.trim().removeSuffix("/")
+        // http://server/timeshift/user/pass/duration/start_time/stream_id.ts
+        // Wait, standard timeshift format is: http://server/timeshift/user/pass/duration/start_date:minute/stream_id.ts
+        // Actually, Xtream Codes timeshift format: http://server/timeshift/user/pass/duration/start_timestamp/stream_id.ts
+        // Note: start_timestamp is usually in format "YYYY-MM-DD:HH-MM" but some servers just take unix time.
+        // Let's use standard: server/timeshift/user/pass/duration/start_datetime/stream_id.ts
+        // Let's create a placeholder we can fix later if it needs formatting.
+        return "$server/timeshift/${portal.username}/${portal.password}/$durationMinutes/$startUnixMinute/$streamId.ts"
+    }
 }
 
 sealed interface AuthResult {

@@ -18,6 +18,7 @@ data class PortalEntity(
     val syncMovies: Boolean = true,
     val syncSeries: Boolean = true,
     val expiryDate: String? = null,
+    val timeShiftHours: Float = 0f,
     val lastSyncedAt: Long = 0L
 ) {
     fun toDomain(): PortalConfig = PortalConfig(
@@ -32,7 +33,8 @@ data class PortalEntity(
         syncLive = syncLive,
         syncMovies = syncMovies,
         syncSeries = syncSeries,
-        expiryDate = expiryDate
+        expiryDate = expiryDate,
+        timeShiftHours = timeShiftHours
     )
 
     companion object {
@@ -49,6 +51,7 @@ data class PortalEntity(
             syncMovies = config.syncMovies,
             syncSeries = config.syncSeries,
             expiryDate = config.expiryDate,
+            timeShiftHours = config.timeShiftHours,
             lastSyncedAt = lastSyncedAt
         )
     }

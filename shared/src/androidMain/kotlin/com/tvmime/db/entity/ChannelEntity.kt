@@ -27,6 +27,8 @@ data class ChannelEntity(
     val epgChannelId: String? = null,
     val categoryId: String,
     val containerExtension: String = "ts",
+    val hasArchive: Boolean = false,
+    val archiveDuration: Int = 0,
     val directSourceUrl: String = "",
     val isFavorite: Boolean = false,
     val lastWatchedEpoch: Long = 0L
@@ -41,6 +43,8 @@ data class ChannelEntity(
         epgChannelId = epgChannelId,
         categoryId = categoryId,
         containerExtension = containerExtension,
+        hasArchive = hasArchive,
+        archiveDuration = archiveDuration,
         directSourceUrl = directSourceUrl
     )
 
@@ -56,6 +60,8 @@ data class ChannelEntity(
             epgChannelId = ch.epgChannelId,
             categoryId = ch.categoryId,
             containerExtension = ch.containerExtension,
+            hasArchive = ch.hasArchive,
+            archiveDuration = ch.archiveDuration,
             directSourceUrl = ch.directSourceUrl,
             isFavorite = isFavorite
         )
