@@ -41,7 +41,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 enum class OnboardingTab {
-    QUICK_PAIR,
     DIRECT_LOGIN,
     DEMO_MODE
 }
@@ -57,13 +56,7 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
     val capabilities = remember { DeviceCapabilityDetector.detect(context) }
 
-    var selectedTab by remember { mutableStateOf(OnboardingTab.QUICK_PAIR) }
-
-    // Quick Pair State
-    var pairCode by remember { mutableStateOf("") }
-    var isPairingRegistered by remember { mutableStateOf(false) }
-    var pairStatusText by remember { mutableStateOf("Generating secure pairing code...") }
-    var isPairSuccess by remember { mutableStateOf(false) }
+    var selectedTab by remember { mutableStateOf(OnboardingTab.DIRECT_LOGIN) }
 
     // Direct Login State
     var email by remember { mutableStateOf("") }
@@ -79,33 +72,7 @@ fun OnboardingScreen(
     val textPrimary = Color(DesignSystemTokens.Colors.TextPrimary)
     val textSecondary = Color(DesignSystemTokens.Colors.TextSecondary)
 
-    // Generate and register code on initial launch
-    LaunchedEffect(Unit) {
-        val randomNum = (1000..9999).random()
-        val code = "MIME-$randomNum"
-        pairCode = code
 
-        val regResult = viewModel.registerPairingCode(code)
-        if (regResult.isSuccess) {
-            isPairingRegistered = true
-            pairStatusText = "Waiting for authorization from tvmime.vercel.app/pair..."
-
-            // Polling loop
-            while (isActive && !isPairSuccess) {
-                delay(2500)
-                val check = viewModel.checkPairingAndSync(code)
-                if (check.isSuccess && check.getOrNull() == true) {
-                    isPairSuccess = true
-                    pairStatusText = "Device successfully linked! Ingesting your IPTV playlists..."
-                    delay(1200)
-                    onComplete()
-                    break
-                }
-            }
-        } else {
-            pairStatusText = "Unable to register code with pairing service. Try Direct Login or Demo Mode."
-        }
-    }
 
     Box(
         modifier = modifier
@@ -201,14 +168,6 @@ fun OnboardingScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     TabButton(
-                        title = "Quick TV Pair",
-                        subtitle = "Scan QR or enter code on phone",
-                        icon = Icons.Default.QrCode,
-                        isSelected = selectedTab == OnboardingTab.QUICK_PAIR,
-                        onClick = { selectedTab = OnboardingTab.QUICK_PAIR }
-                    )
-
-                    TabButton(
                         title = "Direct Login",
                         subtitle = "Sign in with TVMime email/pass",
                         icon = Icons.Default.AccountCircle,
@@ -235,125 +194,6 @@ fun OnboardingScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     when (selectedTab) {
-                        OnboardingTab.QUICK_PAIR -> {
-                            val qrUrl = if (pairCode.isNotEmpty()) "https://tvmime.vercel.app/pair?code=$pairCode" else "https://tvmime.vercel.app/pair"
-                            val qrBitmap = rememberQrBitmap(qrUrl, 240)
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(28.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                // QR Code Box
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(190.dp)
-                                            .background(Color.White, RoundedCornerShape(12.dp))
-                                            .padding(10.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        if (qrBitmap != null) {
-                                            Image(
-                                                bitmap = qrBitmap,
-                                                contentDescription = "QR Code for TV Pairing",
-                                                modifier = Modifier.fillMaxSize()
-                                            )
-                                        } else {
-                                            CircularProgressIndicator(
-                                                modifier = Modifier.size(36.dp),
-                                                color = crimson,
-                                                strokeWidth = 3.dp
-                                            )
-                                        }
-                                    }
-                                    Text(
-                                        text = "Scan with phone camera",
-                                        color = textSecondary,
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                }
-
-                                // Instructions & Code Box
-                                Column(
-                                    modifier = Modifier.weight(1f),
-                                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                                ) {
-                                    Text(
-                                        text = "FAST TV PAIRING",
-                                        color = crimson,
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        letterSpacing = 1.5.sp
-                                    )
-
-                                    Text(
-                                        text = "Scan the QR code or visit:",
-                                        color = textSecondary,
-                                        fontSize = 13.sp
-                                    )
-
-                                    Box(
-                                        modifier = Modifier
-                                            .background(Color(0xFF181822), RoundedCornerShape(8.dp))
-                                            .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
-                                            .padding(horizontal = 14.dp, vertical = 6.dp)
-                                    ) {
-                                        Text(
-                                            text = "tvmime.vercel.app/pair",
-                                            color = Color(0xFF38BDF8),
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = FontFamily.Monospace
-                                        )
-                                    }
-
-                                    Text(
-                                        text = "Authorization Code:",
-                                        color = textSecondary,
-                                        fontSize = 12.sp
-                                    )
-
-                                    // Huge Pairing Code Box
-                                    Box(
-                                        modifier = Modifier
-                                            .background(Color(0x22E50914), RoundedCornerShape(12.dp))
-                                            .border(2.dp, crimsonBright, RoundedCornerShape(12.dp))
-                                            .padding(horizontal = 24.dp, vertical = 10.dp)
-                                    ) {
-                                        Text(
-                                            text = if (pairCode.isNotEmpty()) pairCode else "......",
-                                            color = Color.White,
-                                            fontSize = 30.sp,
-                                            fontWeight = FontWeight.Black,
-                                            letterSpacing = 5.sp,
-                                            fontFamily = FontFamily.Monospace
-                                        )
-                                    }
-
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = if (isPairSuccess) Icons.Default.CheckCircle else Icons.Default.Sync,
-                                            contentDescription = null,
-                                            tint = if (isPairSuccess) Color(0xFF10B981) else Color(0xFFF59E0B),
-                                            modifier = Modifier.size(16.dp)
-                                        )
-                                        Text(
-                                            text = pairStatusText,
-                                            color = if (isPairSuccess) Color(0xFF10B981) else Color(0xFF9CA3AF),
-                                            fontSize = 12.sp
-                                        )
-                                    }
-                                }
-                            }
-                        }
 
                         OnboardingTab.DIRECT_LOGIN -> {
                             Column(

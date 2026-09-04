@@ -69,16 +69,24 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val categoryListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
     val channelListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
 
-    // First-Run Wizard
+    // First-Run Wizard & Boot Flow
     val context = androidx.compose.ui.platform.LocalContext.current
-    LaunchedEffect(Unit) {
-        if (activePortals.isNotEmpty()) {
+    LaunchedEffect(activePortals) {
+        if (activePortals != null && activePortals!!.isNotEmpty()) {
             viewModel.syncCurrentPortal()
             com.tvmime.tv.sync.SyncWorkManager.scheduleBackgroundSync(context, 12L)
         }
     }
+    
     var dismissedOnboarding by remember { mutableStateOf(false) }
-    if (activePortals.isEmpty() && !dismissedOnboarding) {
+
+    if (activePortals == null) {
+        // Still loading from Room Database, show splash or black screen
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black))
+        return
+    }
+
+    if (activePortals!!.isEmpty() && !dismissedOnboarding) {
         com.tvmime.tv.ui.onboarding.OnboardingScreen(
             viewModel = viewModel,
             onComplete = { 

@@ -56,8 +56,8 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     // Active Portals & Sync Status
-    val activePortals: StateFlow<List<PortalEntity>> = repository.activePortals
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    val activePortals: StateFlow<List<PortalEntity>?> = repository.activePortals
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val allPortals: StateFlow<List<PortalEntity>> = repository.allPortals
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -65,7 +65,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     val syncProgress: StateFlow<SyncProgress> = repository.syncProgress
 
     val epgPrograms: StateFlow<List<EpgProgramEntity>> = activePortals.flatMapLatest { portals ->
-        if (portals.isEmpty()) flowOf(emptyList())
+        if (portals.isNullOrEmpty()) flowOf(emptyList())
         else {
             // Combine flows for all active portals
             val flows = portals.map { portal ->
@@ -116,7 +116,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     val categories: StateFlow<List<CategoryEntity>> = combine(activePortals, currentDestination, preferences.hiddenCategories) { portals, dest, hidden ->
         Triple(portals, dest, hidden)
     }.flatMapLatest { (portals, dest, hidden) ->
-        if (portals.isEmpty()) {
+        if (portals.isNullOrEmpty()) {
             flowOf(emptyList())
         } else {
             val type = when (dest) {
@@ -142,7 +142,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     ) { portals, dest, category, query ->
         Quadruple(portals, dest, category, query)
     }.flatMapLatest { (portals, dest, category, query) ->
-        if (portals.isEmpty()) return@flatMapLatest flowOf(emptyList())
+        if (portals.isNullOrEmpty()) return@flatMapLatest flowOf(emptyList())
 
         val portalIds = portals.map { it.id }
 
@@ -177,7 +177,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     private suspend fun autoPlayFirstChannelIfIdle() {
         if (_playingChannel.value == null) {
             val portals = activePortals.value
-            if (portals.isEmpty()) return
+            if (portals.isNullOrEmpty()) return
             val portalIds = portals.map { it.id }
             val firstCh = repository.getFirstChannel(portalIds)
             if (firstCh != null) {
@@ -221,7 +221,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun playCatchup(ch: ChannelEntity, program: EpgProgramEntity) {
-        val portal = activePortals.value.find { it.id == ch.portalId } ?: return
+        val portal = activePortals.value?.find { it.id == ch.portalId } ?: return
         
         // Convert epoch ms to YYYY-MM-DD:HH-MM
         val sdf = java.text.SimpleDateFormat("yyyy-MM-dd:HH-mm", java.util.Locale.US)
