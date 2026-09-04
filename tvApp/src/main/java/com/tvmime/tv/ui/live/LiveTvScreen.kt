@@ -24,6 +24,7 @@ import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.*
 import com.tvmime.db.entity.CategoryEntity
 import com.tvmime.db.entity.ChannelEntity
+import com.tvmime.db.entity.PortalEntity
 import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.ui.player.TvVideoPlayer
 
@@ -41,6 +42,10 @@ fun LiveTvScreen(
     isFullscreen: Boolean,
     onToggleFullscreen: () -> Unit,
     onToggleLastChannel: (() -> Boolean)? = null,
+    activePortal: PortalEntity? = null,
+    showClockOverlay: Boolean = true,
+    autoHideOsdSeconds: Int = 5,
+    enableLastChannelZap: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val bgMain = Color(DesignSystemTokens.Colors.Background)
@@ -53,6 +58,10 @@ fun LiveTvScreen(
     if (isFullscreen) {
         TvVideoPlayer(
             channel = playingChannel,
+            activePortal = activePortal,
+            showClockOverlay = showClockOverlay,
+            autoHideOsdSeconds = autoHideOsdSeconds,
+            enableLastChannelZap = enableLastChannelZap,
             isFullscreen = true,
             onToggleFullscreen = onToggleFullscreen,
             onToggleFavorite = onToggleFavorite,
@@ -126,6 +135,7 @@ fun LiveTvScreen(
                 // Video Player Preview Box
                 TvVideoPlayer(
                     channel = playingChannel,
+                    activePortal = activePortal,
                     isFullscreen = false,
                     onToggleFullscreen = onToggleFullscreen,
                     modifier = Modifier

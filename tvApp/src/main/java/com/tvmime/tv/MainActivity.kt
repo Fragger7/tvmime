@@ -44,6 +44,10 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val isFullscreen by viewModel.isFullscreen.collectAsStateWithLifecycle()
     val epgPrograms by viewModel.epgPrograms.collectAsStateWithLifecycle()
 
+    val showClockOverlay by viewModel.showClockOverlay.collectAsStateWithLifecycle()
+    val autoHideOsdSeconds by viewModel.autoHideOsdSeconds.collectAsStateWithLifecycle()
+    val enableLastChannelZap by viewModel.enableLastChannelZap.collectAsStateWithLifecycle()
+
     // Handle Back Button in Fullscreen
     BackHandler(enabled = isFullscreen) {
         viewModel.setFullscreen(false)
@@ -81,6 +85,10 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                 isFullscreen = true,
                 onToggleFullscreen = { viewModel.toggleFullscreen() },
                 onToggleLastChannel = { viewModel.toggleLastChannel() },
+                activePortal = activePortal,
+                showClockOverlay = showClockOverlay,
+                autoHideOsdSeconds = autoHideOsdSeconds,
+                enableLastChannelZap = enableLastChannelZap,
                 modifier = Modifier.fillMaxSize()
             )
         } else {
@@ -110,6 +118,10 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 isFullscreen = false,
                                 onToggleFullscreen = { viewModel.toggleFullscreen() },
                                 onToggleLastChannel = { viewModel.toggleLastChannel() },
+                                activePortal = activePortal,
+                                showClockOverlay = showClockOverlay,
+                                autoHideOsdSeconds = autoHideOsdSeconds,
+                                enableLastChannelZap = enableLastChannelZap,
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -156,6 +168,12 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                             SettingsScreen(
                                 channelCount = channels.size,
                                 categoryCount = categories.size,
+                                showClockOverlay = showClockOverlay,
+                                autoHideOsdSeconds = autoHideOsdSeconds,
+                                enableLastChannelZap = enableLastChannelZap,
+                                onToggleClockOverlay = { viewModel.setShowClockOverlay(!showClockOverlay) },
+                                onChangeAutoHideOsdSeconds = { viewModel.setAutoHideOsdSeconds(it) },
+                                onToggleLastChannelZap = { viewModel.setEnableLastChannelZap(!enableLastChannelZap) },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }

@@ -34,6 +34,11 @@
 - [x] Implement Left-Side Navigation Drawer with D-Pad focus (`TvNavigationDrawer.kt`).
 - [x] Implement Live TV Channel & Category Split Browser (`LiveTvScreen.kt`).
 - [x] Implement ExoPlayer hardware-accelerated playback overlay (`TvVideoPlayer.kt`).
+- [x] Implement In-Playback Controls & Track Switcher (Aspect Ratio, Audio Tracks, Subtitle selector, Issue Reporting).
+- [x] Implement TiviMate-style EPG Grid TV Guide (`TvGuideScreen.kt`) with PIP mini-preview and 30-minute time slots.
+- [x] Implement D-Pad Right Last Channel Quick Zap with floating toast indicator.
+- [x] Implement Custom Player Overlay & Telemetry HUD (Live bitrate, remote host/IP, buffer depth % and active/max connections badge).
+- [x] Implement Player & Overlay Preferences panel in Settings (`TvPreferencesManager.kt`, `SettingsScreen.kt`).
 - [x] Implement Cloud Portal Sync & Demo loader UI (`CloudSyncScreen.kt`).
 - [x] Implement Live TV EPG Timeline (Translucent Strips).
 - [x] Implement VOD Section (Netflix style, TMDB metadata - `VodScreen.kt`).

@@ -32,6 +32,28 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
 
     private val database = AppDatabase.getInstance(application)
     val repository = XtreamRepository(database)
+    val preferences = com.tvmime.tv.settings.TvPreferencesManager.getInstance(application)
+
+    val showClockOverlay: StateFlow<Boolean> = preferences.showClockOverlay
+    val autoHideOsdSeconds: StateFlow<Int> = preferences.autoHideOsdSeconds
+    val enableLastChannelZap: StateFlow<Boolean> = preferences.enableLastChannelZap
+    val defaultAspectMode: StateFlow<String> = preferences.defaultAspectMode
+
+    fun setShowClockOverlay(enabled: Boolean) {
+        preferences.setShowClockOverlay(enabled)
+    }
+
+    fun setAutoHideOsdSeconds(sec: Int) {
+        preferences.setAutoHideOsdSeconds(sec)
+    }
+
+    fun setEnableLastChannelZap(enabled: Boolean) {
+        preferences.setEnableLastChannelZap(enabled)
+    }
+
+    fun setDefaultAspectMode(mode: String) {
+        preferences.setDefaultAspectMode(mode)
+    }
 
     // Active Portal & Sync Status
     val activePortal: StateFlow<PortalEntity?> = repository.activePortal

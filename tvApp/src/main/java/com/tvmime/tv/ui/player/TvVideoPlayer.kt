@@ -46,6 +46,7 @@ import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
 import com.tvmime.db.entity.ChannelEntity
+import com.tvmime.db.entity.PortalEntity
 import com.tvmime.player.BufferProfile
 import com.tvmime.player.Media3PlayerConfig
 import com.tvmime.sync.FirebaseSyncClient
@@ -53,6 +54,7 @@ import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.hardware.DeviceCapabilityDetector
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -78,6 +80,10 @@ private data class TrackOption(
 @Composable
 fun TvVideoPlayer(
     channel: ChannelEntity?,
+    activePortal: PortalEntity? = null,
+    showClockOverlay: Boolean = true,
+    autoHideOsdSeconds: Int = 5,
+    enableLastChannelZap: Boolean = true,
     modifier: Modifier = Modifier,
     isFullscreen: Boolean = false,
     onToggleFullscreen: () -> Unit = {},
@@ -124,7 +130,20 @@ fun TvVideoPlayer(
     var videoFps by remember { mutableStateOf("--") }
     var videoCodec by remember { mutableStateOf("Hardware Decoder") }
     var audioCodec by remember { mutableStateOf("Audio DSP") }
+    var streamBitrate by remember { mutableStateOf("--") }
     var bufferedSeconds by remember { mutableLongStateOf(0L) }
+
+    // Remote Host/IP Parsing
+    val streamHost = remember(channel?.directSourceUrl) {
+        try {
+            val uri = URI(channel?.directSourceUrl ?: "")
+            val host = uri.host ?: ""
+            val port = if (uri.port > 0) ":${uri.port}" else ""
+            if (host.isNotBlank()) "$host$port" else "Direct Stream"
+        } catch (e: Exception) {
+            "Direct Stream"
+        }
+    }
 
     // Tracks
     var audioTracks by remember { mutableStateOf<List<TrackOption>>(emptyList()) }
@@ -145,6 +164,10 @@ fun TvVideoPlayer(
                 videoResolution = if (vFormat.width > 0 && vFormat.height > 0) "${vFormat.width}x${vFormat.height}" else "Auto"
                 videoFps = if (vFormat.frameRate > 0) "${vFormat.frameRate.toInt()} fps" else "--"
                 videoCodec = vFormat.sampleMimeType?.substringAfterLast("/")?.uppercase() ?: "HEVC/H.264"
+                streamBitrate = if (vFormat.bitrate > 0) {
+                    val mbps = vFormat.bitrate / 1_000_000f
+                    if (mbps >= 1f) String.format(Locale.US, "%.1f Mbps", mbps) else "${vFormat.bitrate / 1000} kbps"
+                } else "--"
             }
             val aFormat = exoPlayer.audioFormat
             if (aFormat != null) {
@@ -157,10 +180,10 @@ fun TvVideoPlayer(
         }
     }
 
-    // Auto-hide OSD after 5 seconds of inactivity in fullscreen
-    LaunchedEffect(isOsdVisible, lastInteractionTime, activeModal) {
-        if (isFullscreen && isOsdVisible && activeModal == null) {
-            delay(5000)
+    // Auto-hide OSD after configured timeout in fullscreen
+    LaunchedEffect(isOsdVisible, lastInteractionTime, activeModal, autoHideOsdSeconds) {
+        if (isFullscreen && isOsdVisible && activeModal == null && autoHideOsdSeconds > 0) {
+            delay(autoHideOsdSeconds * 1000L)
             isOsdVisible = false
         }
     }
@@ -267,6 +290,13 @@ fun TvVideoPlayer(
     }
 
     val timeFormat = remember { SimpleDateFormat("h:mm a", Locale.getDefault()) }
+    var currentTimeString by remember { mutableStateOf(timeFormat.format(Date())) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            currentTimeString = timeFormat.format(Date())
+            delay(10000L)
+        }
+    }
 
     Box(
         modifier = modifier
@@ -295,7 +325,7 @@ fun TvVideoPlayer(
                             }
                         }
                         KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                            if (onToggleLastChannel != null) {
+                            if (enableLastChannelZap && onToggleLastChannel != null) {
                                 val toggled = onToggleLastChannel()
                                 if (toggled) {
                                     showLastChannelToast = true
@@ -370,22 +400,70 @@ fun TvVideoPlayer(
                     .align(Alignment.TopStart)
                     .padding(start = 24.dp, top = 80.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0xCC0C0C12))
+                    .background(Color(0xEE0A0A12))
                     .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
-                    .padding(12.dp)
+                    .padding(14.dp)
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("STREAM TELEMETRY HUD", color = crimsonBright, fontSize = 10.sp, fontWeight = FontWeight.Black, letterSpacing = 1.sp)
+                val maxBufferSec = if (capabilities.isLowRamDevice) 15f else 30f
+                val bufferPercent = ((bufferedSeconds.toFloat() / maxBufferSec) * 100).toInt().coerceIn(0, 100)
+
+                Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(6.dp)
+                                .clip(RoundedCornerShape(3.dp))
+                                .background(Color(0xFF10B981))
+                        )
+                        Text(
+                            text = "LIVE STREAM TELEMETRY",
+                            color = crimsonBright,
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 1.sp
+                        )
+                    }
+
                     Text("Resolution: $videoResolution ($videoFps)", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text("Data Transfer Rate: $streamBitrate", color = Color(0xFF38BDF8), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text("Stream Host / IP: $streamHost", color = textSecondary, fontSize = 11.sp)
+                    Text(
+                        text = "Buffer Depth: ${bufferedSeconds}s / ${maxBufferSec.toInt()}s ($bufferPercent% cached)",
+                        color = if (bufferedSeconds > 2) Color(0xFF10B981) else Color(0xFFF59E0B),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                     Text("Video Decoder: $videoCodec", color = textSecondary, fontSize = 11.sp)
                     Text("Audio Track: $audioCodec", color = textSecondary, fontSize = 11.sp)
-                    Text("Buffered: ${bufferedSeconds}s (${bufferProfile.label})", color = Color(0xFF10B981), fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                    Text("Aspect Mode: ${currentAspectMode.label}", color = textSecondary, fontSize = 11.sp)
+                    Text("Aspect Scaling: ${currentAspectMode.label}", color = textSecondary, fontSize = 11.sp)
                 }
             }
         }
 
-        // --- 4. Last Channel Zap Floating Toast ---
+        // --- 4. Dedicated Clock Overlay (Top-Right Screen Corner, Persistent if enabled) ---
+        if (showClockOverlay && isFullscreen) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 16.dp, end = 24.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0x990A0A10))
+                    .border(1.dp, Color(0x33FFFFFF), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    text = currentTimeString,
+                    color = Color.White,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+
+        // --- 5. Last Channel Zap Floating Toast ---
         AnimatedVisibility(
             visible = showLastChannelToast && isFullscreen,
             enter = fadeIn() + slideInVertically { -it },
@@ -421,7 +499,7 @@ fun TvVideoPlayer(
             }
         }
 
-        // --- 4. Fullscreen OSD: Top Bar & Bottom Bar ---
+        // --- 6. Fullscreen OSD: Top Bar & Bottom Bar ---
         if (isFullscreen) {
             AnimatedVisibility(
                 visible = isOsdVisible,
@@ -438,9 +516,10 @@ fun TvVideoPlayer(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // Left: Channel Number, Channel Name, Live Resolution
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Box(
                             modifier = Modifier
@@ -456,36 +535,70 @@ fun TvVideoPlayer(
                             )
                         }
 
-                        Column {
+                        Text(
+                            text = channel?.name ?: "No Channel Playing",
+                            color = Color.White,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        // Live Resolution Badge
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color(0xFF1F1F2C))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ) {
                             Text(
-                                text = channel?.name ?: "No Channel Playing",
-                                color = Color.White,
-                                fontSize = 15.sp,
+                                text = videoResolution,
+                                color = Color(0xFF38BDF8),
+                                fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = "${channel?.containerExtension?.uppercase() ?: "HLS"} • ${bufferProfile.label} • $videoResolution",
-                                color = textSecondary,
-                                fontSize = 11.sp
                             )
                         }
                     }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    // Right: Connection / Playlist Name & Active/Max Connections Badge
+                    val activeCons = activePortal?.activeConnections ?: 1
+                    val maxCons = activePortal?.maxConnections ?: 1
+                    val isExceeded = activeCons > maxCons
+
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(Color(0xFF1E1E28))
+                            .border(1.dp, borderCol, RoundedCornerShape(6.dp))
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .background(Color(0xFF1F1F2C))
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(if (isExceeded) Color(0xFFEF4444) else Color(0xFF10B981))
+                            )
+
                             Text(
-                                text = timeFormat.format(Date()),
+                                text = activePortal?.name ?: "TVMime Public Demo",
                                 color = Color.White,
-                                fontSize = 13.sp,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
+                            )
+
+                            Text(
+                                text = "•",
+                                color = textSecondary,
+                                fontSize = 11.sp
+                            )
+
+                            Text(
+                                text = "$activeCons/$maxCons Cons",
+                                color = if (isExceeded) Color(0xFFEF4444) else crimsonBright,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Black
                             )
                         }
                     }
@@ -536,32 +649,6 @@ fun TvVideoPlayer(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(if (isPlaying) "Pause" else "Play", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                            }
-                        }
-
-                        // Last Channel Zap Button
-                        if (onToggleLastChannel != null) {
-                            Surface(
-                                onClick = {
-                                    lastInteractionTime = System.currentTimeMillis()
-                                    val toggled = onToggleLastChannel()
-                                    if (toggled) showLastChannelToast = true
-                                },
-                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                                colors = ClickableSurfaceDefaults.colors(
-                                    containerColor = Color(0xFF1E1E2C),
-                                    focusedContainerColor = crimsonBright
-                                ),
-                                modifier = Modifier.height(38.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                                ) {
-                                    Icon(Icons.Default.SwapHoriz, contentDescription = "Last Channel", tint = Color.White, modifier = Modifier.size(16.dp))
-                                    Text("Last Ch (▶|)", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                                }
                             }
                         }
 
@@ -714,7 +801,7 @@ fun TvVideoPlayer(
                 }
             }
 
-            // --- 5. Audio / Subtitles Modal Dialog Sheet ---
+            // --- 7. Audio / Subtitles Modal Dialog Sheet ---
             if (activeModal != null) {
                 Box(
                     modifier = Modifier
@@ -860,7 +947,7 @@ fun TvVideoPlayer(
             }
         }
 
-        // --- 6. Error State Overlay with 1-Click Firestore Reporting ---
+        // --- 8. Error State Overlay with 1-Click Firestore Reporting ---
         if (playbackError != null) {
             Box(
                 modifier = Modifier
@@ -980,7 +1067,7 @@ fun TvVideoPlayer(
             }
         }
 
-        // --- 7. Non-fullscreen Preview Header (when embedded in screen) ---
+        // --- 9. Non-fullscreen Preview Header (when embedded in screen) ---
         if (!isFullscreen && channel != null) {
             Row(
                 modifier = Modifier
@@ -995,7 +1082,7 @@ fun TvVideoPlayer(
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "CH ${channel.num} • ${channel.containerExtension.uppercase()} • ${bufferProfile.label}",
+                        text = "CH ${channel.num} • ${channel.containerExtension.uppercase()} • $videoResolution",
                         color = Color.White,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
