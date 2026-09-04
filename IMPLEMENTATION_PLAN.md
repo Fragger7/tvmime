@@ -121,5 +121,21 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 ## Backlog & Future Explorations
 
 > [!NOTE]
+> **Sportmate Live Hub (Dedicated Sports Overlay)**
+> Based on the `Sohva-TV` `EventChannelMatcher` blueprint, we will build a dedicated `SPORTS_HUB` overlay. 
+> - **The Data:** Integrates a free third-party sports API (e.g., TheSportsDB) to pull real-world schedules.
+> - **The Logic:** Scans the messy IPTV Room database for matching team names and times to automatically route users to live games.
+> - **The UI:** Uses Jetpack Compose to dynamically assemble "Match Cards" (Gradient background + Home/Away transparent PNG logos pulled via Coil from free CDNs like ESPN). 
+> - **Performance:** Employs `TvLazyVerticalGrid` and `DeviceCapabilityDetector` to disable heavy blurs/animations on low-RAM devices (e.g., Chromecast) while looking premium on Nvidia Shields.
+
+> [!TIP]
+> **Titan-Tier Power User Features**
+> - **Multi-View (Sports Bar Mode):** Hardware-checked multi-ExoPlayer instances (2-9 screens) for simultaneous viewing.
+> - **Auto-Framerate Matching (AFR):** ExoPlayer HDMI OS-level hooks to match stream framerate (24Hz/50Hz) and eliminate judder.
+> - **Local Timeshift Buffering:** Custom `CacheDataSource.Factory` to cache live `.ts` streams to USB/internal disk for instant pause/rewind of Live TV.
+> - **Trakt.tv VOD Sync:** Cloud syncing watch-progress for movies and series across devices.
+> - **D-Pad Macro Keymapping:** Expand `MainActivity.kt` to allow users to bind custom actions (e.g., Double Tap Left = EPG).
+
+> [!NOTE]
 > **Radical 3D UI / Game Engine Integration**
-> Once the core KMP engine and baseline Jetpack Compose UI are rock-solid, explore ripping off the Compose layer and plugging the shared Kotlin engine into a game engine (**Unity** or **Godot**) via native bridging. This would allow for the realization of the "Spatial Floating Glass" radical mockups—enabling real-time 3D Cover Flow, volumetric smoke, and physics-based UI rendering that standard app frameworks cannot handle, similar to modern automotive EV dashboards.
+> Once the core KMP engine and baseline Jetpack Compose UI are rock-solid, explore ripping off the Compose layer and plugging the shared Kotlin engine into a game engine (**Unity** or **Godot**) via native bridging.

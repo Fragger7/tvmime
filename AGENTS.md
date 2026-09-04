@@ -107,17 +107,21 @@ We have officially executed the **"Sohva-TV Pivot"**. Do NOT use standard `TvNav
 *   **The Blueprint:** If you need to understand how to handle D-Pad focus state machines, ExoPlayer lifecycle hooks, or M3U ingestion, read the reference repository: `https://github.com/Macstered/Sohva-TV`
 *   **The Paradigm:** The app is a single `AndroidView` wrapping ExoPlayer at Z-index 0. D-Pad keys are intercepted at the raw View level (`setOnKeyListener`) to mutate booleans (`channelBrowserVisible`, `chromeVisible`). These booleans render lightweight translucent Compose panes on top of the playing video.
 
-### Implementation Tasks (Prioritized):
-1. **Pass 4: Systems-Level Architecture (The Premium Tier)**:
-   - **Background Sync Workers**: Setup Android `WorkManager` for silent syncing (every 12 hours) and add toggles to SettingsScreen.
-   - **EPG Local Time-Shift**: Refactor the EPG logic to auto-map UTC to the local device timezone, and add a manual timezone offset slider in Settings for sloppy providers.
-   - **Catch-Up TV (DVR)**: Add the ability to scroll backwards in the EPG and trigger the specialized `/timeshift/` URL streams for past events if `has_archive = 1`.
-   - **M3U Fallback Pipeline**: Ensure raw `.m3u` text parsing works alongside our Xtream Codes JSON implementation.
-2. **Pass 5: Auth & Polish**:
-   - Rip out the broken QR code UI and simplify the login screen.
-   - Eliminate the brief login screen flash that happens on every boot.
-3. **Pass 6: Mobile App (`androidApp`) Touch EPG**:
-   - Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
+### Implementation Tasks Completed:
+- **Pass 4: Systems-Level Architecture (The Premium Tier)**: Background Sync Workers, EPG Local Time-Shift, Catch-Up TV (DVR), and M3U Fallback Pipeline are fully implemented and functionally verified against raw `.ts` CDNs.
+- **Pass 5.1: Auth & Polish**: Excised the broken QR UI and eliminated the blank screen flash on boot by making the `activePortals` flow nullable during Room DB initialization.
+
+### Next Agent Hand-Off: What Is Left (Prioritized):
+1. **Pass 5.2: Mobile App (`androidApp`) Touch EPG**: (Currently Paused/Ignored by User, but remains next logical step). Adapt the TV Grid to a touch-optimized UI.
+2. **Backlog Priority 1 - Sportmate Live Hub (Dedicated Sports Overlay)**: 
+   - Build a `SPORTS_HUB` overlay leveraging a third-party sports API (e.g., TheSportsDB) matched against our local IPTV stream database using the `EventChannelMatcher.kt` logic found in the `Sohva-TV` reference repo.
+   - Assemble dynamic Jetpack Compose graphics utilizing free transparent PNGs from CDNs rendered via `Coil`, utilizing `DeviceCapabilityDetector` to adjust graphics load for low-end dongles.
+3. **Backlog Priority 2 - Titan-Tier IPTV Features**:
+   - **Multi-View:** 2-9 simultaneous ExoPlayer streams.
+   - **Auto-Framerate Matching (AFR):** Dynamic HDMI refresh rate OS-hooks.
+   - **Local Timeshift Buffering:** Writing live `.ts` streams to USB cache for rewind/pause.
+   - **Trakt.tv VOD Sync:** Global sync for movie/series tracking.
+   - **D-Pad Macro Keymapping:** Custom user-defined remote mapping.
 
 ## 8. Development Environment & Testing Guide
 - **Web Admin Development**:
