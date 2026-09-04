@@ -40,6 +40,12 @@ To achieve ultimate speed, we must bypass standard Android media limitations.
 ## 5. Expanded Settings Dashboard
 The settings must empower power users while remaining clean.
 *   **Playback:** Hardware vs Software Decoder toggle, AFR Toggle, Audio Passthrough toggle.
-*   **Buffer Size:** Network Cache size (None, Small, Normal, Large).
+*   **Buffer Size:** Network Cache size (Fast Zap vs Stability Mode).
 *   **Appearance:** Customize OSD timeout, Clock position, Channel sorting (by number vs alphabetical).
 *   **EPG:** Update frequency (Every start, Every 12 hours, Daily), Timezone Offset (to fix provider time sync issues).
+
+## 6. The Dual-Model Data Sync Lifecycle (Cloud + Local)
+TVMime operates a hybrid edge-compute model to bypass Vercel serverless limitations while delivering seamless multi-device sync:
+*   **The Cloud (Vercel/Firebase):** Acts exclusively as a lightweight credential locker. It stores M3U/Xtream URLs, Usernames, and Passwords. It NEVER processes massive 50MB M3U playlists.
+*   **The Edge (Android TV CPU):** Handles all heavy lifting. The TV fetches credentials from the cloud and connects directly to the IPTV provider, parsing the 100,000+ channel JSON locally using low-memory stream readers into a Room Database.
+*   **UX Flow:** Users can pair via a 6-digit code to sync credentials from the Web Admin, OR they can manually type credentials into the TV. Locally added playlists can be pushed up to the cloud via an "Upload to Web Admin" button. All playlists feature a visual indicator (☁️ Cloud vs 📺 Local) in the manager.

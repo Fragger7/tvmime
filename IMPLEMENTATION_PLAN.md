@@ -97,21 +97,18 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Long-Press Context Menu & Group Hiding:** Extended `TvPreferencesManager.kt` to persist a `Set<String>` of hidden category IDs to `SharedPreferences`. Modified `TvMainViewModel.kt`'s `categories` StateFlow to intercept and filter out hidden categories in real-time. Wired `onLongClick` in `LiveTvScreen.kt` CategoryCard.
 - **Channel State Integrity:** Restored `playChannel` with previous-channel tracking for instant D-Pad Right swap and watch-history tracking in Room.
 
-### Sprint 3: Resilience, Ingestion Hardening & Multi-Portal [ACTIVE SPRINT]
-- **Stream Auto-Recovery & Dummy Header Pruning [COMPLETED in v1.2.2]:** Filtered dummy separator headers in `StreamingCatalogParser.kt` to avoid 404 dead stream calls. Implemented proactive socket teardown (`stop()` + `clearMediaItems()`) for single-connection IPTV portals. Built auto-format recovery (`.ts` ⇄ `.m3u8`) and an on-screen guidance banner in `TvVideoPlayer.kt`.
-- **Cleartext Traffic Support [COMPLETED in v1.2.1]:** Created `network_security_config.xml` to allow cleartext HTTP traffic required by bare-IP edge CDN stream redirects.
-- **[CRITICAL BUG FIX #1] JsonReader Null-Safety in Catalog Ingestion:**
-  - *Issue*: `Expected a string but was NULL` crashes catalog ingestion when an IPTV provider sends `null` values for `stream_icon`, `epg_channel_id`, or `category_id`.
-  - *Fix Planned*: Add extension `fun JsonReader.nextStringOrNull(): String?` and wrap individual row parsing with try-catch fallback.
-- **[CRITICAL BUG FIX #2 & #4] Empty Channels & Movies List Resolution:**
-  - *Issue*: Category counts load but Channels and Movies show 0 items because the ingestion exception prematurely halts the transaction.
-  - *Fix Planned*: Ensure robust transaction isolation and verify VOD stream endpoint (`get_vod_streams`) ingestion completes.
-- **[CRITICAL ARCHITECTURE #3] Multi-Portal Unified Content Aggregation:**
-  - *Issue*: Currently, only the top portal marked active displays channels, leaving secondary active portals unbrowsable.
-  - *Design Planned*: Aggregate channels and categories across all enabled portals (`isActive = true`), prefixing IDs (`${portalId}_${type}_${streamId}`) to avoid collisions, and introduce playlist indicator chips or group nesting `[Playlist Name] Category`.
-- **Mobile Touch EPG [NEXT]:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
-- **Chromecast Streaming [UPCOMING]:** Wire `androidx.media3:media3-cast` into mobile player to route streams to smart TVs and Cast targets.
-
+### Sprint 3: The "Sohva-TV Pivot" (Resilience, Ingestion Hardening & The Player IS The App) [ACTIVE SPRINT]
+- **Stream Auto-Recovery & Dummy Header Pruning [COMPLETED]:** Filtered dummy separator headers in `StreamingCatalogParser.kt` to avoid 404 dead stream calls. Implemented proactive socket teardown (`stop()` + `clearMediaItems()`) for single-connection IPTV portals. 
+- **[CRITICAL BUG FIX #1] JsonReader Null-Safety in Catalog Ingestion [COMPLETED]:**
+  - Added extension `fun JsonReader.nextStringOrNull(): String?` and wrapped individual row parsing with try-catch fallback. This prevents massive 50MB JSON parses from aborting midway.
+- **[CRITICAL ARCHITECTURE #2] The "Player IS The App" D-Pad Overhaul [IN PROGRESS]:**
+  - *Rationale*: Standard Compose `TvNavigationDrawer` causes recomposition lag and black screens on TV. Following the *Sohva-TV* architecture, we will rip out all navigation drawers.
+  - *Design*: The app is a single `AndroidView` wrapping ExoPlayer at Z-index 0. D-Pad keys are intercepted at the raw View level (`setOnKeyListener`) to mutate booleans (`channelBrowserVisible`, `chromeVisible`). These booleans render lightweight translucent Compose panes on top of the playing video.
+  - *Playback Engineering*: Implement `LOW_LATENCY` (1000ms) and `STABILITY` (5000ms) `LoadControl` profiles. Hook into the Android Lifecycle to instantly fire `controller.stop()` when backgrounded to prevent "Ghost Connection" lockouts from IPTV providers.
+- **[CRITICAL ARCHITECTURE #3] Dual-Model Sync & Multi-Portal Aggregation:**
+  - *Rationale*: Vercel free tier cannot process M3U lists. 
+  - *Design*: Cloud stores credentials only. TV edge-computes the heavy ingestion. The UI will aggregate channels/categories across all `isActive = true` portals, prefixing IDs (`${portalId}_${type}_${streamId}`) to avoid collisions. The Playlists menu will distinguish between Cloud ☁️ and Local 📺 credentials, and allow bidirectional sync.
+- **Mobile Touch EPG [UPCOMING]:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
 ---
 
 ## Backlog & Future Explorations
