@@ -150,6 +150,12 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             channel = playingChannel,
             isFullscreen = true,
             onToggleFullscreen = { },
+            onPlayerError = { errMsg ->
+                viewModel.setPlayerError(errMsg)
+            },
+            onAutoSkipNext = {
+                viewModel.zapNext()
+            },
             modifier = Modifier.fillMaxSize()
         )
 

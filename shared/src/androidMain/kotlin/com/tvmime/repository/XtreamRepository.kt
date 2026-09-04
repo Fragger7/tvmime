@@ -274,7 +274,7 @@ class XtreamRepository(
                     syncLive = cfg.syncLive,
                     syncMovies = cfg.syncMovies,
                     syncSeries = cfg.syncSeries,
-                    lastSyncedAt = null
+                    lastSyncedAt = 0L
                 )
                 database.portalDao().insertOrUpdate(entity)
             }
@@ -305,7 +305,7 @@ class XtreamRepository(
                 syncLive = cfg.syncLive,
                 syncMovies = cfg.syncMovies,
                 syncSeries = cfg.syncSeries,
-                lastSyncedAt = null
+                lastSyncedAt = 0L
             )
             database.portalDao().insertOrUpdate(entity)
             entities.add(entity)

@@ -146,7 +146,12 @@ object StreamingCatalogParser {
         }
         reader.endObject()
 
-        if (streamId <= 0 || name.isBlank()) return null
+        val trimmedName = name.trim()
+        if (streamId <= 0 || trimmedName.isBlank()) return null
+
+        // Filter out decorative dummy headers (e.g. "##### 4K SPORTS CHANNELS #####", "=== VIP MOVIES ===")
+        val isSeparatorHeader = trimmedName.matches(Regex("^[#=\\-_~*]{3,}.*|.*[#=\\-_~*]{3,}$"))
+        if (isSeparatorHeader) return null
 
         val section = when (type) {
             StreamType.LIVE -> "live"
