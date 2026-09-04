@@ -55,22 +55,28 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         preferences.setDefaultAspectMode(mode)
     }
 
-    // Active Portal & Sync Status
-    val activePortal: StateFlow<PortalEntity?> = repository.activePortal
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    // Active Portals & Sync Status
+    val activePortals: StateFlow<List<PortalEntity>> = repository.activePortals
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val allPortals: StateFlow<List<PortalEntity>> = repository.allPortals
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val syncProgress: StateFlow<SyncProgress> = repository.syncProgress
 
-    val epgPrograms: StateFlow<List<EpgProgramEntity>> = activePortal.flatMapLatest { portal ->
-        if (portal == null) flowOf(emptyList())
-        else repository.getEpgProgramsInWindow(
-            portal.id,
-            System.currentTimeMillis() - 2 * 3600 * 1000L,
-            System.currentTimeMillis() + 6 * 3600 * 1000L
-        )
+    val epgPrograms: StateFlow<List<EpgProgramEntity>> = activePortals.flatMapLatest { portals ->
+        if (portals.isEmpty()) flowOf(emptyList())
+        else {
+            // Combine flows for all active portals
+            val flows = portals.map { portal ->
+                repository.getEpgProgramsInWindow(
+                    portal.id,
+                    System.currentTimeMillis() - 2 * 3600 * 1000L,
+                    System.currentTimeMillis() + 6 * 3600 * 1000L
+                )
+            }
+            combine(flows) { arrays -> arrays.flatMap { it.toList() } }
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // Navigation & Screen State
@@ -103,11 +109,11 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     private val _playerError = MutableStateFlow<String?>(null)
     val playerError: StateFlow<String?> = _playerError.asStateFlow()
 
-    // Categories Flow for active portal and destination
-    val categories: StateFlow<List<CategoryEntity>> = combine(activePortal, currentDestination, preferences.hiddenCategories) { portal, dest, hidden ->
-        Triple(portal, dest, hidden)
-    }.flatMapLatest { (portal, dest, hidden) ->
-        if (portal == null) {
+    // Categories Flow for active portals and destination
+    val categories: StateFlow<List<CategoryEntity>> = combine(activePortals, currentDestination, preferences.hiddenCategories) { portals, dest, hidden ->
+        Triple(portals, dest, hidden)
+    }.flatMapLatest { (portals, dest, hidden) ->
+        if (portals.isEmpty()) {
             flowOf(emptyList())
         } else {
             val type = when (dest) {
@@ -116,7 +122,8 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
                 TvNavDestination.SERIES -> StreamType.SERIES
                 else -> StreamType.LIVE
             }
-            repository.getCategories(portal.id, type).map { list -> list.filter { !hidden.contains(it.categoryId) } }
+            val portalIds = portals.map { it.id }
+            repository.getCategories(portalIds, type).map { list -> list.filter { !hidden.contains(it.categoryId) } }
         }
     }.onEach { catList ->
         if (_selectedCategory.value == null || catList.none { it.categoryId == _selectedCategory.value?.categoryId }) {
@@ -125,31 +132,33 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val channels: StateFlow<List<ChannelEntity>> = combine(
-        activePortal,
+        activePortals,
         currentDestination,
         selectedCategory,
         searchQuery
-    ) { portal, dest, category, query ->
-        Quadruple(portal, dest, category, query)
-    }.flatMapLatest { (portal, dest, category, query) ->
-        if (portal == null) return@flatMapLatest flowOf(emptyList())
+    ) { portals, dest, category, query ->
+        Quadruple(portals, dest, category, query)
+    }.flatMapLatest { (portals, dest, category, query) ->
+        if (portals.isEmpty()) return@flatMapLatest flowOf(emptyList())
+
+        val portalIds = portals.map { it.id }
 
         if (query.isNotBlank()) {
-            return@flatMapLatest repository.searchChannels(portal.id, query)
+            return@flatMapLatest repository.searchChannels(portalIds, query)
         }
 
         when (dest) {
-            TvNavDestination.FAVORITES -> repository.getFavorites(portal.id)
+            TvNavDestination.FAVORITES -> repository.getFavorites(portalIds)
             else -> {
                 if (category != null) {
-                    repository.getChannelsByCategory(portal.id, category.categoryId)
+                    repository.getChannelsByCategory(portalIds, category.categoryId)
                 } else {
                     val type = when (dest) {
                         TvNavDestination.MOVIES -> StreamType.MOVIE
                         TvNavDestination.SERIES -> StreamType.SERIES
                         else -> StreamType.LIVE
                     }
-                    repository.getAllChannelsByType(portal.id, type)
+                    repository.getAllChannelsByType(portalIds, type)
                 }
             }
         }
@@ -162,8 +171,10 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
 
     private suspend fun autoPlayFirstChannelIfIdle() {
         if (_playingChannel.value == null) {
-            val portal = activePortal.value ?: return
-            val firstCh = repository.getFirstChannel(portal.id)
+            val portals = activePortals.value
+            if (portals.isEmpty()) return
+            val portalIds = portals.map { it.id }
+            val firstCh = repository.getFirstChannel(portalIds)
             if (firstCh != null) {
                 _playingChannel.value = firstCh
                 _selectedChannel.value = firstCh
@@ -272,16 +283,18 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
 
     fun syncCurrentPortal() {
         viewModelScope.launch {
-            repository.syncActivePortal()
+            repository.syncActivePortals()
             autoPlayFirstChannelIfIdle()
         }
     }
 
-    fun selectActivePortal(portalId: String) {
+    fun toggleActivePortal(portalId: String, isActive: Boolean) {
         viewModelScope.launch {
-            repository.setActivePortal(portalId)
-            repository.syncActivePortal()
-            autoPlayFirstChannelIfIdle()
+            repository.setPortalActiveStatus(portalId, isActive)
+            if (isActive) {
+                repository.syncActivePortals()
+                autoPlayFirstChannelIfIdle()
+            }
         }
     }
 
@@ -290,7 +303,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             val userId = preferences.cloudUserId.value ?: "r0b3lfflA9RbQaGZJFCE4mdTspy1"
             val res = repository.syncPortalsByUserId(userId)
             if (res.isSuccess) {
-                repository.syncActivePortal()
+                repository.syncActivePortals()
                 autoPlayFirstChannelIfIdle()
             }
         }
@@ -301,7 +314,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         if (authResult.isFailure) {
             return Result.failure(authResult.exceptionOrNull() ?: Exception("Authentication failed"))
         }
-        val syncResult = repository.syncActivePortal()
+        val syncResult = repository.syncActivePortals()
         autoPlayFirstChannelIfIdle()
         if (syncResult.isFailure) {
             return Result.failure(syncResult.exceptionOrNull() ?: Exception("Sync failed"))
@@ -328,7 +341,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             if (!pair.second.isNullOrBlank()) {
                 preferences.setCloudUser(pair.second, null)
             }
-            repository.syncActivePortal()
+            repository.syncActivePortals()
             return Result.success(true)
         }
         return Result.success(false)

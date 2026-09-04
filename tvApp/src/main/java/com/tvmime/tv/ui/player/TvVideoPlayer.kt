@@ -36,7 +36,7 @@ fun TvVideoPlayer(
 ) {
     val context = LocalContext.current
     val capabilities = remember { DeviceCapabilityDetector.detect(context) }
-    val bufferProfile = if (capabilities.isLowRamDevice) BufferProfile.FAST_ZAP else BufferProfile.BALANCED
+    val bufferProfile = if (capabilities.isLowRamDevice) BufferProfile.LOW_LATENCY else BufferProfile.STABILITY
 
     var isBuffering by remember { mutableStateOf(false) }
     var streamErrorMessage by remember { mutableStateOf<String?>(null) }
@@ -96,6 +96,29 @@ fun TvVideoPlayer(
             exoPlayer.stop()
             exoPlayer.clearMediaItems()
             exoPlayer.release()
+        }
+    }
+
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, exoPlayer) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            when (event) {
+                androidx.lifecycle.Lifecycle.Event.ON_STOP -> {
+                    // Prevent IPTV max_connections lockout
+                    exoPlayer.stop()
+                }
+                androidx.lifecycle.Lifecycle.Event.ON_START -> {
+                    if (channel != null) {
+                        exoPlayer.prepare()
+                        exoPlayer.playWhenReady = true
+                    }
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 

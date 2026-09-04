@@ -17,6 +17,12 @@ interface PortalDao {
     @Query("SELECT * FROM portals WHERE isActive = 1 LIMIT 1")
     suspend fun getActivePortalSync(): PortalEntity?
 
+    @Query("SELECT * FROM portals WHERE isActive = 1")
+    fun getActivePortals(): Flow<List<PortalEntity>>
+
+    @Query("SELECT * FROM portals WHERE isActive = 1")
+    suspend fun getActivePortalsSync(): List<PortalEntity>
+
     @Query("SELECT * FROM portals ORDER BY name ASC")
     fun getAllPortals(): Flow<List<PortalEntity>>
 
@@ -32,14 +38,8 @@ interface PortalDao {
     @Query("UPDATE portals SET isActive = 0")
     suspend fun clearAllActive()
 
-    @Transaction
-    suspend fun setActivePortal(portalId: String) {
-        clearAllActive()
-        setActive(portalId)
-    }
-
-    @Query("UPDATE portals SET isActive = 1 WHERE id = :portalId")
-    suspend fun setActive(portalId: String)
+    @Query("UPDATE portals SET isActive = :isActive WHERE id = :portalId")
+    suspend fun setPortalActiveStatus(portalId: String, isActive: Boolean)
 
     @Query("UPDATE portals SET lastSyncedAt = :timestamp WHERE id = :portalId")
     suspend fun updateLastSynced(portalId: String, timestamp: Long)

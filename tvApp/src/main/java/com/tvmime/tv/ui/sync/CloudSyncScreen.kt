@@ -26,12 +26,12 @@ import java.util.*
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun CloudSyncScreen(
-    activePortal: PortalEntity?,
+    activePortals: List<PortalEntity>,
     allPortals: List<PortalEntity> = emptyList(),
     syncProgress: SyncProgress,
     onSyncCurrentPortal: () -> Unit,
     onRefreshCloudPortals: () -> Unit = {},
-    onSelectPortal: (String) -> Unit = {},
+    onTogglePortal: (String, Boolean) -> Unit = { _, _ -> },
     onLoadDemoPortal: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -184,7 +184,7 @@ fun CloudSyncScreen(
                             modifier = Modifier.size(18.dp)
                         )
                         Text(
-                            text = "Sync Active Portal Now",
+                            text = "Sync Active Portals Now",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
@@ -231,7 +231,7 @@ fun CloudSyncScreen(
                 letterSpacing = 1.sp
             )
 
-            if (allPortals.isEmpty() && activePortal == null) {
+            if (allPortals.isEmpty() && activePortals.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -245,17 +245,13 @@ fun CloudSyncScreen(
                     )
                 }
             } else {
-                val displayList = if (allPortals.isNotEmpty()) allPortals else listOfNotNull(activePortal)
+                val displayList = if (allPortals.isNotEmpty()) allPortals else activePortals
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     for (portal in displayList) {
-                        val isCurrentActive = portal.id == activePortal?.id
+                        val isCurrentActive = activePortals.any { it.id == portal.id }
                         Surface(
                             onClick = {
-                                if (!isCurrentActive) {
-                                    onSelectPortal(portal.id)
-                                } else {
-                                    onSyncCurrentPortal()
-                                }
+                                onTogglePortal(portal.id, !isCurrentActive)
                             },
                             shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
                             colors = ClickableSurfaceDefaults.colors(
@@ -305,7 +301,7 @@ fun CloudSyncScreen(
                                 }
 
                                 Text(
-                                    text = if (isCurrentActive) "Press OK to Sync" else "Press OK to Select & Sync",
+                                    text = if (isCurrentActive) "Press OK to Deactivate" else "Press OK to Activate & Sync",
                                     color = if (isCurrentActive) crimson else textSecondary,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold

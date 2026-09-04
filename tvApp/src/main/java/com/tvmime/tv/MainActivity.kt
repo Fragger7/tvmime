@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val bgColor = Color.Black
-    val activePortal by viewModel.activePortal.collectAsStateWithLifecycle()
+    val activePortals by viewModel.activePortals.collectAsStateWithLifecycle()
     val allPortals by viewModel.allPortals.collectAsStateWithLifecycle()
     val syncProgress by viewModel.syncProgress.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle()
@@ -66,7 +66,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
 
     // First-Run Wizard
     var dismissedOnboarding by remember { mutableStateOf(false) }
-    if (activePortal == null && !dismissedOnboarding) {
+    if (activePortals.isEmpty() && !dismissedOnboarding) {
         com.tvmime.tv.ui.onboarding.OnboardingScreen(
             viewModel = viewModel,
             onComplete = { 
@@ -81,11 +81,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
 
     // Handle Back Button based on Overlay State
     BackHandler(enabled = overlayState != TvOverlayState.HIDDEN) {
-        if (overlayState == TvOverlayState.MAIN_MENU) {
-            viewModel.setOverlayState(TvOverlayState.CHANNEL_LIST)
-        } else {
-            viewModel.setOverlayState(TvOverlayState.HIDDEN)
-        }
+        viewModel.setOverlayState(TvOverlayState.HIDDEN)
     }
 
     Box(
@@ -106,7 +102,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 viewModel.setOverlayState(TvOverlayState.CHANNEL_LIST)
                                 return@onKeyEvent true
                             } else if (overlayState == TvOverlayState.CHANNEL_LIST) {
-                                viewModel.setOverlayState(TvOverlayState.MAIN_MENU)
+                                viewModel.setOverlayState(TvOverlayState.HIDDEN)
                                 return@onKeyEvent true
                             }
                         }
@@ -173,30 +169,8 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             )
         }
 
-        // Overlay: MAIN MENU (Left Slide-out pane)
-        AnimatedVisibility(
-            visible = overlayState == TvOverlayState.MAIN_MENU,
-            enter = slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300)) + fadeIn(),
-            exit = slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300)) + fadeOut(),
-            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterStart)
-        ) {
-            TvNavigationDrawer(
-                currentDestination = currentDestination,
-                onDestinationSelected = { dest ->
-                    viewModel.navigateTo(dest)
-                    when (dest) {
-                        TvNavDestination.LIVE_TV, TvNavDestination.FAVORITES -> viewModel.setOverlayState(TvOverlayState.CHANNEL_LIST)
-                        TvNavDestination.TV_GUIDE -> viewModel.setOverlayState(TvOverlayState.GUIDE)
-                        TvNavDestination.MOVIES, TvNavDestination.SERIES -> viewModel.setOverlayState(TvOverlayState.VOD)
-                        TvNavDestination.CLOUD_SYNC -> viewModel.setOverlayState(TvOverlayState.CLOUD_SYNC)
-                        TvNavDestination.SETTINGS -> viewModel.setOverlayState(TvOverlayState.SETTINGS)
-                        else -> viewModel.setOverlayState(TvOverlayState.HIDDEN)
-                    }
-                },
-                modifier = Modifier.background(Color(0xD90A0A10)),
-                initialFocusRequester = mainMenuFocusRequester
-            )
-        }
+        // Overlay: MAIN MENU (Removed as part of Pass 2 Pivot)
+
 
         // Overlay: Channel List (Left Side Glass Pane)
         AnimatedVisibility(
@@ -230,7 +204,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                     isFullscreen = false,
                     onToggleFullscreen = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
                     onToggleLastChannel = { viewModel.toggleLastChannel() },
-                    activePortal = activePortal,
+                    activePortals = activePortals,
                     showClockOverlay = showClockOverlay,
                     autoHideOsdSeconds = autoHideOsdSeconds,
                     enableLastChannelZap = enableLastChannelZap,
@@ -304,12 +278,12 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         ) {
             Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
                 CloudSyncScreen(
-                    activePortal = activePortal,
+                    activePortals = activePortals,
                     allPortals = allPortals,
                     syncProgress = syncProgress,
                     onSyncCurrentPortal = { viewModel.syncCurrentPortal() },
                     onRefreshCloudPortals = { viewModel.refreshPortalsFromCloud() },
-                    onSelectPortal = { viewModel.selectActivePortal(it) },
+                    onTogglePortal = { portalId, isActive -> viewModel.toggleActivePortal(portalId, isActive) },
                     onLoadDemoPortal = { viewModel.addDemoPortal() },
                     modifier = Modifier.fillMaxSize()
                 )

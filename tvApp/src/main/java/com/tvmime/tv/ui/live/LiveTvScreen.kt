@@ -42,7 +42,7 @@ fun LiveTvScreen(
     isFullscreen: Boolean, // Kept for signature compatibility but ignored
     onToggleFullscreen: () -> Unit,
     onToggleLastChannel: (() -> Boolean)? = null,
-    activePortal: PortalEntity? = null,
+    activePortals: List<PortalEntity> = emptyList(),
     showClockOverlay: Boolean = true,
     autoHideOsdSeconds: Int = 5,
     enableLastChannelZap: Boolean = true,

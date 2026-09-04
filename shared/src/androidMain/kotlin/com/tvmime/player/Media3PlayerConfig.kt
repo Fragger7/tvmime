@@ -21,26 +21,19 @@ enum class BufferProfile(
     val bufferForPlaybackMs: Int,
     val bufferForPlaybackAfterRebufferMs: Int
 ) {
-    FAST_ZAP(
+    LOW_LATENCY(
         label = "Fast Zap (Low Latency)",
-        minBufferMs = 1500,
-        maxBufferMs = 8000,
-        bufferForPlaybackMs = 500, // Play instantly
-        bufferForPlaybackAfterRebufferMs = 1000
-    ),
-    BALANCED(
-        label = "Balanced (Standard)",
         minBufferMs = 5000,
         maxBufferMs = 15000,
-        bufferForPlaybackMs = 1500,
-        bufferForPlaybackAfterRebufferMs = 3000
+        bufferForPlaybackMs = 1000,
+        bufferForPlaybackAfterRebufferMs = 2000
     ),
-    STABLE_4K(
-        label = "Stable 4K Buffer (Deep)",
-        minBufferMs = 15000,
-        maxBufferMs = 45000,
-        bufferForPlaybackMs = 4000,
-        bufferForPlaybackAfterRebufferMs = 8000
+    STABILITY(
+        label = "Stability Mode (Deep Buffer)",
+        minBufferMs = 60000,
+        maxBufferMs = 120000,
+        bufferForPlaybackMs = 5000,
+        bufferForPlaybackAfterRebufferMs = 10000
     )
 }
 
@@ -59,7 +52,7 @@ object Media3PlayerConfig {
     }
 
     @OptIn(UnstableApi::class)
-    fun buildLoadControl(profile: BufferProfile = BufferProfile.FAST_ZAP): DefaultLoadControl {
+    fun buildLoadControl(profile: BufferProfile = BufferProfile.LOW_LATENCY): DefaultLoadControl {
         return DefaultLoadControl.Builder()
             .setBufferDurationsMs(
                 profile.minBufferMs,
@@ -74,7 +67,7 @@ object Media3PlayerConfig {
     @OptIn(UnstableApi::class)
     fun buildPlayer(
         context: Context,
-        bufferProfile: BufferProfile = BufferProfile.FAST_ZAP,
+        bufferProfile: BufferProfile = BufferProfile.LOW_LATENCY,
         enableAfr: Boolean = true
     ): ExoPlayer {
         // 1. Hardware Video Decoder Prioritization

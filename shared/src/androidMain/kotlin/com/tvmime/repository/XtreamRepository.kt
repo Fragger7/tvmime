@@ -46,35 +46,36 @@ class XtreamRepository(
     private val _syncProgress = MutableStateFlow<SyncProgress>(SyncProgress.Idle)
     val syncProgress: StateFlow<SyncProgress> = _syncProgress.asStateFlow()
 
-    val activePortal: Flow<PortalEntity?> = database.portalDao().getActivePortal()
+    val activePortals: Flow<List<PortalEntity>> = database.portalDao().getActivePortals()
     val allPortals: Flow<List<PortalEntity>> = database.portalDao().getAllPortals()
 
-    fun getCategories(portalId: String, type: StreamType = StreamType.LIVE): Flow<List<CategoryEntity>> {
-        return database.categoryDao().getCategories(portalId, type.name)
+    fun getCategories(portalIds: List<String>, type: StreamType = StreamType.LIVE): Flow<List<CategoryEntity>> {
+        return database.categoryDao().getCategoriesForPortals(portalIds, type.name)
     }
 
-    fun getChannelsByCategory(portalId: String, categoryId: String): Flow<List<ChannelEntity>> {
-        return database.channelDao().getChannelsByCategory(portalId, categoryId)
+    fun getChannelsByCategory(portalIds: List<String>, categoryId: String): Flow<List<ChannelEntity>> {
+        return database.channelDao().getChannelsByCategoryForPortals(portalIds, categoryId)
     }
 
-    fun getAllChannelsByType(portalId: String, type: StreamType = StreamType.LIVE): Flow<List<ChannelEntity>> {
-        return database.channelDao().getAllChannelsByType(portalId, type.name)
+    fun getAllChannelsByType(portalIds: List<String>, type: StreamType = StreamType.LIVE): Flow<List<ChannelEntity>> {
+        return database.channelDao().getAllChannelsByTypeForPortals(portalIds, type.name)
     }
 
-    suspend fun getFirstChannel(portalId: String): ChannelEntity? {
-        return database.channelDao().getFirstChannel(portalId)
+    suspend fun getFirstChannel(portalIds: List<String>): ChannelEntity? {
+        if (portalIds.isEmpty()) return null
+        return database.channelDao().getFirstChannelForPortals(portalIds)
     }
 
-    fun getFavorites(portalId: String): Flow<List<ChannelEntity>> {
-        return database.channelDao().getFavorites(portalId)
+    fun getFavorites(portalIds: List<String>): Flow<List<ChannelEntity>> {
+        return database.channelDao().getFavoritesForPortals(portalIds)
     }
 
-    fun searchChannels(portalId: String, query: String): Flow<List<ChannelEntity>> {
-        return database.channelDao().searchChannels(portalId, query)
+    fun searchChannels(portalIds: List<String>, query: String): Flow<List<ChannelEntity>> {
+        return database.channelDao().searchChannelsForPortals(portalIds, query)
     }
 
-    fun getRecentlyWatched(portalId: String, limit: Int = 20): Flow<List<ChannelEntity>> {
-        return database.channelDao().getRecentlyWatched(portalId, limit)
+    fun getRecentlyWatched(portalIds: List<String>, limit: Int = 20): Flow<List<ChannelEntity>> {
+        return database.channelDao().getRecentlyWatchedForPortals(portalIds, limit)
     }
 
     suspend fun setFavorite(channelId: String, isFavorite: Boolean) {
@@ -89,12 +90,12 @@ class XtreamRepository(
         val entity = PortalEntity.fromDomain(portal)
         database.portalDao().insertOrUpdate(entity)
         if (setActive) {
-            database.portalDao().setActivePortal(entity.id)
+            database.portalDao().setPortalActiveStatus(entity.id, true)
         }
     }
 
-    suspend fun setActivePortal(portalId: String) {
-        database.portalDao().setActivePortal(portalId)
+    suspend fun setPortalActiveStatus(portalId: String, isActive: Boolean) {
+        database.portalDao().setPortalActiveStatus(portalId, isActive)
     }
 
     suspend fun deletePortal(portalId: String) {
@@ -108,13 +109,26 @@ class XtreamRepository(
     }
 
     /**
-     * Executes zero-OOM sync of categories and channels directly into SQLite/Room.
+     * Executes zero-OOM sync of categories and channels directly into SQLite/Room for all active portals.
      */
-    suspend fun syncActivePortal(): Result<Unit> = withContext(Dispatchers.IO) {
-        val portal = database.portalDao().getActivePortalSync()
-            ?: return@withContext Result.failure(IllegalStateException("No active portal selected"))
+    suspend fun syncActivePortals(): Result<Unit> = withContext(Dispatchers.IO) {
+        val portals = database.portalDao().getActivePortalsSync()
+        if (portals.isEmpty()) {
+            return@withContext Result.failure(IllegalStateException("No active portals selected"))
+        }
 
-        syncPortal(portal)
+        var lastException: Exception? = null
+        for (portal in portals) {
+            val res = syncPortal(portal)
+            if (res.isFailure) {
+                lastException = res.exceptionOrNull() as? Exception
+            }
+        }
+        
+        if (lastException != null && portals.size == 1) {
+            return@withContext Result.failure(lastException)
+        }
+        Result.success(Unit)
     }
 
     suspend fun syncPortal(portal: PortalEntity): Result<Unit> = withContext(Dispatchers.IO) {
@@ -242,7 +256,7 @@ class XtreamRepository(
 
         val activePortal = cloudPortals.firstOrNull { it.isActive } ?: cloudPortals.firstOrNull()
         if (activePortal != null) {
-            database.portalDao().setActivePortal(activePortal.id)
+            database.portalDao().setPortalActiveStatus(activePortal.id, true)
         }
 
         Result.success(entities)
@@ -280,7 +294,7 @@ class XtreamRepository(
             }
             val activePortal = portals.firstOrNull { it.isActive } ?: portals.firstOrNull()
             if (activePortal != null) {
-                database.portalDao().setActivePortal(activePortal.id)
+                database.portalDao().setPortalActiveStatus(activePortal.id, true)
             }
             Result.success(Pair(true, status.userId))
         } else {
@@ -312,7 +326,7 @@ class XtreamRepository(
         }
         val activePortal = portals.firstOrNull { it.isActive } ?: portals.firstOrNull()
         if (activePortal != null) {
-            database.portalDao().setActivePortal(activePortal.id)
+            database.portalDao().setPortalActiveStatus(activePortal.id, true)
         }
         Result.success(entities)
     }
@@ -349,7 +363,7 @@ class XtreamRepository(
             lastSyncedAt = System.currentTimeMillis()
         )
         database.portalDao().insertOrUpdate(demo)
-        database.portalDao().setActivePortal(demo.id)
+        database.portalDao().setPortalActiveStatus(demo.id, true)
 
         val demoCat = com.tvmime.db.entity.CategoryEntity(
             id = "demo_portal_LIVE_demo_cat",
