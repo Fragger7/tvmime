@@ -21,7 +21,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.ui.live.LiveTvScreen
-import com.tvmime.tv.ui.navigation.TvNavigationDrawer
 import com.tvmime.tv.ui.player.TvVideoPlayer
 import com.tvmime.tv.ui.settings.SettingsScreen
 import com.tvmime.tv.ui.sync.CloudSyncScreen
@@ -186,7 +185,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             TvHudOverlay(
                 channel = playingChannel,
                 epgPrograms = epgPrograms,
-                activePortals = activePortals,
+                activePortals = activePortals ?: emptyList(),
                 onDismiss = { viewModel.setOverlayState(TvOverlayState.HIDDEN) }
             )
         }
@@ -226,7 +225,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                     isFullscreen = false,
                     onToggleFullscreen = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
                     onToggleLastChannel = { viewModel.toggleLastChannel() },
-                    activePortals = activePortals,
+                    activePortals = activePortals ?: emptyList(),
                     showClockOverlay = showClockOverlay,
                     autoHideOsdSeconds = autoHideOsdSeconds,
                     enableLastChannelZap = enableLastChannelZap,
@@ -303,7 +302,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         ) {
             Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
                 CloudSyncScreen(
-                    activePortals = activePortals,
+                    activePortals = activePortals ?: emptyList(),
                     allPortals = allPortals,
                     syncProgress = syncProgress,
                     onSyncCurrentPortal = { viewModel.syncCurrentPortal() },
@@ -349,7 +348,6 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             when (overlayState) {
                 TvOverlayState.HIDDEN -> rootFocusRequester.requestFocus()
                 TvOverlayState.CHANNEL_LIST -> channelListFocusRequester.requestFocus()
-                TvOverlayState.MAIN_MENU -> mainMenuFocusRequester.requestFocus()
                 TvOverlayState.SETTINGS -> settingsFocusRequester.requestFocus()
                 TvOverlayState.GUIDE -> guideFocusRequester.requestFocus()
                 else -> {}

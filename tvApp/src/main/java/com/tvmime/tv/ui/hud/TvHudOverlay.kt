@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tvmime.db.entity.ChannelEntity
 import com.tvmime.db.entity.EpgProgramEntity
+import com.tvmime.db.entity.PortalEntity
 import com.tvmime.theme.DesignSystemTokens
 import kotlinx.coroutines.delay
 
@@ -116,6 +117,8 @@ fun TvHudOverlay(
                 }
             }
 
+            // Stream Stats
+            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 val portalName = activePortals.find { it.id == channel.portalId }?.name ?: "Unknown Provider"
                 Badge(portalName.uppercase(), color = crimson)
                 Badge("FHD 1080p")

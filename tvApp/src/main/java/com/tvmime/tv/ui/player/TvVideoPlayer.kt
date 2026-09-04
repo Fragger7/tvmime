@@ -99,7 +99,7 @@ fun TvVideoPlayer(
         }
     }
 
-    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner, exoPlayer) {
         val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
             when (event) {
