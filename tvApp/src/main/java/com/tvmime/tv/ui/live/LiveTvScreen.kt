@@ -47,6 +47,8 @@ fun LiveTvScreen(
     autoHideOsdSeconds: Int = 5,
     enableLastChannelZap: Boolean = true,
     onSyncPortal: (() -> Unit)? = null,
+    categoryListState: androidx.tv.foundation.lazy.list.TvLazyListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState(),
+    channelListState: androidx.tv.foundation.lazy.list.TvLazyListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState(),
     modifier: Modifier = Modifier
 ) {
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
@@ -100,17 +102,43 @@ fun LiveTvScreen(
                     }
                 }
             } else {
+                val categoriesByPortal = categories.groupBy { it.portalId }
+                var expandedPortals by remember { mutableStateOf(activePortals.map { it.id }.toSet()) }
+
                 TvLazyColumn(
+                    state = categoryListState,
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    items(categories, key = { it.id }) { cat ->
-                        CategoryCard(
-                            category = cat,
-                            isSelected = cat.categoryId == selectedCategory?.categoryId,
-                            onClick = { onSelectCategory(cat) },
-                            onLongClick = { onHideCategory(cat) }
-                        )
+                    activePortals.forEach { portal ->
+                        val portalCategories = categoriesByPortal[portal.id] ?: emptyList()
+                        if (portalCategories.isNotEmpty()) {
+                            item(key = "header_${portal.id}") {
+                                val isExpanded = expandedPortals.contains(portal.id)
+                                PortalHeaderCard(
+                                    portalName = portal.name,
+                                    isExpanded = isExpanded,
+                                    onClick = {
+                                        expandedPortals = if (isExpanded) {
+                                            expandedPortals - portal.id
+                                        } else {
+                                            expandedPortals + portal.id
+                                        }
+                                    }
+                                )
+                            }
+
+                            if (expandedPortals.contains(portal.id)) {
+                                items(portalCategories, key = { it.id }) { cat ->
+                                    CategoryCard(
+                                        category = cat,
+                                        isSelected = cat.categoryId == selectedCategory?.categoryId,
+                                        onClick = { onSelectCategory(cat) },
+                                        onLongClick = { onHideCategory(cat) }
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -156,6 +184,7 @@ fun LiveTvScreen(
                 }
             } else {
                 TvLazyColumn(
+                    state = channelListState,
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
@@ -169,6 +198,57 @@ fun LiveTvScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+private fun PortalHeaderCard(
+    portalName: String,
+    isExpanded: Boolean,
+    onClick: () -> Unit
+) {
+    val crimson = Color(DesignSystemTokens.Colors.Crimson)
+    var isFocused by remember { mutableStateOf(false) }
+
+    Surface(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .onFocusChanged { isFocused = it.isFocused },
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
+            containerColor = Color(0xFF1E1E2C),
+            focusedContainerColor = crimson
+        ),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = portalName.uppercase(),
+                color = Color.White,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+            
+            Text(
+                text = if (isExpanded) "−" else "+",
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

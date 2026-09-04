@@ -59,10 +59,14 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val currentDestination by viewModel.currentDestination.collectAsStateWithLifecycle()
 
     val rootFocusRequester = remember { FocusRequester() }
+    val playerFocusRequester = remember { FocusRequester() }
+    val hudFocusRequester = remember { FocusRequester() }
     val channelListFocusRequester = remember { FocusRequester() }
-    val mainMenuFocusRequester = remember { FocusRequester() }
     val settingsFocusRequester = remember { FocusRequester() }
     val guideFocusRequester = remember { FocusRequester() }
+
+    val categoryListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
+    val channelListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
 
     // First-Run Wizard
     var dismissedOnboarding by remember { mutableStateOf(false) }
@@ -165,6 +169,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             TvHudOverlay(
                 channel = playingChannel,
                 epgPrograms = epgPrograms,
+                activePortals = activePortals,
                 onDismiss = { viewModel.setOverlayState(TvOverlayState.HIDDEN) }
             )
         }
@@ -209,6 +214,8 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                     autoHideOsdSeconds = autoHideOsdSeconds,
                     enableLastChannelZap = enableLastChannelZap,
                     onSyncPortal = { viewModel.syncCurrentPortal() },
+                    categoryListState = categoryListState,
+                    channelListState = channelListState,
                     modifier = Modifier.fillMaxSize().focusRequester(channelListFocusRequester)
                 )
             }

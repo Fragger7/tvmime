@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 fun TvHudOverlay(
     channel: ChannelEntity?,
     epgPrograms: List<EpgProgramEntity>,
+    activePortals: List<PortalEntity>,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -115,8 +116,8 @@ fun TvHudOverlay(
                 }
             }
 
-            // Stream Stats
-            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                val portalName = activePortals.find { it.id == channel.portalId }?.name ?: "Unknown Provider"
+                Badge(portalName.uppercase(), color = crimson)
                 Badge("FHD 1080p")
                 Badge("60 FPS")
                 Badge("AAC 2.0")
@@ -126,12 +127,12 @@ fun TvHudOverlay(
 }
 
 @Composable
-private fun Badge(text: String) {
+private fun Badge(text: String, color: Color = Color(0xFF262636)) {
     Box(
         modifier = Modifier
-            .background(Color(0xFF262636), RoundedCornerShape(4.dp))
+            .background(color, RoundedCornerShape(4.dp))
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        Text(text = text, color = Color(0xFFD1D5DB), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        Text(text = text, color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 }
