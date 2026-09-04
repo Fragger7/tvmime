@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,7 +34,8 @@ import com.tvmime.tv.viewmodel.TvNavDestination
 fun TvNavigationDrawer(
     currentDestination: TvNavDestination,
     onDestinationSelected: (TvNavDestination) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    initialFocusRequester: FocusRequester? = null
 ) {
     val bgDrawer = Color.Transparent
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
@@ -111,7 +114,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.LIVE_TV.label,
                 isSelected = currentDestination == TvNavDestination.LIVE_TV,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.LIVE_TV) }
+                onClick = { onDestinationSelected(TvNavDestination.LIVE_TV) },
+                modifier = if (initialFocusRequester != null && (currentDestination == TvNavDestination.LIVE_TV || currentDestination == TvNavDestination.FAVORITES)) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -119,7 +125,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.TV_GUIDE.label,
                 isSelected = currentDestination == TvNavDestination.TV_GUIDE,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.TV_GUIDE) }
+                onClick = { onDestinationSelected(TvNavDestination.TV_GUIDE) },
+                modifier = if (initialFocusRequester != null && currentDestination == TvNavDestination.TV_GUIDE) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -127,7 +136,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.MOVIES.label,
                 isSelected = currentDestination == TvNavDestination.MOVIES,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.MOVIES) }
+                onClick = { onDestinationSelected(TvNavDestination.MOVIES) },
+                modifier = if (initialFocusRequester != null && currentDestination == TvNavDestination.MOVIES) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -135,7 +147,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.SERIES.label,
                 isSelected = currentDestination == TvNavDestination.SERIES,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.SERIES) }
+                onClick = { onDestinationSelected(TvNavDestination.SERIES) },
+                modifier = if (initialFocusRequester != null && currentDestination == TvNavDestination.SERIES) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -157,7 +172,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.CLOUD_SYNC.label,
                 isSelected = currentDestination == TvNavDestination.CLOUD_SYNC,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.CLOUD_SYNC) }
+                onClick = { onDestinationSelected(TvNavDestination.CLOUD_SYNC) },
+                modifier = if (initialFocusRequester != null && currentDestination == TvNavDestination.CLOUD_SYNC) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -165,7 +183,10 @@ fun TvNavigationDrawer(
                 label = TvNavDestination.SETTINGS.label,
                 isSelected = currentDestination == TvNavDestination.SETTINGS,
                 isExpanded = isDrawerFocused,
-                onClick = { onDestinationSelected(TvNavDestination.SETTINGS) }
+                onClick = { onDestinationSelected(TvNavDestination.SETTINGS) },
+                modifier = if (initialFocusRequester != null && currentDestination == TvNavDestination.SETTINGS) {
+                    Modifier.focusRequester(initialFocusRequester)
+                } else Modifier
             )
 
             NavItemRow(
@@ -186,7 +207,8 @@ private fun NavItemRow(
     label: String,
     isSelected: Boolean,
     isExpanded: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
@@ -202,7 +224,7 @@ private fun NavItemRow(
 
     Surface(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(48.dp)
             .onFocusChanged { isFocused = it.isFocused },

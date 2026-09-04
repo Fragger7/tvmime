@@ -24,6 +24,21 @@ class TvPreferencesManager(context: Context) {
     private val _hiddenCategories = MutableStateFlow(prefs.getStringSet(KEY_HIDDEN_CATEGORIES, emptySet()) ?: emptySet())
     val hiddenCategories: StateFlow<Set<String>> = _hiddenCategories.asStateFlow()
 
+    private val _cloudUserId = MutableStateFlow(prefs.getString(KEY_CLOUD_USER_ID, null))
+    val cloudUserId: StateFlow<String?> = _cloudUserId.asStateFlow()
+
+    private val _cloudUserEmail = MutableStateFlow(prefs.getString(KEY_CLOUD_USER_EMAIL, null))
+    val cloudUserEmail: StateFlow<String?> = _cloudUserEmail.asStateFlow()
+
+    fun setCloudUser(userId: String?, email: String?) {
+        prefs.edit()
+            .putString(KEY_CLOUD_USER_ID, userId)
+            .putString(KEY_CLOUD_USER_EMAIL, email)
+            .apply()
+        _cloudUserId.value = userId
+        _cloudUserEmail.value = email
+    }
+
     fun setShowClockOverlay(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_SHOW_CLOCK, enabled).apply()
         _showClockOverlay.value = enabled
@@ -57,6 +72,8 @@ class TvPreferencesManager(context: Context) {
         private const val KEY_LAST_CHANNEL_ZAP = "pref_last_channel_zap"
         private const val KEY_ASPECT_MODE = "pref_default_aspect_mode"
         private const val KEY_HIDDEN_CATEGORIES = "pref_hidden_categories"
+        private const val KEY_CLOUD_USER_ID = "pref_cloud_user_id"
+        private const val KEY_CLOUD_USER_EMAIL = "pref_cloud_user_email"
 
         @Volatile
         private var INSTANCE: TvPreferencesManager? = null

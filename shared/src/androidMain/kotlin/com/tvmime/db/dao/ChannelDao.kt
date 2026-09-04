@@ -12,6 +12,12 @@ interface ChannelDao {
     @Query("SELECT * FROM channels WHERE portalId = :portalId AND categoryId = :categoryId ORDER BY num ASC, name ASC")
     fun getChannelsByCategory(portalId: String, categoryId: String): Flow<List<ChannelEntity>>
 
+    @Query("SELECT * FROM channels WHERE portalId = :portalId AND type = :type ORDER BY num ASC, name ASC")
+    fun getAllChannelsByType(portalId: String, type: String): Flow<List<ChannelEntity>>
+
+    @Query("SELECT * FROM channels WHERE portalId = :portalId ORDER BY num ASC, name ASC LIMIT 1")
+    suspend fun getFirstChannel(portalId: String): ChannelEntity?
+
     @Query("SELECT * FROM channels WHERE portalId = :portalId AND isFavorite = 1 ORDER BY num ASC, name ASC")
     fun getFavorites(portalId: String): Flow<List<ChannelEntity>>
 

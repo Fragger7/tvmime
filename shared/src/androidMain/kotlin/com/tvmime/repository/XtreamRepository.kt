@@ -57,6 +57,14 @@ class XtreamRepository(
         return database.channelDao().getChannelsByCategory(portalId, categoryId)
     }
 
+    fun getAllChannelsByType(portalId: String, type: StreamType = StreamType.LIVE): Flow<List<ChannelEntity>> {
+        return database.channelDao().getAllChannelsByType(portalId, type.name)
+    }
+
+    suspend fun getFirstChannel(portalId: String): ChannelEntity? {
+        return database.channelDao().getFirstChannel(portalId)
+    }
+
     fun getFavorites(portalId: String): Flow<List<ChannelEntity>> {
         return database.channelDao().getFavorites(portalId)
     }
@@ -226,13 +234,15 @@ class XtreamRepository(
         val cloudPortals = portalsResult.getOrElse { return@withContext Result.failure(it) }
 
         val entities = mutableListOf<PortalEntity>()
-        for ((idx, portal) in cloudPortals.withIndex()) {
+        for (portal in cloudPortals) {
             val entity = PortalEntity.fromDomain(portal)
             database.portalDao().insertOrUpdate(entity)
-            if (idx == 0) {
-                database.portalDao().setActivePortal(entity.id)
-            }
             entities.add(entity)
+        }
+
+        val activePortal = cloudPortals.firstOrNull { it.isActive } ?: cloudPortals.firstOrNull()
+        if (activePortal != null) {
+            database.portalDao().setActivePortal(activePortal.id)
         }
 
         Result.success(entities)
@@ -243,17 +253,17 @@ class XtreamRepository(
         firebase.registerTvPairingCode(code, System.currentTimeMillis())
     }
 
-    suspend fun checkPairingAndSync(code: String): Result<Boolean> = withContext(Dispatchers.IO) {
+    suspend fun checkPairingAndSync(code: String): Result<Pair<Boolean, String?>> = withContext(Dispatchers.IO) {
         val firebase = com.tvmime.sync.FirebaseSyncClient()
         val statusRes = firebase.checkTvPairingStatus(code)
         if (statusRes.isFailure) return@withContext Result.failure(statusRes.exceptionOrNull() ?: Exception("Pairing check failed"))
-        val status = statusRes.getOrNull() ?: return@withContext Result.success(false)
+        val status = statusRes.getOrNull() ?: return@withContext Result.success(Pair(false, null))
 
         if (status.isAuthorized && !status.userId.isNullOrBlank()) {
             val portalsRes = firebase.fetchPortalsByUserId(status.userId)
             if (portalsRes.isFailure) return@withContext Result.failure(portalsRes.exceptionOrNull() ?: Exception("Failed to fetch portals"))
             val portals = portalsRes.getOrNull() ?: emptyList()
-            for ((idx, cfg) in portals.withIndex()) {
+            for (cfg in portals) {
                 val entity = PortalEntity(
                     id = cfg.id,
                     name = cfg.name,
@@ -264,17 +274,47 @@ class XtreamRepository(
                     syncLive = cfg.syncLive,
                     syncMovies = cfg.syncMovies,
                     syncSeries = cfg.syncSeries,
-                    lastSyncedAt = System.currentTimeMillis()
+                    lastSyncedAt = null
                 )
                 database.portalDao().insertOrUpdate(entity)
-                if (idx == 0) {
-                    database.portalDao().setActivePortal(entity.id)
-                }
             }
-            Result.success(true)
+            val activePortal = portals.firstOrNull { it.isActive } ?: portals.firstOrNull()
+            if (activePortal != null) {
+                database.portalDao().setActivePortal(activePortal.id)
+            }
+            Result.success(Pair(true, status.userId))
         } else {
-            Result.success(false)
+            Result.success(Pair(false, null))
         }
+    }
+
+    suspend fun syncPortalsByUserId(userId: String): Result<List<PortalEntity>> = withContext(Dispatchers.IO) {
+        val firebase = com.tvmime.sync.FirebaseSyncClient()
+        val portalsRes = firebase.fetchPortalsByUserId(userId)
+        if (portalsRes.isFailure) return@withContext Result.failure(portalsRes.exceptionOrNull() ?: Exception("Failed to fetch portals"))
+        val portals = portalsRes.getOrNull() ?: emptyList()
+        val entities = mutableListOf<PortalEntity>()
+        for (cfg in portals) {
+            val entity = PortalEntity(
+                id = cfg.id,
+                name = cfg.name,
+                serverUrl = cfg.serverUrl,
+                username = cfg.username,
+                password = cfg.password,
+                isActive = cfg.isActive,
+                syncLive = cfg.syncLive,
+                syncMovies = cfg.syncMovies,
+                syncSeries = cfg.syncSeries,
+                lastSyncedAt = null
+            )
+            database.portalDao().insertOrUpdate(entity)
+            entities.add(entity)
+        }
+        val activePortal = portals.firstOrNull { it.isActive } ?: portals.firstOrNull()
+        if (activePortal != null) {
+            database.portalDao().setActivePortal(activePortal.id)
+        }
+        Result.success(entities)
     }
 
     suspend fun reportStreamIssue(

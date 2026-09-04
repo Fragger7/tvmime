@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
 fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val bgColor = Color.Black
     val activePortal by viewModel.activePortal.collectAsStateWithLifecycle()
+    val allPortals by viewModel.allPortals.collectAsStateWithLifecycle()
     val syncProgress by viewModel.syncProgress.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle()
     val channels by viewModel.channels.collectAsStateWithLifecycle()
@@ -186,7 +187,8 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                         else -> viewModel.setOverlayState(TvOverlayState.HIDDEN)
                     }
                 },
-                modifier = Modifier.background(Color(0xD90A0A10)).focusRequester(mainMenuFocusRequester)
+                modifier = Modifier.background(Color(0xD90A0A10)),
+                initialFocusRequester = mainMenuFocusRequester
             )
         }
 
@@ -226,6 +228,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                     showClockOverlay = showClockOverlay,
                     autoHideOsdSeconds = autoHideOsdSeconds,
                     enableLastChannelZap = enableLastChannelZap,
+                    onSyncPortal = { viewModel.syncCurrentPortal() },
                     modifier = Modifier.fillMaxSize().focusRequester(channelListFocusRequester)
                 )
             }
@@ -296,8 +299,11 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
                 CloudSyncScreen(
                     activePortal = activePortal,
+                    allPortals = allPortals,
                     syncProgress = syncProgress,
                     onSyncCurrentPortal = { viewModel.syncCurrentPortal() },
+                    onRefreshCloudPortals = { viewModel.refreshPortalsFromCloud() },
+                    onSelectPortal = { viewModel.selectActivePortal(it) },
                     onLoadDemoPortal = { viewModel.addDemoPortal() },
                     modifier = Modifier.fillMaxSize()
                 )

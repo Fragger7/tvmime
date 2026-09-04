@@ -130,6 +130,7 @@ export async function authorizeTvPairing(code: string, userId: string, userEmail
   await setDoc(pairRef, {
     code: cleanCode,
     status: 'authorized',
+    authorized: true,
     userId,
     userEmail,
     authorizedAt: Date.now()

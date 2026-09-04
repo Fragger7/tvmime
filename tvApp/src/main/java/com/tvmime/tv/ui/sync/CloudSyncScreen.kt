@@ -27,8 +27,11 @@ import java.util.*
 @Composable
 fun CloudSyncScreen(
     activePortal: PortalEntity?,
+    allPortals: List<PortalEntity> = emptyList(),
     syncProgress: SyncProgress,
     onSyncCurrentPortal: () -> Unit,
+    onRefreshCloudPortals: () -> Unit = {},
+    onSelectPortal: (String) -> Unit = {},
     onLoadDemoPortal: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -46,8 +49,8 @@ fun CloudSyncScreen(
         contentAlignment = Alignment.TopStart
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            modifier = Modifier.fillMaxWidth(0.9f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Header
             Row(
@@ -81,70 +84,6 @@ fun CloudSyncScreen(
                         color = textSecondary,
                         fontSize = 12.sp
                     )
-                }
-            }
-
-            // Active Portal Card
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(cardBg, RoundedCornerShape(12.dp))
-                    .padding(20.dp)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Text(
-                        text = "ACTIVE PORTAL",
-                        color = crimson,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
-
-                    if (activePortal != null) {
-                        Text(
-                            text = activePortal.name,
-                            color = textPrimary,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = "Server: ${activePortal.serverUrl}",
-                            color = textSecondary,
-                            fontSize = 13.sp
-                        )
-
-                        Text(
-                            text = "Username: ${activePortal.username}",
-                            color = textSecondary,
-                            fontSize = 13.sp
-                        )
-
-                        val syncTime = if (activePortal.lastSyncedAt > 0) {
-                            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date(activePortal.lastSyncedAt))
-                        } else {
-                            "Never"
-                        }
-                        Text(
-                            text = "Last Synced: $syncTime",
-                            color = Color(0xFF9CA3AF),
-                            fontSize = 12.sp
-                        )
-                    } else {
-                        Text(
-                            text = "No Active Portal Configured",
-                            color = textPrimary,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            text = "Load the demo portal below or link your account at tvmime.vercel.app",
-                            color = textSecondary,
-                            fontSize = 12.sp
-                        )
-                    }
                 }
             }
 
@@ -196,6 +135,35 @@ fun CloudSyncScreen(
             // Action Buttons
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Surface(
+                    onClick = onRefreshCloudPortals,
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
+                        containerColor = Color(0xFF2563EB),
+                        focusedContainerColor = Color(0xFF3B82F6)
+                    ),
+                    modifier = Modifier.height(44.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Default.CloudDownload,
+                            contentDescription = "Cloud Refresh",
+                            tint = Color.White,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "Refresh Portals From Cloud",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+
+                Surface(
                     onClick = onSyncCurrentPortal,
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
                     colors = ClickableSurfaceDefaults.colors(
@@ -245,11 +213,105 @@ fun CloudSyncScreen(
                             modifier = Modifier.size(18.dp)
                         )
                         Text(
-                            text = "Load Demo Xtream Portal",
+                            text = "Load Demo Portal",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )
+                    }
+                }
+            }
+
+            // Portals List
+            Text(
+                text = "SAVED PORTALS (${allPortals.size})",
+                color = crimson,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp
+            )
+
+            if (allPortals.isEmpty() && activePortal == null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(cardBg, RoundedCornerShape(12.dp))
+                        .padding(20.dp)
+                ) {
+                    Text(
+                        text = "No portals saved. Press 'Refresh Portals From Cloud' to load your portals from tvmime.vercel.app, or load demo portal.",
+                        color = textSecondary,
+                        fontSize = 13.sp
+                    )
+                }
+            } else {
+                val displayList = if (allPortals.isNotEmpty()) allPortals else listOfNotNull(activePortal)
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    for (portal in displayList) {
+                        val isCurrentActive = portal.id == activePortal?.id
+                        Surface(
+                            onClick = {
+                                if (!isCurrentActive) {
+                                    onSelectPortal(portal.id)
+                                } else {
+                                    onSyncCurrentPortal()
+                                }
+                            },
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
+                                containerColor = if (isCurrentActive) Color(0x33E50914) else cardBg,
+                                focusedContainerColor = Color(0xFF2B2B3D)
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Text(
+                                            text = portal.name,
+                                            color = textPrimary,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                        if (isCurrentActive) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .background(Color(0xFF10B981), RoundedCornerShape(4.dp))
+                                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                            ) {
+                                                Text(
+                                                    text = "ACTIVE",
+                                                    color = Color.White,
+                                                    fontSize = 9.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                    }
+                                    Text(
+                                        text = "${portal.serverUrl} • ${portal.username}",
+                                        color = textSecondary,
+                                        fontSize = 12.sp
+                                    )
+                                }
+
+                                Text(
+                                    text = if (isCurrentActive) "Press OK to Sync" else "Press OK to Select & Sync",
+                                    color = if (isCurrentActive) crimson else textSecondary,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
                     }
                 }
             }

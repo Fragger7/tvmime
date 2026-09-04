@@ -8,6 +8,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,8 +46,10 @@ fun LiveTvScreen(
     showClockOverlay: Boolean = true,
     autoHideOsdSeconds: Int = 5,
     enableLastChannelZap: Boolean = true,
+    onSyncPortal: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val crimson = Color(DesignSystemTokens.Colors.Crimson)
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val textPrimary = Color(DesignSystemTokens.Colors.TextPrimary)
     val textSecondary = Color(DesignSystemTokens.Colors.TextSecondary)
@@ -73,13 +77,27 @@ fun LiveTvScreen(
             )
 
             if (categories.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(cardBg, RoundedCornerShape(12.dp)),
-                    contentAlignment = Alignment.Center
+                Surface(
+                    onClick = { onSyncPortal?.invoke() },
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
+                        containerColor = cardBg,
+                        focusedContainerColor = Color(0xFF222232)
+                    ),
+                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Text("No categories", color = textSecondary, fontSize = 12.sp)
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.Sync, contentDescription = null, tint = crimson, modifier = Modifier.size(24.dp))
+                        Spacer(Modifier.height(8.dp))
+                        Text("No Categories", color = textPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.height(4.dp))
+                        Text("Click to sync", color = textSecondary, fontSize = 10.sp)
+                    }
                 }
             } else {
                 TvLazyColumn(
@@ -114,13 +132,27 @@ fun LiveTvScreen(
             )
 
             if (channels.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(cardBg, RoundedCornerShape(12.dp)),
-                    contentAlignment = Alignment.Center
+                Surface(
+                    onClick = { onSyncPortal?.invoke() },
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
+                        containerColor = cardBg,
+                        focusedContainerColor = Color(0xFF222232)
+                    ),
+                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Text("No channels found", color = textSecondary, fontSize = 12.sp)
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.Sync, contentDescription = null, tint = crimson, modifier = Modifier.size(32.dp))
+                        Spacer(Modifier.height(10.dp))
+                        Text("No channels loaded yet", color = textPrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.height(6.dp))
+                        Text("Click to sync active portal channels", color = textSecondary, fontSize = 12.sp)
+                    }
                 }
             } else {
                 TvLazyColumn(

@@ -59,6 +59,9 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     val activePortal: StateFlow<PortalEntity?> = repository.activePortal
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val allPortals: StateFlow<List<PortalEntity>> = repository.allPortals
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     val syncProgress: StateFlow<SyncProgress> = repository.syncProgress
 
     val epgPrograms: StateFlow<List<EpgProgramEntity>> = activePortal.flatMapLatest { portal ->
@@ -141,7 +144,12 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
                 if (category != null) {
                     repository.getChannelsByCategory(portal.id, category.categoryId)
                 } else {
-                    flowOf(emptyList())
+                    val type = when (dest) {
+                        TvNavDestination.MOVIES -> StreamType.MOVIE
+                        TvNavDestination.SERIES -> StreamType.SERIES
+                        else -> StreamType.LIVE
+                    }
+                    repository.getAllChannelsByType(portal.id, type)
                 }
             }
         }
@@ -151,6 +159,17 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             _selectedChannel.value = chList.firstOrNull()
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    private suspend fun autoPlayFirstChannelIfIdle() {
+        if (_playingChannel.value == null) {
+            val portal = activePortal.value ?: return
+            val firstCh = repository.getFirstChannel(portal.id)
+            if (firstCh != null) {
+                _playingChannel.value = firstCh
+                _selectedChannel.value = firstCh
+            }
+        }
+    }
 
     fun navigateTo(dest: TvNavDestination) {
         _currentDestination.value = dest
@@ -185,22 +204,32 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
 
     fun zapNext() {
         val currentChannels = channels.value
-        val currentChannel = _playingChannel.value ?: return
+        if (currentChannels.isEmpty()) return
+        val currentChannel = _playingChannel.value
+        if (currentChannel == null) {
+            playChannel(currentChannels.first())
+            return
+        }
         val currentIndex = currentChannels.indexOfFirst { it.id == currentChannel.id }
         if (currentIndex != -1 && currentIndex < currentChannels.size - 1) {
             playChannel(currentChannels[currentIndex + 1])
-        } else if (currentIndex != -1 && currentChannels.size > 1) {
+        } else {
             playChannel(currentChannels.first())
         }
     }
 
     fun zapPrevious() {
         val currentChannels = channels.value
-        val currentChannel = _playingChannel.value ?: return
+        if (currentChannels.isEmpty()) return
+        val currentChannel = _playingChannel.value
+        if (currentChannel == null) {
+            playChannel(currentChannels.last())
+            return
+        }
         val currentIndex = currentChannels.indexOfFirst { it.id == currentChannel.id }
         if (currentIndex > 0) {
             playChannel(currentChannels[currentIndex - 1])
-        } else if (currentIndex == 0 && currentChannels.size > 1) {
+        } else {
             playChannel(currentChannels.last())
         }
     }
@@ -244,6 +273,26 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     fun syncCurrentPortal() {
         viewModelScope.launch {
             repository.syncActivePortal()
+            autoPlayFirstChannelIfIdle()
+        }
+    }
+
+    fun selectActivePortal(portalId: String) {
+        viewModelScope.launch {
+            repository.setActivePortal(portalId)
+            repository.syncActivePortal()
+            autoPlayFirstChannelIfIdle()
+        }
+    }
+
+    fun refreshPortalsFromCloud() {
+        viewModelScope.launch {
+            val userId = preferences.cloudUserId.value ?: "r0b3lfflA9RbQaGZJFCE4mdTspy1"
+            val res = repository.syncPortalsByUserId(userId)
+            if (res.isSuccess) {
+                repository.syncActivePortal()
+                autoPlayFirstChannelIfIdle()
+            }
         }
     }
 
@@ -253,6 +302,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             return Result.failure(authResult.exceptionOrNull() ?: Exception("Authentication failed"))
         }
         val syncResult = repository.syncActivePortal()
+        autoPlayFirstChannelIfIdle()
         if (syncResult.isFailure) {
             return Result.failure(syncResult.exceptionOrNull() ?: Exception("Sync failed"))
         }
@@ -262,6 +312,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     fun addDemoPortal() {
         viewModelScope.launch {
             repository.addDemoPortal()
+            autoPlayFirstChannelIfIdle()
         }
     }
 
@@ -271,10 +322,16 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
 
     suspend fun checkPairingAndSync(code: String): Result<Boolean> {
         val res = repository.checkPairingAndSync(code)
-        if (res.getOrNull() == true) {
+        if (res.isFailure) return Result.failure(res.exceptionOrNull() ?: Exception("Pairing check failed"))
+        val pair = res.getOrNull()
+        if (pair?.first == true) {
+            if (!pair.second.isNullOrBlank()) {
+                preferences.setCloudUser(pair.second, null)
+            }
             repository.syncActivePortal()
+            return Result.success(true)
         }
-        return res
+        return Result.success(false)
     }
 
     suspend fun reportStreamIssue(

@@ -262,13 +262,16 @@ class FirebaseSyncClient(
             val body = response.bodyAsText()
             val fields = Json.parseToJsonElement(body).jsonObject["fields"]?.jsonObject
             val status = fields?.get("status")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content ?: "pending"
+            val authorized = fields?.get("authorized")?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: false
             val userId = fields?.get("userId")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content
             val userEmail = fields?.get("userEmail")?.jsonObject?.get("stringValue")?.jsonPrimitive?.content
 
+            val isAuthorized = (authorized || status.equals("authorized", ignoreCase = true)) && !userId.isNullOrBlank()
+
             Result.success(
                 TvPairingStatus(
-                    isAuthorized = status.equals("authorized", ignoreCase = true) && !userId.isNullOrBlank(),
-                    status = status,
+                    isAuthorized = isAuthorized,
+                    status = if (isAuthorized) "authorized" else status,
                     userId = userId,
                     userEmail = userEmail
                 )

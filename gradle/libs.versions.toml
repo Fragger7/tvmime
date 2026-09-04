@@ -62,6 +62,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 # Logging
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+zxing-core = { module = "com.google.zxing:core", version = "3.5.3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

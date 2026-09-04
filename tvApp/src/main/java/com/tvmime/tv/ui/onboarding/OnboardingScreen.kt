@@ -1,5 +1,6 @@
 package com.tvmime.tv.ui.onboarding
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +29,10 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.MultiFormatWriter
+import android.graphics.Bitmap
 import com.tvmime.theme.DesignSystemTokens
 import com.tvmime.tv.hardware.DeviceCapabilityDetector
 import com.tvmime.tv.viewmodel.TvMainViewModel
@@ -230,77 +236,121 @@ fun OnboardingScreen(
                 ) {
                     when (selectedTab) {
                         OnboardingTab.QUICK_PAIR -> {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            val qrUrl = if (pairCode.isNotEmpty()) "https://tvmime.vercel.app/pair?code=$pairCode" else "https://tvmime.vercel.app/pair"
+                            val qrBitmap = rememberQrBitmap(qrUrl, 240)
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(28.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "FAST TV PAIRING",
-                                    color = crimson,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    letterSpacing = 1.5.sp
-                                )
+                                // QR Code Box
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(190.dp)
+                                            .background(Color.White, RoundedCornerShape(12.dp))
+                                            .padding(10.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (qrBitmap != null) {
+                                            Image(
+                                                bitmap = qrBitmap,
+                                                contentDescription = "QR Code for TV Pairing",
+                                                modifier = Modifier.fillMaxSize()
+                                            )
+                                        } else {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(36.dp),
+                                                color = crimson,
+                                                strokeWidth = 3.dp
+                                            )
+                                        }
+                                    }
+                                    Text(
+                                        text = "Scan with phone camera",
+                                        color = textSecondary,
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
 
-                                Text(
-                                    text = "On your phone or computer, visit:",
-                                    color = textSecondary,
-                                    fontSize = 13.sp
-                                )
-
-                                Box(
-                                    modifier = Modifier
-                                        .background(Color(0xFF181822), RoundedCornerShape(8.dp))
-                                        .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
-                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                // Instructions & Code Box
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
                                     Text(
-                                        text = "tvmime.vercel.app/pair",
-                                        color = Color(0xFF38BDF8),
-                                        fontSize = 18.sp,
+                                        text = "FAST TV PAIRING",
+                                        color = crimson,
+                                        fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold,
-                                        fontFamily = FontFamily.Monospace
+                                        letterSpacing = 1.5.sp
                                     )
-                                }
 
-                                Text(
-                                    text = "And enter this authorization code:",
-                                    color = textSecondary,
-                                    fontSize = 13.sp
-                                )
-
-                                // Huge Pairing Code Box
-                                Box(
-                                    modifier = Modifier
-                                        .background(Color(0x22E50914), RoundedCornerShape(12.dp))
-                                        .border(2.dp, crimsonBright, RoundedCornerShape(12.dp))
-                                        .padding(horizontal = 32.dp, vertical = 14.dp)
-                                ) {
                                     Text(
-                                        text = if (pairCode.isNotEmpty()) pairCode else "......",
-                                        color = Color.White,
-                                        fontSize = 36.sp,
-                                        fontWeight = FontWeight.Black,
-                                        letterSpacing = 6.sp,
-                                        fontFamily = FontFamily.Monospace
+                                        text = "Scan the QR code or visit:",
+                                        color = textSecondary,
+                                        fontSize = 13.sp
                                     )
-                                }
 
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = if (isPairSuccess) Icons.Default.CheckCircle else Icons.Default.Sync,
-                                        contentDescription = null,
-                                        tint = if (isPairSuccess) Color(0xFF10B981) else Color(0xFFF59E0B),
-                                        modifier = Modifier.size(16.dp)
-                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .background(Color(0xFF181822), RoundedCornerShape(8.dp))
+                                            .border(1.dp, Color(0xFF2E2E40), RoundedCornerShape(8.dp))
+                                            .padding(horizontal = 14.dp, vertical = 6.dp)
+                                    ) {
+                                        Text(
+                                            text = "tvmime.vercel.app/pair",
+                                            color = Color(0xFF38BDF8),
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            fontFamily = FontFamily.Monospace
+                                        )
+                                    }
+
                                     Text(
-                                        text = pairStatusText,
-                                        color = if (isPairSuccess) Color(0xFF10B981) else Color(0xFF9CA3AF),
+                                        text = "Authorization Code:",
+                                        color = textSecondary,
                                         fontSize = 12.sp
                                     )
+
+                                    // Huge Pairing Code Box
+                                    Box(
+                                        modifier = Modifier
+                                            .background(Color(0x22E50914), RoundedCornerShape(12.dp))
+                                            .border(2.dp, crimsonBright, RoundedCornerShape(12.dp))
+                                            .padding(horizontal = 24.dp, vertical = 10.dp)
+                                    ) {
+                                        Text(
+                                            text = if (pairCode.isNotEmpty()) pairCode else "......",
+                                            color = Color.White,
+                                            fontSize = 30.sp,
+                                            fontWeight = FontWeight.Black,
+                                            letterSpacing = 5.sp,
+                                            fontFamily = FontFamily.Monospace
+                                        )
+                                    }
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = if (isPairSuccess) Icons.Default.CheckCircle else Icons.Default.Sync,
+                                            contentDescription = null,
+                                            tint = if (isPairSuccess) Color(0xFF10B981) else Color(0xFFF59E0B),
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                        Text(
+                                            text = pairStatusText,
+                                            color = if (isPairSuccess) Color(0xFF10B981) else Color(0xFF9CA3AF),
+                                            fontSize = 12.sp
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -546,3 +596,27 @@ private fun TabButton(
         }
     }
 }
+
+@Composable
+private fun rememberQrBitmap(content: String, sizePx: Int = 240): androidx.compose.ui.graphics.ImageBitmap? {
+    return remember(content, sizePx) {
+        if (content.isBlank()) return@remember null
+        try {
+            val hints = mapOf(
+                EncodeHintType.CHARACTER_SET to "UTF-8",
+                EncodeHintType.MARGIN to 1
+            )
+            val matrix = MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, sizePx, sizePx, hints)
+            val bmp = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.RGB_565)
+            for (x in 0 until sizePx) {
+                for (y in 0 until sizePx) {
+                    bmp.setPixel(x, y, if (matrix.get(x, y)) android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+                }
+            }
+            bmp.asImageBitmap()
+        } catch (e: Exception) {
+            null
+        }
+    }
+}
+
