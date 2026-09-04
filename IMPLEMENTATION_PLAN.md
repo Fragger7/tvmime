@@ -97,10 +97,11 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Long-Press Context Menu & Group Hiding:** Extended `TvPreferencesManager.kt` to persist a `Set<String>` of hidden category IDs to `SharedPreferences`. Modified `TvMainViewModel.kt`'s `categories` StateFlow to intercept and filter out hidden categories in real-time. Wired `onLongClick` in `LiveTvScreen.kt` CategoryCard.
 - **Channel State Integrity:** Restored `playChannel` with previous-channel tracking for instant D-Pad Right swap and watch-history tracking in Room.
 
-### Sprint 3: Resilience & Mobile Foundation [UPCOMING]
-- **Stream Failover & Auto-Recovery:** Detect network drops or HTTP 403/456 errors; retry 2x with exponential backoff before showing toast and failing over to next available stream.
-- **Mobile Touch EPG:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
-- **Chromecast Streaming:** Wire `androidx.media3:media3-cast` into mobile player to route streams to smart TVs and Cast targets.
+### Sprint 3: Resilience & Mobile Foundation [ACTIVE SPRINT]
+- **Stream Auto-Recovery & Dummy Header Pruning [COMPLETED in v1.2.2]:** Filtered dummy separator headers in `StreamingCatalogParser.kt` to avoid 404 dead stream calls. Implemented proactive socket teardown (`stop()` + `clearMediaItems()`) for single-connection IPTV portals. Built auto-format recovery (`.ts` ⇄ `.m3u8`) and an on-screen guidance banner in `TvVideoPlayer.kt`.
+- **Cleartext Traffic Support [COMPLETED in v1.2.1]:** Created `network_security_config.xml` to allow cleartext HTTP traffic required by bare-IP edge CDN stream redirects.
+- **Mobile Touch EPG [NEXT]:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
+- **Chromecast Streaming [UPCOMING]:** Wire `androidx.media3:media3-cast` into mobile player to route streams to smart TVs and Cast targets.
 
 ---
 

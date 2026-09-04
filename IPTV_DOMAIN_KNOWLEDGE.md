@@ -101,3 +101,40 @@ Standard media player implementations clear the video surface upon switching str
 *   **Surface Retention:** Configure Media3/ExoPlayer video surface view to retain the last rendered frame until the first decoded video frame (I-frame) of the new stream is dispatched to the surface.
 *   **Fast Zap Load Control:** Tune `DefaultLoadControl` to request initial playback as soon as 500ms of data is in the socket buffer, rather than waiting for 2500ms+.
 *   **Sequential Channel Cycling:** Implement `zapNext()` and `zapPrevious()` directly in the ViewModel to cycle through adjacent channels in the active category index without opening the full channel list.
+
+---
+
+## 9. Fake Category Header Rows ("Separator Channels")
+
+**The Problem:**
+IPTV providers frequently inject non-stream pseudo-channels to visually divide groups in traditional M3U apps (e.g., `##### 4K SPORTS #####`, `=== UK PREMIUM ===`, `--- CINEMA ---`). These entries have real `stream_id`s in Xtream JSON responses but their stream targets immediately return `HTTP 404 Not Found` or cause infinite buffer loops when tuned.
+
+**The Solution:**
+*   Sanitize streams in the parser layer (`StreamingCatalogParser.kt`) using regex boundary checking:
+    ```kotlin
+    val isSeparatorHeader = name.matches(Regex("^[#=\\-_~*]{3,}.*|.*[#=\\-_~*]{3,}$"))
+    if (isSeparatorHeader) return null // Discard from Room database
+    ```
+*   Never insert separator rows as playable channel records.
+
+---
+
+## 10. Concurrency Limits & Strict Socket Disconnects
+
+**The Problem:**
+Commercial IPTV portals strictly enforce `max_connections: 1`. If an ExoPlayer instance begins loading a new channel before the old TCP socket has cleanly severed, the provider's reverse proxy detects 2 concurrent streams and responds with `HTTP 456` (Too Many Connections) or drops the stream entirely.
+
+**The Solution:**
+*   Upon every channel switch, immediately execute `exoPlayer.stop()` and `exoPlayer.clearMediaItems()` before enqueueing the next stream item.
+*   Release HTTP DataSources immediately in `DisposableEffect(exoPlayer) { onDispose { ... } }`.
+
+---
+
+## 11. Cleartext Traffic & Edge CDN 302 Redirects
+
+**The Problem:**
+IPTV portals often provide `http://` or `https://` entrypoints that issue `HTTP 302 Found` redirects to bare-IP edge streaming relays (e.g., `http://185.x.x.x:8080/...`). On Android 9+ (API 28+), network security defaults block all cleartext HTTP traffic, causing silent `IOException: Cleartext HTTP traffic to ... not permitted` crashes.
+
+**The Solution:**
+*   Explicitly define `network_security_config.xml` with `<base-config cleartextTrafficPermitted="true" />` and reference it in the `AndroidManifest.xml`.
+

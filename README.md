@@ -44,11 +44,15 @@ TVMime is an ultra-fast, high-performance IPTV player built for **Android TV** a
 
 ---
 
-## ✨ Key Features (v1.1.0 / Build 23)
+## ✨ Key Features (v1.2.2 / Build 32)
 
 ### 📺 TV Playback & In-Stream OSD
 - **Hardware-Accelerated ExoPlayer**: Dynamic buffer tuning (Fast Zap profile with 500ms startup vs. Balanced 4K profile) based on hardware capability detection.
 - **Top Channel Bar**: Live channel number, channel name, resolution badge (`1080p`, `4K`), active playlist indicator, and active-to-max connection tally (`0/1`, `1/1`, `2/1 Cons`) with live health indicator dot.
+- **Stream Auto-Recovery & Failover**: Automatic container format retry (`.ts` ⇄ `.m3u8`) upon decoder or network drops.
+- **Proactive Socket Management**: Strict `stop()` and `clearMediaItems()` teardown before tuning next stream to obey strict `max_connections: 1` limits on commercial IPTV portals.
+- **Visual Error Guidance Card**: Contextual banner for HTTP 404, 403, and 456/884 egress blocks with prompt to zap or bring up HUD.
+- **Zero-OOM Catalog Ingestion & Separator Filtering**: Token-by-token `JsonReader` parsing directly into Room DB; automatically discards dummy header rows (`##### 4K SPORTS #####`).
 - **Dedicated Clock Overlay**: Independent real-time clock pill anchored to the upper-right corner during fullscreen playback.
 - **In-Stream Track Selector**: Modal sheets for switching audio tracks (`C.TRACK_TYPE_AUDIO`) and subtitle tracks (`C.TRACK_TYPE_TEXT`).
 - **Aspect Ratio Control**: Instant cycling between `FIT`, `FILL`, and `ZOOM`.

@@ -24,7 +24,7 @@
 - **Network Evasion:** Providers block scraping. All Ktor requests to IPTV portals must spoof user-agents (e.g., `IPTVSmartersPro/1.1.1`).
 - **Player Errors:** Handle HTTP 456/884 gracefully as "Stream Egress Disabled", not as a generic crash. ExoPlayer must use a custom DataSource Factory for the User-Agent.
 
-## 4. Current State & Feature Inventory (Build 24 / v1.1.0)
+## 4. Current State & Feature Inventory (Build 32 / v1.2.2)
 - **Live TV Player & Architecture ("The Player IS The App")**:
   - The video player runs perpetually at Z-index 0. No mobile-style navigation drawer breaks the viewing experience.
   - All secondary interfaces (Channel List, HUD, Settings, EPG Guide) render as translucent glass overlays on top of the live video.
@@ -34,6 +34,16 @@
   - Dedicated Clock Overlay: Independent corner pill in top-right corner (`h:mm a`), updates every 10s, toggled via settings.
   - Bottom Controls: Play/Pause, Aspect Ratio (`FIT`/`FILL`/`ZOOM`), Audio Track modal sheet, Subtitle modal sheet, Telemetry HUD toggle, Favorite toggle, TV Guide launcher, and 1-Click Stream Issue Reporter to Firestore.
   - Telemetry HUD: Real-time bitrate, stream host/IP, buffer depth & cached percentage, video decoder, and audio track.
+  - **Auto-Recovery & Dynamic Failover (v1.2.2)**: Auto-switches between `.ts` and `.m3u8` container extensions upon demuxer/playback errors. Drops active TCP sockets (`stop()`, `clearMediaItems()`) prior to tuning to obey strict `max_connections: 1` IPTV limits.
+  - **Visual Error Guidance Card (v1.2.2)**: Immediately catches HTTP 404, 403, and 456/884 egress blocks, dismisses perpetual buffering spinners, and surfaces an on-screen guidance banner prompting user navigation.
+
+- **Streaming Catalog Ingestion & Dummy Header Pruning (v1.2.2)**:
+  - `StreamingCatalogParser.kt` uses low-level `JsonReader` token streaming directly into Room DB to prevent OOMs on 50MB+ catalogs.
+  - Integrated regex sanitization (`^[#=\-_~*]{3,}.*|.*[#=\-_~*]{3,}$`) to discard fake separator headers (e.g., `##### 4K SPORTS #####`), preventing broken 404 stream links.
+
+- **Multi-Portal Cloud Sync (v1.2.0 - v1.2.2)**:
+  - CloudSync overlay pane with Firebase Firestore integration for syncing multiple IPTV portals across devices.
+  - Full cleartext traffic configuration (`network_security_config.xml`) enabled for unencrypted edge CDN stream redirects.
 
 - **D-Pad Remote Control Matrix (`tvApp/.../MainActivity.kt`)**:
   - `[ CENTER / OK ]`: When overlays are hidden, brings up the Bottom HUD and playback controls; selects items when an overlay is open.
@@ -92,8 +102,8 @@ All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventiona
 - **Android Version Code**: Strictly monotonic integer derived from `git rev-list --count HEAD` so every single commit anywhere guarantees a higher build number than previous builds.
 
 ## 7. Next Agent Hand-Off: What Is Left (Prioritized)
-1. **Error Recovery & Auto-Failover (`TvMainViewModel.kt` & `TvVideoPlayer.kt`)**:
-   - When a stream throws HTTP 403/404/456/884 or timeout, automatically attempt a reconnection (max 2 retries) before presenting a failover toast or jumping to the next channel in the group.
+1. **Error Recovery & Auto-Failover [COMPLETED in v1.2.2]**:
+   - Initial retry with alternate container format (`.ts` ⇄ `.m3u8`), proactive socket drop on zapping (`stop()` + `clearMediaItems()`), and descriptive on-screen error banner for HTTP 404/456/884.
 2. **Mobile App (`androidApp`) Touch EPG & Channel Grid**:
    - Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
    - Channel grid with pull-to-refresh and category horizontal scroll chips.

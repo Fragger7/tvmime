@@ -15,8 +15,9 @@
 - [x] **Long-Press Context Menu & Group Hiding:** `TvPreferencesManager` persists `hiddenCategories` to `SharedPreferences`. `TvMainViewModel` filters them dynamically via `StateFlow`. `LiveTvScreen` CategoryCard triggers hiding on long-click.
 - [x] **Previous Channel State Tracking:** Recorded previous channel on playback switch for instant D-Pad Right swap.
 
-### Sprint 3: Resilience & Mobile Experience [CURRENT NEXT SPRINT]
-- [ ] **Stream Error Auto-Recovery (403/404/Timeout):** Implement auto-reconnect logic (max 2 retries) with user toast, followed by failover to the next working channel in `TvMainViewModel.kt`.
+### Sprint 3: Resilience & Mobile Experience [ACTIVE SPRINT]
+- [x] **Stream Error Auto-Recovery & Dummy Header Pruning (v1.2.2):** Filter dummy header rows (`##### 4K SPORTS #####`) in `StreamingCatalogParser.kt`. Proactive socket closure on zapping to respect `max_connections: 1`. Container format fallback (`.ts` ⇄ `.m3u8`) and contextual error pill in `TvVideoPlayer.kt`.
+- [x] **Cleartext Traffic Configuration:** Added `network_security_config.xml` to support unencrypted IPTV edge CDN redirects.
 - [ ] **Mobile Touch EPG Grid (`androidApp`):** Implement touch-optimized 2D timeline and channel browser for mobile phones/tablets.
 - [ ] **Chromecast Receiver Discovery & Transfer (`androidApp`):** Complete Cast SDK integration (`androidx.media3:media3-cast`) to transfer live streams from mobile device to Android TV / Cast hardware.
 
