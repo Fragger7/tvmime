@@ -74,8 +74,12 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     private val _currentDestination = MutableStateFlow(TvNavDestination.LIVE_TV)
     val currentDestination: StateFlow<TvNavDestination> = _currentDestination.asStateFlow()
 
+    private val _overlayState = MutableStateFlow(TvOverlayState.HIDDEN)
+    val overlayState: StateFlow<TvOverlayState> = _overlayState.asStateFlow()
+
     private val _isFullscreen = MutableStateFlow(false)
     val isFullscreen: StateFlow<Boolean> = _isFullscreen.asStateFlow()
+
 
     // Selection & Playback State
     private val _selectedCategory = MutableStateFlow<CategoryEntity?>(null)
@@ -97,9 +101,9 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     val playerError: StateFlow<String?> = _playerError.asStateFlow()
 
     // Categories Flow for active portal and destination
-    val categories: StateFlow<List<CategoryEntity>> = combine(activePortal, currentDestination) { portal, dest ->
-        portal to dest
-    }.flatMapLatest { (portal, dest) ->
+    val categories: StateFlow<List<CategoryEntity>> = combine(activePortal, currentDestination, preferences.hiddenCategories) { portal, dest, hidden ->
+        Triple(portal, dest, hidden)
+    }.flatMapLatest { (portal, dest, hidden) ->
         if (portal == null) {
             flowOf(emptyList())
         } else {
@@ -109,7 +113,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
                 TvNavDestination.SERIES -> StreamType.SERIES
                 else -> StreamType.LIVE
             }
-            repository.getCategories(portal.id, type)
+            repository.getCategories(portal.id, type).map { list -> list.filter { !hidden.contains(it.categoryId) } }
         }
     }.onEach { catList ->
         if (_selectedCategory.value == null || catList.none { it.categoryId == _selectedCategory.value?.categoryId }) {
@@ -117,7 +121,6 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // Channels Flow for active portal & selected category
     val channels: StateFlow<List<ChannelEntity>> = combine(
         activePortal,
         currentDestination,
@@ -155,6 +158,10 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         _selectedCategory.value = null
     }
 
+    fun setOverlayState(state: TvOverlayState) {
+        _overlayState.value = state
+    }
+
     fun selectCategory(cat: CategoryEntity?) {
         _selectedCategory.value = cat
     }
@@ -176,6 +183,28 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun zapNext() {
+        val currentChannels = channels.value
+        val currentChannel = _playingChannel.value ?: return
+        val currentIndex = currentChannels.indexOfFirst { it.id == currentChannel.id }
+        if (currentIndex != -1 && currentIndex < currentChannels.size - 1) {
+            playChannel(currentChannels[currentIndex + 1])
+        } else if (currentIndex != -1 && currentChannels.size > 1) {
+            playChannel(currentChannels.first())
+        }
+    }
+
+    fun zapPrevious() {
+        val currentChannels = channels.value
+        val currentChannel = _playingChannel.value ?: return
+        val currentIndex = currentChannels.indexOfFirst { it.id == currentChannel.id }
+        if (currentIndex > 0) {
+            playChannel(currentChannels[currentIndex - 1])
+        } else if (currentIndex == 0 && currentChannels.size > 1) {
+            playChannel(currentChannels.last())
+        }
+    }
+
     fun toggleLastChannel(): Boolean {
         val prev = _previousChannel.value
         val current = _playingChannel.value
@@ -184,6 +213,10 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             return true
         }
         return false
+    }
+
+    fun toggleCategoryVisibility(category: CategoryEntity, hide: Boolean) {
+        preferences.toggleCategoryVisibility(category.categoryId, hide)
     }
 
     fun toggleFavorite(ch: ChannelEntity) {
@@ -214,11 +247,16 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun syncFromCloud(email: String, pass: String) {
-        viewModelScope.launch {
-            repository.syncFromCloud(email, pass)
-            repository.syncActivePortal()
+    suspend fun syncFromCloud(email: String, pass: String): Result<Unit> {
+        val authResult = repository.syncFromCloud(email, pass)
+        if (authResult.isFailure) {
+            return Result.failure(authResult.exceptionOrNull() ?: Exception("Authentication failed"))
         }
+        val syncResult = repository.syncActivePortal()
+        if (syncResult.isFailure) {
+            return Result.failure(syncResult.exceptionOrNull() ?: Exception("Sync failed"))
+        }
+        return Result.success(Unit)
     }
 
     fun addDemoPortal() {

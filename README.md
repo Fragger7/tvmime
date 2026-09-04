@@ -47,12 +47,15 @@ TVMime is an ultra-fast, high-performance IPTV player built for **Android TV** a
 ## ✨ Key Features (v1.1.0 / Build 23)
 
 ### 📺 TV Playback & In-Stream OSD
-- **Hardware-Accelerated ExoPlayer**: Dynamic buffer tuning (Fast Zap profile vs. Balanced 4K profile) based on hardware capability detection.
+- **Hardware-Accelerated ExoPlayer**: Dynamic buffer tuning (Fast Zap profile with 500ms startup vs. Balanced 4K profile) based on hardware capability detection.
 - **Top Channel Bar**: Live channel number, channel name, resolution badge (`1080p`, `4K`), active playlist indicator, and active-to-max connection tally (`0/1`, `1/1`, `2/1 Cons`) with live health indicator dot.
 - **Dedicated Clock Overlay**: Independent real-time clock pill anchored to the upper-right corner during fullscreen playback.
 - **In-Stream Track Selector**: Modal sheets for switching audio tracks (`C.TRACK_TYPE_AUDIO`) and subtitle tracks (`C.TRACK_TYPE_TEXT`).
 - **Aspect Ratio Control**: Instant cycling between `FIT`, `FILL`, and `ZOOM`.
+- **D-Pad UP/DOWN Channel Surfing**: Direct instant channel tune-up and tune-down when OSD overlays are closed.
 - **D-Pad Right Last Channel Zap**: Pressing `KEYCODE_DPAD_RIGHT` immediately flips back and forth between previous and current channels with an animated floating toast badge.
+- **Long-Press Category Hiding**: Long-press `OK`/`Select` on any category in the channel list overlay to permanently hide bloated foreign or unwanted categories from the guide.
+- **Anti-Focus Trap Engine**: Dedicated `FocusRequester` state machine ensuring physical TV remote focus is never dropped or trapped when overlays open and close.
 - **Stats for Nerds (Telemetry HUD)**: Live data transfer bitrate (Mbps/kbps), stream host/IP and egress port, buffer depth seconds with cached percentage bar, hardware video decoder, and audio DSP codec.
 - **1-Click Issue Reporting**: Immediately logs dead streams and egress blocks (HTTP 456/884) to Firestore for triage.
 

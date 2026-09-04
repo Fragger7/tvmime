@@ -24,25 +24,48 @@
 - **Network Evasion:** Providers block scraping. All Ktor requests to IPTV portals must spoof user-agents (e.g., `IPTVSmartersPro/1.1.1`).
 - **Player Errors:** Handle HTTP 456/884 gracefully as "Stream Egress Disabled", not as a generic crash. ExoPlayer must use a custom DataSource Factory for the User-Agent.
 
-## 4. Current State & Feature Inventory (Build 23 / v1.1.0)
-- **Live TV Player (`tvApp/.../ui/player/TvVideoPlayer.kt`)**:
-  - Hardware-accelerated Media3 (ExoPlayer) with dynamic buffer profiles.
+## 4. Current State & Feature Inventory (Build 24 / v1.1.0)
+- **Live TV Player & Architecture ("The Player IS The App")**:
+  - The video player runs perpetually at Z-index 0. No mobile-style navigation drawer breaks the viewing experience.
+  - All secondary interfaces (Channel List, HUD, Settings, EPG Guide) render as translucent glass overlays on top of the live video.
+  - Hardware-accelerated Media3 (ExoPlayer) with dynamic buffer profiles (Fast Zap profile with 500ms initial playback vs. Balanced 4K profile).
+  - Black Screen Minimizer: Retains previous video frame until new stream decoder initializes.
   - Top Bar: Channel number (`CH X`), Channel Name, Live Resolution Badge (`1080p`, `4K`), Active Playlist badge with active-to-max connection tally (`$activeCons/$maxCons Cons`) and status indicator dot.
   - Dedicated Clock Overlay: Independent corner pill in top-right corner (`h:mm a`), updates every 10s, toggled via settings.
   - Bottom Controls: Play/Pause, Aspect Ratio (`FIT`/`FILL`/`ZOOM`), Audio Track modal sheet, Subtitle modal sheet, Telemetry HUD toggle, Favorite toggle, TV Guide launcher, and 1-Click Stream Issue Reporter to Firestore.
-  - Last Channel Quick Zap: Pressing D-Pad Right instantly swaps between current and last channel with animated top-center toast banner.
   - Telemetry HUD: Real-time bitrate, stream host/IP, buffer depth & cached percentage, video decoder, and audio track.
+
+- **D-Pad Remote Control Matrix (`tvApp/.../MainActivity.kt`)**:
+  - `[ CENTER / OK ]`: When overlays are hidden, brings up the Bottom HUD and playback controls; selects items when an overlay is open.
+  - `[ UP / DOWN ]`: While HUD is hidden, immediately zaps to the next or previous channel in the current playlist (`zapNext()` / `zapPrevious()`).
+  - `[ LEFT ]`: Slides out the Master Channel List overlay with categories in column 1 and channels in column 2.
+  - `[ RIGHT ]`: Last Channel Quick Zap—instantly swaps between current and previously tuned channel with animated floating toast banner.
+  - `[ MENU ]`: Opens the Settings overlay directly.
+  - `[ BACK ]`: Dismisses active overlays and returns focus to fullscreen playback without exiting the application accidentally.
+
+- **Focus Management & Trap Prevention**:
+  - Dedicated `FocusRequester` matrix in `MainActivity.kt` (`playerFocusRequester`, `hudFocusRequester`, `channelListFocusRequester`, `settingsFocusRequester`).
+  - `LaunchedEffect(overlayState)` requests focus programmatically on state transitions, preventing lost-focus and unnavigable remotes on Android TV / Fire TV sticks.
+
+- **Category Filtering & Long-Press Hiding**:
+  - `TvPreferencesManager.kt` persists user-hidden category IDs (`Set<String>`) in `SharedPreferences`.
+  - `TvMainViewModel.kt`'s `categories` StateFlow combines active portal, destination, and hidden categories in real-time.
+  - Long-press (`onLongClick`) on category cards in `LiveTvScreen.kt` instantly hides unwanted categories from the catalog.
+
 - **TiviMate-Style EPG Grid Guide (`tvApp/.../ui/guide/TvGuideScreen.kt`)**:
   - Interactive grid with 30-minute time intervals, channel rows, program progress indicators, and PIP mini-preview player.
+
 - **Settings & Preferences (`tvApp/.../ui/settings/SettingsScreen.kt`, `TvPreferencesManager.kt`)**:
   - D-Pad scrollable `TvLazyColumn`.
   - Preferences for Clock Overlay, OSD Auto-Hide Timeout (3s / 5s / 10s / Always On), and Last Channel Zap.
   - Hardware & Performance Intelligence display auto-tuned to device RAM/VPU.
   - In-place OTA updater checking GitHub releases.
+
 - **Cloud Presence & Web Admin (`adminWeb/`)**:
   - React 19 + Tailwind CSS v4 running on `https://tvmime.vercel.app`.
   - Firebase Auth & Firestore syncing portal credentials to Room DB.
   - Serverless proxy `/api/test-portal` for CORS/mixed-content IPTV checks.
+  - Serverless endpoint `/api/version` querying GitHub releases with robust fallbacks.
   - Direct download cards for `tv.apk` and `mobile.apk`.
 
 ## 5. Key Files Map for Quick Navigation
@@ -68,21 +91,28 @@ All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventiona
 - `docs:`, `chore:`, `style:`, `refactor:` - Documentation, dependency maintenance, refactors without external impact (No version bump).
 - **Android Version Code**: Strictly monotonic integer derived from `git rev-list --count HEAD` so every single commit anywhere guarantees a higher build number than previous builds.
 
-## 7. Next Agent Hand-Off: What Is Left
-1. **Physical Device TV Testing**: Test latest `tv.apk` on Android TV / Firestick devices.
-2. **Mobile EPG Grid (`androidApp`)**: Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
-3. **Chromecast Receiver Integration**: Complete `androidx.media3:media3-cast` receiver discovery and playback transfer in `androidApp`.
+## 7. Next Agent Hand-Off: What Is Left (Prioritized)
+1. **Error Recovery & Auto-Failover (`TvMainViewModel.kt` & `TvVideoPlayer.kt`)**:
+   - When a stream throws HTTP 403/404/456/884 or timeout, automatically attempt a reconnection (max 2 retries) before presenting a failover toast or jumping to the next channel in the group.
+2. **Mobile App (`androidApp`) Touch EPG & Channel Grid**:
+   - Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
+   - Channel grid with pull-to-refresh and category horizontal scroll chips.
+3. **Chromecast Receiver Integration (`androidApp`)**:
+   - Complete `androidx.media3:media3-cast` receiver discovery and media routing so streams can be cast from mobile to Android TV / Cast targets.
+4. **VOD Experience Upgrade (`tvApp/.../ui/vod/VodScreen.kt`)**:
+   - Replace basic column list with responsive poster grid featuring TMDB artwork metadata, backdrop art, and synopsis modal.
+5. **Physical Device TV Testing**:
+   - Test APK build artifacts on real Android TV / Fire TV stick hardware with physical remotes.
 
-## 8. Current Agent Philosophy & Fix Roadmap (Added Sep 2026)
-**ATTENTION FUTURE AGENTS:** The previous generative iteration built a beautiful UI shell but completely mocked or broke the underlying execution layers (e.g., `OnboardingScreen.kt` uses `delay(1000)` instead of actual Auth verification).
-
-### The Philosophy (Personal App, Free-Tier, High Quality)
-*   **Scale:** This is a personal/family app. We are optimizing for UX, speed, and reliability—not commercial scale, multi-tenant RBAC, or billing systems.
-*   **Cost:** We rely exclusively on free-tier tools (Firebase Free Tier, Vercel Free Tier, GitHub Actions Free Tier). Do NOT introduce paid services.
-*   **CI/CD Conservation:** Do NOT push `v*` tags or trigger builds unnecessarily. The free GitHub Actions quota is limited. Push commits without tags during iteration. The workflow (`build.yml`) will automatically calculate semantic versioning (`feat/fix/perf`) whenever a build is eventually triggered.
-
-### The Immediate Fix Roadmap (Android TV Core Overhaul)
-1.  **Authentication Reality Check:** Rip out fake `delay(1000)` mocks in onboarding. Implement real `Result` checking from `XtreamClient.kt`. Handle auth failures gracefully with red error text. Do not let unauthenticated users crash the main UI.
-2.  **Performance Overhaul (No Main-Thread Blocking):** Jetpack Compose is fast, but only if heavy JSON parsing and Room DB inserts happen on `Dispatchers.IO`. Fix the current state where the app hangs and crashes because it tries to parse massive lists on the UI thread.
-3.  **UI Professionalization:** Remove amateur elements (e.g., "Architecture by..." footers, generic tech babble). Rebuild `SettingsScreen.kt` based on actual IPTV user needs (Player Settings, EPG Update Frequency, User Agent toggles) instead of random generated toggles.
+## 8. Development Environment & Testing Guide
+- **Web Admin Development**:
+  - Dev server runs on port 3000 via root `npm run dev` (proxied to `tvmime/adminWeb`).
+  - Check health at `http://localhost:3000`.
+- **Android Builds**:
+  - Gradle builds are executed remotely via GitHub Actions (`.github/workflows/build.yml`) on tag push or manual workflow dispatch.
+  - The local container is a Node.js dev container; do NOT attempt to invoke `./gradlew` locally without an installed Android SDK.
+- **Git Push Workflow**:
+  - Repository URL: `https://${GITHUB_PAT}@github.com/Fragger7/tvmime.git`.
+  - Always verify code compiles and lints with `npm run build` and `npm run lint` before committing.
+  - Use conventional commit messages (`feat:`, `fix:`, `perf:`, `docs:`) to maintain automated semver calculation.
 

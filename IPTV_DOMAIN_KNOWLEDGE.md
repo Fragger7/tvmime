@@ -65,3 +65,39 @@ While this is domain knowledge, the architecture implementing it must remain dec
 1.  **Network Layer**: Pure OkHttp + Coroutines + `JsonReader`.
 2.  **Data Layer**: Must heavily utilize a local database (e.g., Room) to cache the 100,000+ channels. The TV UI cannot hold 100k objects in RAM.
 3.  **UI Layer**: Jetpack Compose for TV (using `androidx.tv.foundation.lazy.list` / `androidx.tv.material3`) for proper D-Pad focus management and Leanback design paradigms.
+
+---
+
+## 6. Category Bloat & Real-Time Preference Filtering
+
+**The Problem:**
+IPTV providers commonly return hundreds of international categories (e.g., Arabic, Russian, Portuguese, Polish, Turkish, German) that a single subscriber will never watch. Displaying 300+ categories in a TV sidebar introduces severe scroll fatigue on a 5-button D-Pad remote.
+
+**The Solution:**
+*   Persist a user blacklist (`Set<String>`) of hidden category IDs inside local device `SharedPreferences`.
+*   Filter categories dynamically in the presentation `StateFlow` (`combine(activePortal, currentDestination, hiddenCategories)`).
+*   Provide a 1-click or long-press action (`onLongClick`) on category cards so users can prune their guide in seconds without deleting provider records from the database or requiring cloud round-trips.
+
+---
+
+## 7. Android TV Remote Focus Management & Trap Prevention
+
+**The Problem:**
+In standard Android TV development with Jetpack Compose, toggling visibility of overlays (such as sliding out a channel list or HUD over a running video surface) frequently results in "lost remote focus". The TV remote becomes completely unresponsive because focus is left dangling on a disposed composable.
+
+**The Solution:**
+*   Assign dedicated `FocusRequester` instances to each discrete UI state (`playerFocusRequester`, `hudFocusRequester`, `channelListFocusRequester`, `settingsFocusRequester`).
+*   Drive focus acquisition via a centralized `LaunchedEffect(overlayState)`.
+*   Always ensure the root container has a fallback focus target (`playerFocusRequester`) when all overlays close.
+
+---
+
+## 8. Fast Channel Zapping & Black Screen Elimination
+
+**The Problem:**
+Standard media player implementations clear the video surface upon switching stream URLs, creating an jarring 1-2 second black screen blink on every channel change.
+
+**The Solution:**
+*   **Surface Retention:** Configure Media3/ExoPlayer video surface view to retain the last rendered frame until the first decoded video frame (I-frame) of the new stream is dispatched to the surface.
+*   **Fast Zap Load Control:** Tune `DefaultLoadControl` to request initial playback as soon as 500ms of data is in the socket buffer, rather than waiting for 2500ms+.
+*   **Sequential Channel Cycling:** Implement `zapNext()` and `zapPrevious()` directly in the ViewModel to cycle through adjacent channels in the active category index without opening the full channel list.

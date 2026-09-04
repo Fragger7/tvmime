@@ -1678,8 +1678,8 @@ export function App() {
                   No stream errors reported yet. All channels are operating cleanly.
                 </div>
               ) : (
-                streamReports.map((r) => (
-                  <div key={r.id || Math.random()} className="bg-[#181822] border border-[#262632] rounded-xl p-3.5 space-y-2 text-xs">
+                streamReports.map((r, index) => (
+                  <div key={r.id || `report-${index}`} className="bg-[#181822] border border-[#262632] rounded-xl p-3.5 space-y-2 text-xs">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-white text-sm">{r.channelName}</span>

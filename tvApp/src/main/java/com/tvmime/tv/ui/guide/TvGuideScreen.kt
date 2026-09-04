@@ -54,7 +54,7 @@ fun TvGuideScreen(
     epgPrograms: List<EpgProgramEntity>,
     modifier: Modifier = Modifier
 ) {
-    val bgMain = Color(DesignSystemTokens.Colors.Background)
+    val bgMain = Color.Transparent
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
     val crimsonBright = Color(DesignSystemTokens.Colors.CrimsonBright)
@@ -164,7 +164,7 @@ fun TvGuideScreen(
                         }
                     }
 
-                    items(categories) { cat ->
+                    items(categories, key = { it.id }) { cat ->
                         val isSelected = cat.categoryId == selectedCategory?.categoryId
                         Surface(
                             onClick = { onSelectCategory(cat) },
@@ -197,11 +197,9 @@ fun TvGuideScreen(
                     .border(1.dp, crimson, RoundedCornerShape(10.dp))
                     .background(Color.Black)
             ) {
-                TvVideoPlayer(
-                    channel = playingChannel,
-                    isFullscreen = false,
-                    onToggleFullscreen = onToggleFullscreen,
-                    modifier = Modifier.fillMaxSize()
+                // Just a transparent hole to let the background player show through
+                Box(
+                    modifier = Modifier.fillMaxSize().background(Color.Transparent)
                 )
             }
         }
@@ -261,7 +259,7 @@ fun TvGuideScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(channels) { channel ->
+                items(channels, key = { it.id }) { channel ->
                     val channelPrograms = remember(channel.epgChannelId, epgPrograms) {
                         epgPrograms.filter { it.epgChannelId == channel.epgChannelId }
                     }

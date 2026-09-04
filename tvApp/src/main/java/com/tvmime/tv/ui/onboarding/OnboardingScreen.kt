@@ -19,6 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.ClickableSurfaceDefaults
@@ -59,6 +62,7 @@ fun OnboardingScreen(
     // Direct Login State
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
     var loginStatusText by remember { mutableStateOf<String?>(null) }
     var isLoggingIn by remember { mutableStateOf(false) }
 
@@ -334,7 +338,16 @@ fun OnboardingScreen(
                                     onValueChange = { password = it },
                                     label = { Text("Password", color = Color.Gray, fontSize = 12.sp) },
                                     singleLine = true,
-                                    visualTransformation = PasswordVisualTransformation(),
+                                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                    trailingIcon = {
+                                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                            Icon(
+                                                imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                                contentDescription = "Toggle password visibility",
+                                                tint = Color.Gray
+                                            )
+                                        }
+                                    },
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedTextColor = Color.White,
                                         unfocusedTextColor = Color.White,
@@ -347,13 +360,15 @@ fun OnboardingScreen(
                                 if (loginStatusText != null) {
                                     Text(
                                         text = loginStatusText ?: "",
-                                        color = Color(0xFFEF4444),
-                                        fontSize = 11.sp
+                                        color = if (isLoggingIn) Color(0xFF38BDF8) else Color(0xFFEF4444),
+                                        fontSize = 11.sp,
+                                        modifier = Modifier.padding(horizontal = 4.dp)
                                     )
                                 }
 
                                 Surface(
                                     onClick = {
+                                        if (isLoggingIn) return@Surface
                                         if (email.isBlank() || password.isBlank()) {
                                             loginStatusText = "Please enter email and password."
                                             return@Surface
@@ -362,9 +377,15 @@ fun OnboardingScreen(
                                         loginStatusText = "Signing in and syncing playlists..."
 
                                         coroutineScope.launch {
-                                            viewModel.syncFromCloud(email, password)
-                                            delay(1000)
-                                            onComplete()
+                                            val result = viewModel.syncFromCloud(email, password)
+                                            isLoggingIn = false
+                                            if (result.isSuccess) {
+                                                loginStatusText = "Success!"
+                                                delay(500)
+                                                onComplete()
+                                            } else {
+                                                loginStatusText = result.exceptionOrNull()?.message ?: "Authentication failed."
+                                            }
                                         }
                                     },
                                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
@@ -377,12 +398,20 @@ fun OnboardingScreen(
                                         .height(44.dp)
                                 ) {
                                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                        Text(
-                                            text = if (isLoggingIn) "Signing In..." else "Sign In & Load Playlists",
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 13.sp
-                                        )
+                                        if (isLoggingIn) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(20.dp),
+                                                color = Color.White,
+                                                strokeWidth = 2.dp
+                                            )
+                                        } else {
+                                            Text(
+                                                text = "Sign In & Load Playlists",
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 13.sp
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -458,7 +487,7 @@ fun OnboardingScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "TVMime v1.0.0 • Architecture by Faraz Ahmad",
+                    text = "TVMime v1.1.0",
                     color = Color(0xFF6B7280),
                     fontSize = 11.sp
                 )

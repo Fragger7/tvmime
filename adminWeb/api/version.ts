@@ -31,7 +31,7 @@ export default async function handler(req: any, res: any) {
         changelog: release.body || 'Latest continuous delivery build with low-memory streaming and playback'
       });
     }
-  } catch (e) {
+  } catch {
     // Fallback if GitHub API is unreachable
   }
 

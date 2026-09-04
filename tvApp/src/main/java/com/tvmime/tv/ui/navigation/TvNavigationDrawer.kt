@@ -34,7 +34,7 @@ fun TvNavigationDrawer(
     onDestinationSelected: (TvNavDestination) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val bgDrawer = Color(DesignSystemTokens.Colors.Surface)
+    val bgDrawer = Color.Transparent
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
     val crimsonBright = Color(DesignSystemTokens.Colors.CrimsonBright)
     val textMuted = Color(DesignSystemTokens.Colors.TextMuted)

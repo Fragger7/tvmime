@@ -21,6 +21,9 @@ class TvPreferencesManager(context: Context) {
     private val _defaultAspectMode = MutableStateFlow(prefs.getString(KEY_ASPECT_MODE, "FIT") ?: "FIT")
     val defaultAspectMode: StateFlow<String> = _defaultAspectMode.asStateFlow()
 
+    private val _hiddenCategories = MutableStateFlow(prefs.getStringSet(KEY_HIDDEN_CATEGORIES, emptySet()) ?: emptySet())
+    val hiddenCategories: StateFlow<Set<String>> = _hiddenCategories.asStateFlow()
+
     fun setShowClockOverlay(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_SHOW_CLOCK, enabled).apply()
         _showClockOverlay.value = enabled
@@ -41,15 +44,22 @@ class TvPreferencesManager(context: Context) {
         _defaultAspectMode.value = mode
     }
 
+    fun toggleCategoryVisibility(categoryId: String, hide: Boolean) {
+        val current = _hiddenCategories.value.toMutableSet()
+        if (hide) current.add(categoryId) else current.remove(categoryId)
+        prefs.edit().putStringSet(KEY_HIDDEN_CATEGORIES, current).apply()
+        _hiddenCategories.value = current
+    }
+
     companion object {
         private const val KEY_SHOW_CLOCK = "pref_show_clock_overlay"
         private const val KEY_OSD_TIMEOUT = "pref_osd_timeout_sec"
         private const val KEY_LAST_CHANNEL_ZAP = "pref_last_channel_zap"
         private const val KEY_ASPECT_MODE = "pref_default_aspect_mode"
+        private const val KEY_HIDDEN_CATEGORIES = "pref_hidden_categories"
 
         @Volatile
         private var INSTANCE: TvPreferencesManager? = null
-
         fun getInstance(context: Context): TvPreferencesManager {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: TvPreferencesManager(context.applicationContext).also { INSTANCE = it }
