@@ -108,15 +108,15 @@ We have officially executed the **"Sohva-TV Pivot"**. Do NOT use standard `TvNav
 *   **The Paradigm:** The app is a single `AndroidView` wrapping ExoPlayer at Z-index 0. D-Pad keys are intercepted at the raw View level (`setOnKeyListener`) to mutate booleans (`channelBrowserVisible`, `chromeVisible`). These booleans render lightweight translucent Compose panes on top of the playing video.
 
 ### Implementation Tasks (Prioritized):
-1. **Pass 2: The Player IS The App (D-Pad Overhaul)**:
-   - Rip out `TvNavigationDrawer`.
-   - Rewrite `MainActivity.kt` and `TvVideoPlayer.kt` to intercept raw `KeyEvent` actions for D-Pad Left/Right/Up/Down.
-   - Implement ExoPlayer `LOW_LATENCY` (1000ms) and `STABILITY` (5000ms) `LoadControl` profiles.
-   - Hook into Android Lifecycle to fire `controller.stop()` when backgrounded to prevent IPTV Ghost Connection lockouts.
-2. **Pass 3: Dual-Model Sync & Multi-Portal Aggregation**:
-   - The UI must aggregate channels/categories across all enabled portals (`isActive = true`), prefixing IDs to avoid Room DB collisions.
-   - The Playlists menu must distinguish between Cloud ☁️ and Local 📺 credentials, allowing bidirectional sync to Firebase.
-3. **Pass 4: Mobile App (`androidApp`) Touch EPG**:
+1. **Pass 4: Systems-Level Architecture (The Premium Tier)**:
+   - **Background Sync Workers**: Setup Android `WorkManager` for silent syncing (every 12 hours) and add toggles to SettingsScreen.
+   - **EPG Local Time-Shift**: Refactor the EPG logic to auto-map UTC to the local device timezone, and add a manual timezone offset slider in Settings for sloppy providers.
+   - **Catch-Up TV (DVR)**: Add the ability to scroll backwards in the EPG and trigger the specialized `/timeshift/` URL streams for past events if `has_archive = 1`.
+   - **M3U Fallback Pipeline**: Ensure raw `.m3u` text parsing works alongside our Xtream Codes JSON implementation.
+2. **Pass 5: Auth & Polish**:
+   - Rip out the broken QR code UI and simplify the login screen.
+   - Eliminate the brief login screen flash that happens on every boot.
+3. **Pass 6: Mobile App (`androidApp`) Touch EPG**:
    - Implement touch-optimized EPG channel grid and schedule timeline for Android Mobile.
 
 ## 8. Development Environment & Testing Guide

@@ -97,18 +97,25 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Long-Press Context Menu & Group Hiding:** Extended `TvPreferencesManager.kt` to persist a `Set<String>` of hidden category IDs to `SharedPreferences`. Modified `TvMainViewModel.kt`'s `categories` StateFlow to intercept and filter out hidden categories in real-time. Wired `onLongClick` in `LiveTvScreen.kt` CategoryCard.
 - **Channel State Integrity:** Restored `playChannel` with previous-channel tracking for instant D-Pad Right swap and watch-history tracking in Room.
 
-### Sprint 3: The "Sohva-TV Pivot" (Resilience, Ingestion Hardening & The Player IS The App) [ACTIVE SPRINT]
-- **Stream Auto-Recovery & Dummy Header Pruning [COMPLETED]:** Filtered dummy separator headers in `StreamingCatalogParser.kt` to avoid 404 dead stream calls. Implemented proactive socket teardown (`stop()` + `clearMediaItems()`) for single-connection IPTV portals. 
-- **[CRITICAL BUG FIX #1] JsonReader Null-Safety in Catalog Ingestion [COMPLETED]:**
-  - Added extension `fun JsonReader.nextStringOrNull(): String?` and wrapped individual row parsing with try-catch fallback. This prevents massive 50MB JSON parses from aborting midway.
-- **[CRITICAL ARCHITECTURE #2] The "Player IS The App" D-Pad Overhaul [IN PROGRESS]:**
-  - *Rationale*: Standard Compose `TvNavigationDrawer` causes recomposition lag and black screens on TV. Following the *Sohva-TV* architecture, we will rip out all navigation drawers.
-  - *Design*: The app is a single `AndroidView` wrapping ExoPlayer at Z-index 0. D-Pad keys are intercepted at the raw View level (`setOnKeyListener`) to mutate booleans (`channelBrowserVisible`, `chromeVisible`). These booleans render lightweight translucent Compose panes on top of the playing video.
-  - *Playback Engineering*: Implement `LOW_LATENCY` (1000ms) and `STABILITY` (5000ms) `LoadControl` profiles. Hook into the Android Lifecycle to instantly fire `controller.stop()` when backgrounded to prevent "Ghost Connection" lockouts from IPTV providers.
-- **[CRITICAL ARCHITECTURE #3] Dual-Model Sync & Multi-Portal Aggregation:**
-  - *Rationale*: Vercel free tier cannot process M3U lists. 
-  - *Design*: Cloud stores credentials only. TV edge-computes the heavy ingestion. The UI will aggregate channels/categories across all `isActive = true` portals, prefixing IDs (`${portalId}_${type}_${streamId}`) to avoid collisions. The Playlists menu will distinguish between Cloud ☁️ and Local 📺 credentials, and allow bidirectional sync.
-- **Mobile Touch EPG [UPCOMING]:** Adapt TV EPG timeline grid into touch-draggable 2D timeline for Android phones/tablets.
+### Sprint 3: The Architecture Pivot & "Sohva-TV" Paradigm [COMPLETED]
+- [x] **Phase 3.1: D-Pad Raw Event Overhaul** (Pass 2) - Rip out `TvNavigationDrawer` and replace with raw Z-index 0 `AndroidView` ExoPlayer intercepting `KeyEvent` routing to Compose overlay panes.
+- [x] **Phase 3.2: ExoPlayer Ghost Connection Fix** (Pass 2) - Introduce `LifecycleEventObserver` to drop TCP sockets on `ON_STOP` to respect provider limits.
+- [x] **Phase 3.3: Tuned Buffer Profiles** (Pass 2) - Implement Sohva-TV tuned math for Fast Zap (`LOW_LATENCY`) and 4K Deep Buffer (`STABILITY`) profiles.
+- [x] **Phase 3.4: Multi-Portal Aggregation DAOs** (Pass 3) - Update Room DAOs to support multiple `isActive = true` portals.
+- [x] **Phase 3.5: Unified ViewModel Aggregation** (Pass 3) - Refactor `TvMainViewModel` to combine flows across `activePortals` for categories, channels, and EPG.
+- [x] **Phase 3.6: Cloud Sync UX Toggle** (Pass 3) - Update `CloudSyncScreen` to act as checkboxes (Toggle Activate/Deactivate) rather than radio buttons.
+- [x] **Phase 3.7: TiviMate Accordion & Focus Retention** (Pass 3) - Group channels by provider in `LiveTvScreen` using collapsible headers and hoist `TvLazyListState` to prevent scroll position loss.
+
+### Sprint 4: Systems-Level Architecture & Polish
+- [ ] **Phase 4.1: Background Sync Workers** - Implement Android `WorkManager` for silent EPG/Channel refreshing (every X hours / on launch) with user settings.
+- [ ] **Phase 4.2: EPG Local Time-Shift** - Refactor EPG logic to auto-map UTC to the local device timezone, and add a manual timezone offset slider in Settings for sloppy providers.
+- [ ] **Phase 4.3: Catch-Up TV (DVR)** - Allow scrolling backwards in the EPG and construct the specialized `/timeshift/{stream_id}` URLs for archived playback.
+- [ ] **Phase 4.4: M3U Fallback Pipeline** - Implement regex-based `#EXTM3U` parsing alongside the existing Xtream JSON parser to support raw playlist links.
+
+### Sprint 5: Dual-Model Sync & Cross-Platform (In Progress)
+- [ ] **Phase 5.1: Auth Wizard Simplification** - Eliminate login flash and rip out the broken QR code UI.
+- [ ] **Phase 5.2: Mobile App (`androidApp`) EPG** - Adapt the TV Grid to a touch-optimized UI.
+
 ---
 
 ## Backlog & Future Explorations
