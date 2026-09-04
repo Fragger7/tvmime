@@ -109,8 +109,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 ### Sprint 4: Systems-Level Architecture & Polish
 - [x] **Phase 4.1: Background Sync Workers** - Implement Android `WorkManager` for silent EPG/Channel refreshing (every X hours / on launch) with user settings.
 - [x] **Phase 4.2: EPG Local Time-Shift** - Refactor EPG logic to auto-map UTC to the local device timezone, and add a manual timezone offset slider in Settings for sloppy providers.
-- [ ] **Phase 4.3: Catch-Up TV (DVR)** - Allow scrolling backwards in the EPG and construct the specialized `/timeshift/{stream_id}` URLs for archived playback.
-- [ ] **Phase 4.4: M3U Fallback Pipeline** - Implement regex-based `#EXTM3U` parsing alongside the existing Xtream JSON parser to support raw playlist links.
+- [x] **Phase 4.3: Catch-Up TV (DVR)** - Allow scrolling backwards in the EPG and construct the specialized `/timeshift/{stream_id}` URLs for archived playback.
+- [x] **Phase 4.4: M3U Fallback Pipeline** - Implement regex-based `#EXTM3U` parsing alongside the existing Xtream JSON parser to support raw playlist links.
 
 ### Sprint 5: Dual-Model Sync & Cross-Platform (In Progress)
 - [ ] **Phase 5.1: Auth Wizard Simplification** - Eliminate login flash and rip out the broken QR code UI.
