@@ -28,6 +28,7 @@ import com.tvmime.tv.hardware.DeviceCapabilityDetector
 @Composable
 fun TvVideoPlayer(
     channel: ChannelEntity?,
+    playbackUrl: String?,
     isFullscreen: Boolean = true,
     onToggleFullscreen: () -> Unit = {},
     onPlayerError: ((String) -> Unit)? = null,
@@ -61,13 +62,12 @@ fun TvVideoPlayer(
                 val errorDesc = error.localizedMessage ?: "Stream playback failed"
                 val isHttpError = error.errorCodeName.contains("HTTP", ignoreCase = true) || errorDesc.contains("40", ignoreCase = true)
 
-                if (retryCount == 0 && channel != null) {
+                if (retryCount == 0 && !playbackUrl.isNullOrBlank()) {
                     // Try 1 auto-recovery: switch between .ts and .m3u8 if applicable
                     retryCount++
-                    val currentUrl = channel.directSourceUrl
                     val alternateUrl = when {
-                        currentUrl.endsWith(".ts") -> currentUrl.substringBeforeLast(".ts") + ".m3u8"
-                        currentUrl.endsWith(".m3u8") -> currentUrl.substringBeforeLast(".m3u8") + ".ts"
+                        playbackUrl.endsWith(".ts") -> playbackUrl.substringBeforeLast(".ts") + ".m3u8"
+                        playbackUrl.endsWith(".m3u8") -> playbackUrl.substringBeforeLast(".m3u8") + ".ts"
                         else -> null
                     }
                     if (alternateUrl != null) {
@@ -123,15 +123,15 @@ fun TvVideoPlayer(
     }
 
     // Handle channel changes smoothly with strict socket release
-    LaunchedEffect(channel) {
+    LaunchedEffect(playbackUrl) {
         streamErrorMessage = null
         retryCount = 0
         // Immediately stop previous stream to close HTTP socket (vital for max_connections: 1 IPTV portals)
         exoPlayer.stop()
         exoPlayer.clearMediaItems()
 
-        if (channel != null && channel.directSourceUrl.isNotBlank()) {
-            val mediaItem = MediaItem.fromUri(channel.directSourceUrl)
+        if (!playbackUrl.isNullOrBlank()) {
+            val mediaItem = MediaItem.fromUri(playbackUrl)
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true

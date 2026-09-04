@@ -50,6 +50,7 @@ fun TvGuideScreen(
     selectedChannel: ChannelEntity?,
     playingChannel: ChannelEntity?,
     onPlayChannel: (ChannelEntity) -> Unit,
+    onPlayCatchup: (ChannelEntity, EpgProgramEntity) -> Unit,
     onToggleFullscreen: () -> Unit,
     epgPrograms: List<EpgProgramEntity>,
     onHideCategory: (CategoryEntity) -> Unit = {},
@@ -280,6 +281,9 @@ fun TvGuideScreen(
                             } else {
                                 onPlayChannel(channel)
                             }
+                        },
+                        onPlayCatchup = { program ->
+                            onPlayCatchup(channel, program)
                         }
                     )
                 }
@@ -296,7 +300,8 @@ private fun ChannelGuideRow(
     isPlaying: Boolean,
     currentTimeMillis: Long,
     timeFormat: SimpleDateFormat,
-    onChannelClick: () -> Unit
+    onChannelClick: () -> Unit,
+    onPlayCatchup: (EpgProgramEntity) -> Unit
 ) {
     val cardBg = Color(DesignSystemTokens.Colors.Card)
     val crimson = Color(DesignSystemTokens.Colors.Crimson)
@@ -449,9 +454,17 @@ private fun ChannelGuideRow(
             ) {
                 programs.forEach { program ->
                     val isLiveNow = currentTimeMillis in program.startEpoch..program.endEpoch
+                    val isPast = currentTimeMillis > program.endEpoch
+                    val canCatchup = isPast && channel.hasArchive
 
                     Surface(
-                        onClick = onChannelClick,
+                        onClick = { 
+                            if (canCatchup) {
+                                onPlayCatchup(program)
+                            } else if (isLiveNow) {
+                                onChannelClick()
+                            }
+                        },
                         shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
                         colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (isLiveNow) Color(0xFF1B1B26) else Color(0xFF12121A),
@@ -462,7 +475,7 @@ private fun ChannelGuideRow(
                             .fillMaxHeight()
                             .border(
                                 width = 1.dp,
-                                color = if (isLiveNow) crimson else borderCol,
+                                color = if (isLiveNow) crimson else if (canCatchup) Color(0xFFE50914).copy(alpha=0.3f) else borderCol,
                                 shape = RoundedCornerShape(8.dp)
                             )
                     ) {
@@ -479,7 +492,7 @@ private fun ChannelGuideRow(
                             ) {
                                 Text(
                                     text = program.title,
-                                    color = textPrimary,
+                                    color = if (canCatchup) Color.White else textPrimary,
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1,
@@ -501,6 +514,13 @@ private fun ChannelGuideRow(
                                             fontWeight = FontWeight.Black
                                         )
                                     }
+                                } else if (canCatchup) {
+                                    Icon(
+                                        imageVector = Icons.Default.PlayArrow,
+                                        contentDescription = "Catch-Up",
+                                        tint = crimsonBright,
+                                        modifier = Modifier.size(12.dp)
+                                    )
                                 }
                             }
 

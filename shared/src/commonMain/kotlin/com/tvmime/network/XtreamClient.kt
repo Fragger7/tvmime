@@ -161,17 +161,12 @@ class XtreamClient(
     fun buildTimeshiftUrl(
         portal: PortalConfig,
         streamId: Int,
-        startUnixMinute: Long,
+        startDateTimeString: String,
         durationMinutes: Int
     ): String {
         val server = portal.serverUrl.trim().removeSuffix("/")
-        // http://server/timeshift/user/pass/duration/start_time/stream_id.ts
-        // Wait, standard timeshift format is: http://server/timeshift/user/pass/duration/start_date:minute/stream_id.ts
-        // Actually, Xtream Codes timeshift format: http://server/timeshift/user/pass/duration/start_timestamp/stream_id.ts
-        // Note: start_timestamp is usually in format "YYYY-MM-DD:HH-MM" but some servers just take unix time.
-        // Let's use standard: server/timeshift/user/pass/duration/start_datetime/stream_id.ts
-        // Let's create a placeholder we can fix later if it needs formatting.
-        return "$server/timeshift/${portal.username}/${portal.password}/$durationMinutes/$startUnixMinute/$streamId.ts"
+        // Xtream Codes timeshift format: http://server/timeshift/user/pass/duration/YYYY-MM-DD:HH-MM/stream_id.ts
+        return "$server/timeshift/${portal.username}/${portal.password}/$durationMinutes/$startDateTimeString/$streamId.ts"
     }
 }
 

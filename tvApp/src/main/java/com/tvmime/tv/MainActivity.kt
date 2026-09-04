@@ -51,6 +51,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
     val selectedChannel by viewModel.selectedChannel.collectAsStateWithLifecycle()
     val playingChannel by viewModel.playingChannel.collectAsStateWithLifecycle()
+    val currentPlaybackUrl by viewModel.currentPlaybackUrl.collectAsStateWithLifecycle()
     val epgPrograms by viewModel.epgPrograms.collectAsStateWithLifecycle()
     val showClockOverlay by viewModel.showClockOverlay.collectAsStateWithLifecycle()
     val autoHideOsdSeconds by viewModel.autoHideOsdSeconds.collectAsStateWithLifecycle()
@@ -155,6 +156,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         // Base Layer: Perpetual Video Player
         TvVideoPlayer(
             channel = playingChannel,
+            playbackUrl = currentPlaybackUrl,
             isFullscreen = true,
             onToggleFullscreen = { },
             onPlayerError = { errMsg ->
@@ -244,16 +246,17 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                     categories = categories,
                     selectedCategory = selectedCategory,
                     onSelectCategory = { viewModel.selectCategory(it) },
-                    onHideCategory = { viewModel.toggleCategoryVisibility(it, true) },
                     channels = channels,
                     selectedChannel = selectedChannel,
                     playingChannel = playingChannel,
-                    onPlayChannel = { 
-                        viewModel.playChannel(it)
+                    onPlayChannel = { viewModel.playChannel(it) },
+                    onPlayCatchup = { channel, program -> 
+                        viewModel.playCatchup(channel, program)
                         viewModel.setOverlayState(TvOverlayState.HIDDEN)
                     },
                     onToggleFullscreen = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
                     epgPrograms = epgPrograms,
+                    onHideCategory = { cat -> viewModel.toggleCategoryVisibility(cat, true) },
                     modifier = Modifier.fillMaxSize().focusRequester(guideFocusRequester)
                 )
             }

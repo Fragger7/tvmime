@@ -135,7 +135,23 @@ class XtreamRepository(
         val portalConfig = portal.toDomain()
         _syncProgress.value = SyncProgress.Authenticating(portal.name)
 
-        // 1. Authenticate with provider
+        if (portalConfig.type == "m3u" && !portalConfig.m3uUrl.isNullOrBlank()) {
+            // M3U Fallback Pipeline
+            try {
+                _syncProgress.value = SyncProgress.SyncingChannels(StreamType.LIVE, 0)
+                syncM3uPlaylist(portal)
+                val timestamp = System.currentTimeMillis()
+                database.portalDao().updateLastSynced(portal.id, timestamp)
+                _syncProgress.value = SyncProgress.Success(timestamp)
+                return@withContext Result.success(Unit)
+            } catch (e: Exception) {
+                Napier.e("M3U Sync failed for portal ${portal.name}", e)
+                _syncProgress.value = SyncProgress.Error(e.message ?: "M3U Sync failed")
+                return@withContext Result.failure(e)
+            }
+        }
+
+        // 1. Authenticate with provider (Xtream Codes)
         val auth = xtreamClient.authenticate(portalConfig)
         if (auth is AuthResult.Error) {
             val err = "Authentication failed: ${auth.message}"
@@ -279,6 +295,62 @@ class XtreamRepository(
             }
         } catch (e: Exception) {
             Napier.w("EPG sync failed for portal ${portal.name}", e)
+        }
+    }
+
+    private suspend fun syncM3uPlaylist(portal: PortalEntity) {
+        val url = portal.m3uUrl ?: return
+        val request = Request.Builder()
+            .url(url)
+            .header("User-Agent", XtreamClient.EVASION_USER_AGENT)
+            .build()
+
+        okHttpClient.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Failed to fetch M3U: HTTP ${response.code}")
+            val body = response.body ?: throw IOException("Empty M3U response")
+
+            val categoriesMap = mutableMapOf<String, CategoryEntity>()
+            val channelsBatch = mutableListOf<ChannelEntity>()
+            var totalProcessed = 0
+            var sortIndex = 0
+
+            com.tvmime.parser.M3uParser.parseM3uStream(body.byteStream()).collect { channel ->
+                val categoryName = channel.categoryId.ifBlank { "Uncategorized" }
+                val catId = "${portal.id}_m3u_${categoryName.hashCode()}"
+                
+                if (!categoriesMap.containsKey(catId)) {
+                    val catEntity = CategoryEntity(
+                        id = catId,
+                        portalId = portal.id,
+                        categoryId = catId,
+                        categoryName = categoryName,
+                        parentId = 0,
+                        type = channel.type.name,
+                        sortOrder = sortIndex++
+                    )
+                    categoriesMap[catId] = catEntity
+                }
+
+                // Associate channel with generated Category ID
+                val finalChannel = channel.copy(categoryId = catId)
+                channelsBatch.add(ChannelEntity.fromDomain(finalChannel, portal.id))
+                totalProcessed++
+
+                if (channelsBatch.size >= 500) {
+                    database.categoryDao().insertCategories(categoriesMap.values.toList())
+                    database.channelDao().insertChannelsBatch(channelsBatch)
+                    channelsBatch.clear()
+                    _syncProgress.value = SyncProgress.SyncingChannels(StreamType.LIVE, totalProcessed)
+                }
+            }
+
+            if (categoriesMap.isNotEmpty()) {
+                database.categoryDao().insertCategories(categoriesMap.values.toList())
+            }
+            if (channelsBatch.isNotEmpty()) {
+                database.channelDao().insertChannelsBatch(channelsBatch)
+                _syncProgress.value = SyncProgress.SyncingChannels(StreamType.LIVE, totalProcessed)
+            }
         }
     }
 

@@ -100,6 +100,9 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     private val _playingChannel = MutableStateFlow<ChannelEntity?>(null)
     val playingChannel: StateFlow<ChannelEntity?> = _playingChannel.asStateFlow()
 
+    private val _currentPlaybackUrl = MutableStateFlow<String?>(null)
+    val currentPlaybackUrl: StateFlow<String?> = _currentPlaybackUrl.asStateFlow()
+
     private val _previousChannel = MutableStateFlow<ChannelEntity?>(null)
     val previousChannel: StateFlow<ChannelEntity?> = _previousChannel.asStateFlow()
 
@@ -164,8 +167,10 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
     }.onEach { chList ->
         if (_playingChannel.value == null && chList.isNotEmpty()) {
-            _playingChannel.value = chList.firstOrNull()
-            _selectedChannel.value = chList.firstOrNull()
+            val first = chList.firstOrNull()
+            _playingChannel.value = first
+            _selectedChannel.value = first
+            _currentPlaybackUrl.value = first?.directSourceUrl
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -178,6 +183,7 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
             if (firstCh != null) {
                 _playingChannel.value = firstCh
                 _selectedChannel.value = firstCh
+                _currentPlaybackUrl.value = firstCh.directSourceUrl
             }
         }
     }
@@ -207,6 +213,33 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
         }
         _playingChannel.value = ch
         _selectedChannel.value = ch
+        _currentPlaybackUrl.value = ch.directSourceUrl
+        _playerError.value = null
+        viewModelScope.launch {
+            repository.recordWatch(ch.id)
+        }
+    }
+
+    fun playCatchup(ch: ChannelEntity, program: EpgProgramEntity) {
+        val portal = activePortals.value.find { it.id == ch.portalId } ?: return
+        
+        // Convert epoch ms to YYYY-MM-DD:HH-MM
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd:HH-mm", java.util.Locale.US)
+        sdf.timeZone = java.util.TimeZone.getTimeZone("UTC") // Xtream servers usually expect UTC times for archive
+        val startDateTimeString = sdf.format(java.util.Date(program.startEpoch))
+        
+        val durationMinutes = ((program.endEpoch - program.startEpoch) / (60 * 1000)).toInt()
+
+        val timeshiftUrl = com.tvmime.network.XtreamClient().buildTimeshiftUrl(
+            portal = portal.toDomain(),
+            streamId = ch.streamId,
+            startDateTimeString = startDateTimeString,
+            durationMinutes = durationMinutes
+        )
+
+        _playingChannel.value = ch
+        _selectedChannel.value = ch
+        _currentPlaybackUrl.value = timeshiftUrl
         _playerError.value = null
         viewModelScope.launch {
             repository.recordWatch(ch.id)
