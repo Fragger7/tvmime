@@ -3,6 +3,7 @@ package com.tvmime.repository
 import com.tvmime.db.AppDatabase
 import com.tvmime.db.entity.CategoryEntity
 import com.tvmime.db.entity.ChannelEntity
+import com.tvmime.db.entity.EpgProgramEntity
 import com.tvmime.db.entity.PortalEntity
 import com.tvmime.model.Category
 import com.tvmime.model.Channel
