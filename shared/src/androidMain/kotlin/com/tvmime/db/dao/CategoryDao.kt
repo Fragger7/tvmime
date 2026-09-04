@@ -12,6 +12,9 @@ interface CategoryDao {
     @Query("SELECT * FROM categories WHERE portalId = :portalId AND type = :type ORDER BY sortOrder ASC, categoryName ASC")
     fun getCategories(portalId: String, type: String): Flow<List<CategoryEntity>>
 
+    @Query("SELECT * FROM categories WHERE portalId IN (:portalIds) AND type = :type ORDER BY sortOrder ASC, categoryName ASC")
+    fun getCategoriesForPortals(portalIds: List<String>, type: String): Flow<List<CategoryEntity>>
+
     @Query("SELECT * FROM categories WHERE portalId = :portalId AND type = :type ORDER BY sortOrder ASC, categoryName ASC")
     suspend fun getCategoriesSync(portalId: String, type: String): List<CategoryEntity>
 
