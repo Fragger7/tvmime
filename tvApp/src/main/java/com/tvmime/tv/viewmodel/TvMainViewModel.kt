@@ -65,6 +65,9 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     private val _playingChannel = MutableStateFlow<ChannelEntity?>(null)
     val playingChannel: StateFlow<ChannelEntity?> = _playingChannel.asStateFlow()
 
+    private val _previousChannel = MutableStateFlow<ChannelEntity?>(null)
+    val previousChannel: StateFlow<ChannelEntity?> = _previousChannel.asStateFlow()
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
@@ -139,12 +142,26 @@ class TvMainViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun playChannel(ch: ChannelEntity) {
+        val current = _playingChannel.value
+        if (current != null && current.id != ch.id) {
+            _previousChannel.value = current
+        }
         _playingChannel.value = ch
         _selectedChannel.value = ch
         _playerError.value = null
         viewModelScope.launch {
             repository.recordWatch(ch.id)
         }
+    }
+
+    fun toggleLastChannel(): Boolean {
+        val prev = _previousChannel.value
+        val current = _playingChannel.value
+        if (prev != null && prev.id != current?.id) {
+            playChannel(prev)
+            return true
+        }
+        return false
     }
 
     fun toggleFavorite(ch: ChannelEntity) {

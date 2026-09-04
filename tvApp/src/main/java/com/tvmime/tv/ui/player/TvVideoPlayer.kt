@@ -81,7 +81,8 @@ fun TvVideoPlayer(
     modifier: Modifier = Modifier,
     isFullscreen: Boolean = false,
     onToggleFullscreen: () -> Unit = {},
-    onToggleFavorite: ((ChannelEntity) -> Unit)? = null
+    onToggleFavorite: ((ChannelEntity) -> Unit)? = null,
+    onToggleLastChannel: (() -> Boolean)? = null
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -108,7 +109,15 @@ fun TvVideoPlayer(
     var activeModal by remember { mutableStateOf<PlaybackOverlayModal?>(null) }
     var currentAspectMode by remember { mutableStateOf(AspectRatioMode.FIT) }
     var showStatsHud by remember { mutableStateOf(false) }
+    var showLastChannelToast by remember { mutableStateOf(false) }
     var lastInteractionTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
+
+    LaunchedEffect(showLastChannelToast) {
+        if (showLastChannelToast) {
+            delay(2500)
+            showLastChannelToast = false
+        }
+    }
 
     // Telemetry stats
     var videoResolution by remember { mutableStateOf("Auto") }
@@ -285,6 +294,17 @@ fun TvVideoPlayer(
                                 false
                             }
                         }
+                        KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                            if (onToggleLastChannel != null) {
+                                val toggled = onToggleLastChannel()
+                                if (toggled) {
+                                    showLastChannelToast = true
+                                }
+                                true
+                            } else {
+                                false
+                            }
+                        }
                         KeyEvent.KEYCODE_BACK -> {
                             if (activeModal != null) {
                                 activeModal = null
@@ -361,6 +381,42 @@ fun TvVideoPlayer(
                     Text("Audio Track: $audioCodec", color = textSecondary, fontSize = 11.sp)
                     Text("Buffered: ${bufferedSeconds}s (${bufferProfile.label})", color = Color(0xFF10B981), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                     Text("Aspect Mode: ${currentAspectMode.label}", color = textSecondary, fontSize = 11.sp)
+                }
+            }
+        }
+
+        // --- 4. Last Channel Zap Floating Toast ---
+        AnimatedVisibility(
+            visible = showLastChannelToast && isFullscreen,
+            enter = fadeIn() + slideInVertically { -it },
+            exit = fadeOut() + slideOutVertically { -it },
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 80.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color(0xEE0C0C14))
+                    .border(1.dp, crimson, RoundedCornerShape(20.dp))
+                    .padding(horizontal = 18.dp, vertical = 10.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.SwapHoriz,
+                        contentDescription = "Last Channel",
+                        tint = crimsonBright,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "LAST CHANNEL: CH ${channel?.num ?: 0} • ${channel?.name ?: ""}",
+                        color = Color.White,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
@@ -480,6 +536,32 @@ fun TvVideoPlayer(
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(if (isPlaying) "Pause" else "Play", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+
+                        // Last Channel Zap Button
+                        if (onToggleLastChannel != null) {
+                            Surface(
+                                onClick = {
+                                    lastInteractionTime = System.currentTimeMillis()
+                                    val toggled = onToggleLastChannel()
+                                    if (toggled) showLastChannelToast = true
+                                },
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                colors = ClickableSurfaceDefaults.colors(
+                                    containerColor = Color(0xFF1E1E2C),
+                                    focusedContainerColor = crimsonBright
+                                ),
+                                modifier = Modifier.height(38.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                ) {
+                                    Icon(Icons.Default.SwapHoriz, contentDescription = "Last Channel", tint = Color.White, modifier = Modifier.size(16.dp))
+                                    Text("Last Ch (▶|)", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
 

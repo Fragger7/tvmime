@@ -40,6 +40,7 @@ fun LiveTvScreen(
     onToggleFavorite: (ChannelEntity) -> Unit,
     isFullscreen: Boolean,
     onToggleFullscreen: () -> Unit,
+    onToggleLastChannel: (() -> Boolean)? = null,
     modifier: Modifier = Modifier
 ) {
     val bgMain = Color(DesignSystemTokens.Colors.Background)
@@ -55,6 +56,7 @@ fun LiveTvScreen(
             isFullscreen = true,
             onToggleFullscreen = onToggleFullscreen,
             onToggleFavorite = onToggleFavorite,
+            onToggleLastChannel = onToggleLastChannel,
             modifier = Modifier.fillMaxSize()
         )
         return

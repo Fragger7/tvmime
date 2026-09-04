@@ -80,6 +80,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                 onToggleFavorite = { viewModel.toggleFavorite(it) },
                 isFullscreen = true,
                 onToggleFullscreen = { viewModel.toggleFullscreen() },
+                onToggleLastChannel = { viewModel.toggleLastChannel() },
                 modifier = Modifier.fillMaxSize()
             )
         } else {
@@ -108,6 +109,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                                 onToggleFavorite = { viewModel.toggleFavorite(it) },
                                 isFullscreen = false,
                                 onToggleFullscreen = { viewModel.toggleFullscreen() },
+                                onToggleLastChannel = { viewModel.toggleLastChannel() },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
