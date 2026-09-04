@@ -52,6 +52,7 @@ fun TvGuideScreen(
     onPlayChannel: (ChannelEntity) -> Unit,
     onToggleFullscreen: () -> Unit,
     epgPrograms: List<EpgProgramEntity>,
+    onHideCategory: (CategoryEntity) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val bgMain = Color.Transparent
@@ -168,6 +169,7 @@ fun TvGuideScreen(
                         val isSelected = cat.categoryId == selectedCategory?.categoryId
                         Surface(
                             onClick = { onSelectCategory(cat) },
+                            onLongClick = { onHideCategory(cat) },
                             shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
                             colors = ClickableSurfaceDefaults.colors(
                                 containerColor = if (isSelected) crimson else cardBg,

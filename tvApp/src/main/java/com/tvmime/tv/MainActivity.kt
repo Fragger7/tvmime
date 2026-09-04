@@ -24,6 +24,7 @@ import com.tvmime.tv.ui.live.LiveTvScreen
 import com.tvmime.tv.ui.navigation.TvNavigationDrawer
 import com.tvmime.tv.ui.player.TvVideoPlayer
 import com.tvmime.tv.ui.settings.SettingsScreen
+import com.tvmime.tv.ui.sync.CloudSyncScreen
 import com.tvmime.tv.viewmodel.TvMainViewModel
 import com.tvmime.tv.viewmodel.TvNavDestination
 import com.tvmime.tv.viewmodel.TvOverlayState
