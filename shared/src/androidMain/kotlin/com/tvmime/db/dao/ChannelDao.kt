@@ -42,6 +42,9 @@ interface ChannelDao {
     @Query("SELECT * FROM channels WHERE portalId = :portalId AND lastWatchedEpoch > 0 ORDER BY lastWatchedEpoch DESC LIMIT :limit")
     fun getRecentlyWatched(portalId: String, limit: Int = 20): Flow<List<ChannelEntity>>
 
+    @Query("SELECT * FROM channels WHERE portalId IN (:portalIds) AND lastWatchedEpoch > 0 ORDER BY lastWatchedEpoch DESC LIMIT :limit")
+    fun getRecentlyWatchedForPortals(portalIds: List<String>, limit: Int = 20): Flow<List<ChannelEntity>>
+
     @Query("SELECT * FROM channels WHERE portalId = :portalId AND streamId = :streamId LIMIT 1")
     suspend fun getChannelByStreamId(portalId: String, streamId: Int): ChannelEntity?
 
