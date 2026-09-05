@@ -28,6 +28,7 @@ import com.tvmime.tv.ui.common.TvIcons
 import com.tvmime.tv.ui.common.TvListRow
 import com.tvmime.tv.ui.common.TvUrlField
 
+enum class ChannelFilter { ALL, FAVOURITES, RECENT }
 /**
  * The group rail: favourites, everything, the lists someone has made and the
  * groups the provider ships.
@@ -102,7 +103,7 @@ internal fun GuideGroupRail(
         },
     ) {
         Text(
-            text = stringResource(R.string.guide_groups),
+            text = "",
             modifier = Modifier.padding(start = 14.dp, bottom = 6.dp),
             color = palette.textDim,
             fontSize = typography.overline.fontSize,
@@ -116,7 +117,7 @@ internal fun GuideGroupRail(
         // on its own line because the rail is narrow and Finnish words are
         // long enough to push a label off the end of a shared row.
         TvActionButton(
-            label = stringResource(R.string.guide_options),
+            label = "",
             icon = TvIcons.Info,
             onClick = onOpenOptions,
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
@@ -131,7 +132,7 @@ internal fun GuideGroupRail(
             TvUrlField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
-                label = stringResource(R.string.guide_search_hint),
+                label = "",
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 testTag = "guide-search-field",
                 keyboardType = KeyboardType.Text,
@@ -150,16 +151,16 @@ internal fun GuideGroupRail(
                 val hidden = hiddenGroups.any { it.equals(group, ignoreCase = true) }
                 val selected = !categoryEditMode && key == selectedKey
                 val label = when (key) {
-                    "favourites" -> stringResource(R.string.guide_filter_favourites)
-                    "recent" -> stringResource(R.string.guide_filter_recent)
-                    "all" -> stringResource(R.string.guide_all_channels)
+                    "favourites" -> ""
+                    "recent" -> ""
+                    "all" -> ""
                     else -> if (key.startsWith("list:")) customLists.firstOrNull { it.first == listId }?.second.orEmpty() else group
                 }
                 TvListRow(
                     label = label,
                     icon = when { categoryEditMode -> if (hidden) TvIcons.Close else TvIcons.Check; key == "favourites" -> TvIcons.Star; else -> null },
                     trailing = when {
-                        categoryEditMode -> stringResource(if (hidden) R.string.guide_category_hidden else R.string.guide_category_visible)
+                        categoryEditMode -> stringResource(if (hidden) 0 else 0)
                         key == "favourites" -> favouriteCount.takeIf { it > 0 }?.toString()
                         key == "all" -> allChannelsCount.takeIf { it > 0 }?.toString()
                         key.startsWith("group:") -> groupCounts[group]?.toString()

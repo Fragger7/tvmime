@@ -162,8 +162,8 @@ internal fun PlayerStatsOverlay(
     val typography = TvMimeThemeTokens.typography
     val values = playerStatsValues(
         stats = stats,
-        bufferLabel = stringResource(R.string.player_stats_buffer),
-        droppedLabel = stringResource(R.string.player_stats_dropped),
+        bufferLabel = "",
+        droppedLabel = "",
     )
     Row(
         modifier = modifier.testTag("player-stats"),

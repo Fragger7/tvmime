@@ -167,7 +167,7 @@ private fun GuideHeroStill(
                 Text(
                     text = listOfNotNull(
                         selection.channel.name,
-                        channelNumber?.let { stringResource(R.string.guide_channel_number, it) },
+                        channelNumber?.let { stringResource(0, it) },
                     ).joinToString(HERO_SEPARATOR).uppercase(),
                     color = palette.textPrimary,
                     fontSize = typography.overline.fontSize,
@@ -240,7 +240,7 @@ private fun GuideHeroDetail(
             ) {
                 if (live) {
                     TvTagChip(
-                        label = stringResource(R.string.guide_live),
+                        label = "",
                         tone = TvTagTone.LIVE,
                     )
                 }
@@ -249,7 +249,7 @@ private fun GuideHeroDetail(
                 val facts = listOfNotNull(
                     programme?.let { formatRange(it.startEpochMillis, it.stopEpochMillis, timeZoneId) },
                     programme?.categories?.firstOrNull()?.takeIf(String::isNotBlank),
-                    metadata?.year?.toString(),
+                    metadata?.releaseYear?.toString(),
                 ).joinToString(HERO_SEPARATOR)
                 if (facts.isNotBlank()) {
                     Text(
@@ -263,17 +263,17 @@ private fun GuideHeroDetail(
                 }
                 metadata?.rating?.takeIf(String::isNotBlank)?.let { rating ->
                     TvTagChip(
-                        label = stringResource(R.string.guide_rating, rating),
+                        label = stringResource(0, rating),
                         tone = TvTagTone.RATING,
                     )
                 }
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = metadata?.overview?.takeIf(String::isNotBlank)
+                text = metadata?.synopsis?.takeIf(String::isNotBlank)
                     ?: programme?.description?.takeIf(String::isNotBlank)
                     ?: programme?.subtitle?.takeIf(String::isNotBlank)
-                    ?: stringResource(R.string.guide_programme_no_details),
+                    ?: "",
                 color = palette.textMuted,
                 fontSize = typography.label.fontSize,
                 lineHeight = typography.label.lineHeight,
@@ -286,7 +286,7 @@ private fun GuideHeroDetail(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 TvActionButton(
-                    label = stringResource(R.string.action_watch),
+                    label = "",
                     icon = TvIcons.Play,
                     onClick = onWatch,
                     compact = true,
@@ -294,9 +294,9 @@ private fun GuideHeroDetail(
                 )
                 TvActionButton(
                     label = if (favourite) {
-                        stringResource(R.string.guide_favourite)
+                        ""
                     } else {
-                        stringResource(R.string.guide_add_favourite)
+                        ""
                     },
                     icon = if (favourite) TvIcons.Star else TvIcons.StarOutline,
                     onClick = onToggleFavourite,
@@ -309,9 +309,9 @@ private fun GuideHeroDetail(
                 if (onPlayCatchup != null) {
                     TvActionButton(
                         label = if (live) {
-                            stringResource(R.string.guide_watch_from_start)
+                            ""
                         } else {
-                            stringResource(R.string.guide_watch_recording)
+                            ""
                         },
                         icon = TvIcons.Replay,
                         onClick = onPlayCatchup,
@@ -321,9 +321,9 @@ private fun GuideHeroDetail(
                 }
                 TvActionButton(
                     label = if (searchVisible) {
-                        stringResource(R.string.guide_close_search)
+                        ""
                     } else {
-                        stringResource(R.string.guide_find_programme)
+                        ""
                     },
                     icon = TvIcons.Search,
                     onClick = onSearch,
@@ -333,7 +333,7 @@ private fun GuideHeroDetail(
                 )
                 if (metadata != null && onOpenMetadata != null) {
                     TvActionButton(
-                        label = stringResource(R.string.metadata_source, metadata.attributionName),
+                        label = stringResource(0, metadatanull),
                         icon = TvIcons.Info,
                         onClick = onOpenMetadata,
                         compact = true,

@@ -227,36 +227,36 @@ private fun SohvaWordmark(
  * guarantee it exists at all.
  */
 object TvIcons {
-    val Home: Int = android.R.drawable.ic_menu_sort_by_size
-    val Back: Int = android.R.drawable.ic_menu_revert
-    val Aspect: Int = android.R.drawable.ic_menu_crop
-    val Audio: Int = android.R.drawable.ic_media_play
-    val Subtitles: Int = android.R.drawable.ic_dialog_info
-    val Stats: Int = android.R.drawable.ic_menu_info_details
-    val ChevronRight: Int = android.R.drawable.ic_media_play
-    val ChevronDown: Int = android.R.drawable.ic_menu_help
-    val Lock: Int = android.R.drawable.ic_menu_help
-    val Link: Int = android.R.drawable.ic_menu_help
-    val Key: Int = android.R.drawable.ic_menu_help
-    val Refresh: Int = android.R.drawable.ic_menu_help
-    val Check: Int = android.R.drawable.ic_menu_help
-    val Play: Int = android.R.drawable.ic_menu_help
-    val Pause: Int = android.R.drawable.ic_menu_help
-    val Save: Int = android.R.drawable.ic_menu_help
-    val Settings: Int = android.R.drawable.ic_menu_help
-    val Delete: Int = android.R.drawable.ic_menu_help
-    val Close: Int = android.R.drawable.ic_menu_help
-    val Channels: Int = android.R.drawable.ic_menu_help
-    val Target: Int = android.R.drawable.ic_menu_help
-    val Guide: Int = android.R.drawable.ic_menu_help
-    val Epg: Int = android.R.drawable.ic_menu_help
-    val Info: Int = android.R.drawable.ic_menu_help
-    val Search: Int = android.R.drawable.ic_menu_help
-    val Replay: Int = android.R.drawable.ic_menu_help
-    val Forward: Int = android.R.drawable.ic_menu_help
-    val Rewind: Int = android.R.drawable.ic_menu_help
-    val Star: Int = android.R.drawable.ic_menu_help
-    val StarOutline: Int = android.R.drawable.ic_menu_help
+    val Home: Int = android.android.R.drawable.ic_menu_help
+    val Back: Int = android.android.R.drawable.ic_menu_help
+    val Aspect: Int = android.android.R.drawable.ic_menu_help
+    val Audio: Int = android.android.R.drawable.ic_menu_help
+    val Subtitles: Int = android.android.R.drawable.ic_menu_help
+    val Stats: Int = android.android.R.drawable.ic_menu_help
+    val ChevronRight: Int = android.android.R.drawable.ic_menu_help
+    val ChevronDown: Int = android.android.R.drawable.ic_menu_help
+    val Lock: Int = android.android.R.drawable.ic_menu_help
+    val Link: Int = android.android.R.drawable.ic_menu_help
+    val Key: Int = android.android.R.drawable.ic_menu_help
+    val Refresh: Int = android.android.R.drawable.ic_menu_help
+    val Check: Int = android.android.R.drawable.ic_menu_help
+    val Play: Int = android.android.R.drawable.ic_menu_help
+    val Pause: Int = android.android.R.drawable.ic_menu_help
+    val Save: Int = android.android.R.drawable.ic_menu_help
+    val Settings: Int = android.android.R.drawable.ic_menu_help
+    val Delete: Int = android.android.R.drawable.ic_menu_help
+    val Close: Int = android.android.R.drawable.ic_menu_help
+    val Channels: Int = android.android.R.drawable.ic_menu_help
+    val Target: Int = android.android.R.drawable.ic_menu_help
+    val Guide: Int = android.android.R.drawable.ic_menu_help
+    val Epg: Int = android.android.R.drawable.ic_menu_help
+    val Info: Int = android.android.R.drawable.ic_menu_help
+    val Search: Int = android.android.R.drawable.ic_menu_help
+    val Replay: Int = android.android.R.drawable.ic_menu_help
+    val Forward: Int = android.android.R.drawable.ic_menu_help
+    val Rewind: Int = android.android.R.drawable.ic_menu_help
+    val Star: Int = android.android.R.drawable.ic_menu_help
+    val StarOutline: Int = android.android.R.drawable.ic_menu_help
 }
 
 /**

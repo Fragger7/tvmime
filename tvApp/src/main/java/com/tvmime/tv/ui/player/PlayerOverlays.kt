@@ -185,7 +185,7 @@ internal fun LiveProgrammeInfoOverlay(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         TvTagChip(
-                            label = stringResource(R.string.guide_live),
+                            label = "",
                             tone = TvTagTone.LIVE,
                         )
                         // What the provider says about the feed, read off the
@@ -210,7 +210,7 @@ internal fun LiveProgrammeInfoOverlay(
                 }
             }
             Text(
-                text = programme?.title ?: stringResource(R.string.player_no_current_programme),
+                text = programme?.title ?: "",
                 modifier = Modifier.fillMaxWidth(PLAYER_TEXT_FRACTION).padding(top = 12.dp),
                 color = palette.textPrimary,
                 // A step down from display: this sits over a moving picture,
@@ -237,7 +237,7 @@ internal fun LiveProgrammeInfoOverlay(
                             formatPlayerTime(programme.startEpochMillis, timeZoneId),
                             fraction?.let {
                                 stringResource(
-                                    R.string.player_watched_percent,
+                                    0,
                                     playerPercentWatched(it),
                                 )
                             },
@@ -268,7 +268,7 @@ internal fun LiveProgrammeInfoOverlay(
             nextProgramme?.let { next ->
                 Text(
                     text = stringResource(
-                        R.string.player_next_programme,
+                        0,
                         formatPlayerTime(next.startEpochMillis, timeZoneId),
                         next.title,
                     ),
@@ -304,44 +304,44 @@ internal fun LiveProgrammeInfoOverlay(
             ) {
                 PlayerIconAction(
                     icon = TvIcons.Back,
-                    description = stringResource(R.string.player_action_back),
+                    description = "",
                     onClick = onBack,
                     testTag = "player-back",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Aspect,
-                    description = stringResource(R.string.player_picture_mode, aspectModeLabel),
+                    description = stringResource(0, aspectModeLabel),
                     onClick = onCycleAspectMode,
                     testTag = "player-aspect",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Audio,
-                    description = stringResource(R.string.player_audio_track, audioTrackLabel),
+                    description = stringResource(0, audioTrackLabel),
                     onClick = onCycleAudioTrack,
                     testTag = "player-audio",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Subtitles,
-                    description = stringResource(R.string.player_subtitle_track, subtitleTrackLabel),
+                    description = stringResource(0, subtitleTrackLabel),
                     onClick = onCycleSubtitleTrack,
                     testTag = "player-subtitles",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Channels,
-                    description = stringResource(R.string.player_action_channels),
+                    description = "",
                     onClick = onOpenChannelBrowser,
                     testTag = "player-channels",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Stats,
-                    description = stringResource(R.string.player_action_stats),
+                    description = "",
                     onClick = onToggleStats,
                     selected = statsVisible,
                     testTag = "player-stats-toggle",
                 )
                 PlayerIconAction(
                     icon = TvIcons.Settings,
-                    description = stringResource(R.string.player_action_quick),
+                    description = "",
                     onClick = onOpenQuickActions,
                     testTag = "player-quick-actions",
                 )
@@ -350,9 +350,9 @@ internal fun LiveProgrammeInfoOverlay(
                         icon = TvIcons.Forward,
                         description = stringResource(
                             if (externalPlayerBusy) {
-                                R.string.player_opening_external
+                                0
                             } else {
-                                R.string.player_external
+                                0
                             },
                         ),
                         onClick = it,
@@ -465,9 +465,9 @@ private fun playerRemainingLabel(stopEpochMillis: Long, nowEpochMillis: Long): S
     val minutes = playerRemainingMinutes(stopEpochMillis, nowEpochMillis) ?: return null
     val (hours, remainder) = playerDurationParts(minutes)
     return if (hours > 0) {
-        stringResource(R.string.player_remaining_hours, hours, remainder)
+        stringResource(0, hours, remainder)
     } else {
-        stringResource(R.string.player_remaining_minutes, remainder)
+        stringResource(0, remainder)
     }
 }
 
@@ -524,14 +524,14 @@ fun TrackSelectionOverlay(
                     fontWeight = FontWeight.Black,
                 )
                 TvActionButton(
-                    label = stringResource(R.string.action_back),
+                    label = "",
                     icon = TvIcons.Back,
                     compact = true,
                     onClick = onDismiss,
                 )
             }
             Text(
-                text = stringResource(R.string.player_track_picker_hint),
+                text = "",
                 modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
                 color = palette.textMuted,
                 fontSize = 12.sp,
@@ -714,7 +714,7 @@ private fun ChannelGroupBrowserPane(
             .testTag("player-channel-groups"),
     ) {
         Text(
-            text = stringResource(R.string.guide_groups).uppercase(),
+            text = "".uppercase(),
             modifier = Modifier.padding(start = 10.dp, bottom = 12.dp),
             color = palette.textDim,
             fontSize = typography.overline.fontSize,
@@ -797,7 +797,7 @@ private fun ChannelBrowserPane(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(R.string.player_channels).uppercase(),
+                text = "".uppercase(),
                 modifier = Modifier.weight(1f),
                 color = palette.textDim,
                 fontSize = typography.overline.fontSize,
@@ -806,7 +806,7 @@ private fun ChannelBrowserPane(
                 letterSpacing = typography.overline.letterSpacing,
             )
             Text(
-                text = "${stringResource(R.string.guide_groups)} →",
+                text = "${""} →",
                 color = palette.textDim,
                 fontSize = typography.caption.fontSize,
                 lineHeight = typography.caption.lineHeight,
@@ -851,7 +851,7 @@ private fun ChannelBrowserPane(
                         )
                         Text(
                             text = channel.currentProgrammeTitle
-                                ?: stringResource(R.string.player_no_current_programme),
+                                ?: "",
                             color = if (activeSelection) {
                                 palette.background.copy(alpha = 0.62f)
                             } else {
@@ -956,26 +956,26 @@ fun BottomTransportControls(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 TvActionButton(
-                    label = stringResource(R.string.action_back),
+                    label = "",
                     icon = TvIcons.Back,
                     onClick = onBack,
                     compact = true,
                     testTag = "player-back",
                 )
                 TvActionButton(
-                    label = stringResource(R.string.player_picture_mode, aspectModeLabel),
+                    label = stringResource(0, aspectModeLabel),
                     onClick = onCycleAspectMode,
                     compact = true,
                     testTag = "player-aspect",
                 )
                 TvActionButton(
-                    label = stringResource(R.string.player_audio_track, audioTrackLabel),
+                    label = stringResource(0, audioTrackLabel),
                     onClick = onCycleAudioTrack,
                     compact = true,
                     testTag = "player-audio",
                 )
                 TvActionButton(
-                    label = stringResource(R.string.player_subtitle_track, subtitleTrackLabel),
+                    label = stringResource(0, subtitleTrackLabel),
                     onClick = onCycleSubtitleTrack,
                     compact = true,
                     testTag = "player-subtitles",
@@ -1003,14 +1003,14 @@ fun BottomTransportControls(
                     modifier = Modifier.padding(end = 18.dp),
                 )
                 TvActionButton(
-                    label = stringResource(R.string.player_rewind),
+                    label = "",
                     icon = TvIcons.Rewind,
                     onClick = onRewind,
                     compact = true,
                     testTag = "player-rewind",
                 )
                 TvActionButton(
-                    label = stringResource(if (isPlaying) R.string.player_pause else R.string.player_play),
+                    label = stringResource(if (isPlaying) 0 else 0),
                     icon = if (isPlaying) TvIcons.Pause else TvIcons.Play,
                     onClick = onPlayPause,
                     modifier = Modifier.padding(horizontal = 10.dp),
@@ -1018,7 +1018,7 @@ fun BottomTransportControls(
                     testTag = "player-play-pause",
                 )
                 TvActionButton(
-                    label = stringResource(R.string.player_forward),
+                    label = "",
                     icon = TvIcons.Forward,
                     onClick = onForward,
                     compact = true,
@@ -1174,7 +1174,7 @@ internal fun PlayerQuickActionsOverlay(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = stringResource(R.string.player_quick_actions_title),
+                text = "",
                 color = palette.textPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Black,
