@@ -104,7 +104,7 @@ class TvMimePlaybackService : MediaSessionService() {
             controller: MediaSession.ControllerInfo,
         ): MediaSession.ConnectionResult =
             if (controller.packageName == packageName || controller.isTrusted || session.isMediaNotificationController(controller)) {
-                MediaSession.ConnectionResult.AcceptedResultBuilder(session, controller).build()
+                MediaSession.ConnectionResult.AcceptedResultBuilder(session).build()
             } else {
                 MediaSession.ConnectionResult.reject()
             }
@@ -125,21 +125,16 @@ class TvMimePlaybackService : MediaSessionService() {
                 runCatching {
                     activeSource = null
                     val db = AppDatabase.getInstance(this@TvMimePlaybackService)
-                    
                     val channelId = request.mediaId
-                    val channel = db.channelDao().getChannelById(channelId) 
-                        ?: throw IOException("Channel not found in database")
-                        
+                    val channel = db.channelDao().getChannelById(channelId) ?: throw IOException("Channel not found in database")
+                    val portal = db.portalDao().getPortalById(channel.portalId) ?: throw IOException("Portal not found")
+                    
                     val source = PlaybackSource(
                         sourceId = channel.portalId,
                         channelId = channel.id,
                         channelName = channel.name,
-                        streamUrl = channel.streamUrl,
-                        headers = buildMap {
-                            // Extract headers from URL query params or properties if needed, 
-                            // or inject IPTVSmartersPro/1.1.1
-                            put("User-Agent", "IPTVSmartersPro/1.1.1")
-                        },
+                        streamUrl = "${portal.url}/live/${portal.username}/${portal.password}/${channel.streamId}.${channel.containerExtension}",
+                        headers = mapOf("User-Agent" to "IPTVSmartersPro/1.1.1"),
                         connectionLimit = 1
                     )
                     

@@ -22,7 +22,7 @@ fun TvMimeLiveScreen(viewModel: TvMainViewModel) {
     
     val guideChannels = remember(channels, epgPrograms) {
         channels.map { channel ->
-            val channelEpg = epgPrograms.filter { it.channelId == channel.id }
+            val channelEpg = epgPrograms.filter { it.epgChannelId == channel.epgChannelId }
             GuideTimelineChannel(
                 sourceId = channel.portalId,
                 sourceName = "Portal",
@@ -30,17 +30,17 @@ fun TvMimeLiveScreen(viewModel: TvMainViewModel) {
                 id = channel.id,
                 name = channel.name,
                 groupTitle = channel.categoryId,
-                logoUrl = channel.logoUrl,
+                logoUrl = channel.streamIcon,
                 playlistOrder = 0,
                 programmes = channelEpg.map { epg ->
                     GuideTimelineProgramme(
-                        id = epg.id.toString(),
+                        id = epg.id,
                         title = epg.title,
                         subtitle = null,
                         description = epg.description,
                         categories = emptyList(),
-                        startEpochMillis = epg.startMillis,
-                        stopEpochMillis = epg.endMillis
+                        startEpochMillis = epg.startEpoch * 1000,
+                        stopEpochMillis = epg.endEpoch * 1000
                     )
                 }
             )
@@ -71,6 +71,9 @@ fun TvMimeLiveScreen(viewModel: TvMainViewModel) {
                 onDetails = { _, _ -> },
                 onReturn = { },
                 onPagedGroupFocus = { },
+                onPageForward = { },
+                onPageBack = { },
+                onTransportKey = { false },
                 modifier = Modifier.fillMaxSize()
             )
         } else if (overlayState == com.tvmime.tv.viewmodel.TvOverlayState.HUD) {
@@ -84,13 +87,17 @@ fun TvMimeLiveScreen(viewModel: TvMainViewModel) {
                 audioTrackLabel = "Default",
                 subtitleTrackLabel = "None",
                 statsVisible = false,
-                onBack = { },
+                onBack = { viewModel.setOverlayState(com.tvmime.tv.viewmodel.TvOverlayState.HIDDEN) },
                 onCycleAspectMode = { },
                 onCycleAudioTrack = { },
                 onCycleSubtitleTrack = { },
-                onCycleTelemetryInfo = { },
-                onStartCatchup = { },
-                onToggleFavorite = { }
+                onOpenChannelBrowser = { },
+                onToggleStats = { },
+                onOpenQuickActions = { },
+                externalPlayerBusy = false,
+                onOpenExternal = { },
+                visibilityKey = 0L,
+                enabled = true
             )
         }
     }

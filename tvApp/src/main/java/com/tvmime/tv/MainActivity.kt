@@ -74,7 +74,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         ) {
             Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
                 SettingsScreen(
-                    onDismiss = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
+                    channelCount = viewModel.channels.value.size, categoryCount = viewModel.categories.value.size,
                     showClockOverlay = showClockOverlay,
                     onToggleClockOverlay = { viewModel.toggleClockOverlay() }
                 )
