@@ -139,3 +139,16 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 > [!NOTE]
 > **Radical 3D UI / Game Engine Integration**
 > Once the core KMP engine and baseline Jetpack Compose UI are rock-solid, explore ripping off the Compose layer and plugging the shared Kotlin engine into a game engine (**Unity** or **Godot**) via native bridging.
+
+---
+
+### Sprint 6: "Frankenstein" UI Transplant (Sohva-TV Parity)
+- **The Goal:** Wholesale copy the highly-optimized Jetpack Compose UI architectures from the `Sohva-TV` open source repository to achieve immediate 10-foot UI performance and aesthetic parity.
+- **The Rationale:** Bypasses manual trial-and-error prompting for layout and performance tuning (e.g. `TvLazyVerticalGrid` stuttering). Sohva-TV has solved Android TV focus management, typography spacing, and hardware performance.
+- **The Method (Gut & Wire):**
+  1. Extract `TvUiComponents.kt` and `StreamMateTheme.kt` to act as the aesthetic foundation.
+  2. Gut the current `tvApp/src/main/java/com/tvmime/tv/ui` layer.
+  3. Transplant Sohva-TV's `PlayerChrome.kt`, `GuideGrid.kt`, and `HomeScreen.kt` into the module.
+  4. Wire TVMime's robust backend (`TvMainViewModel`, Room DB, `CloudSyncScreen`) to feed these new UI surfaces.
+  5. Refactor the ExoPlayer implementation if Sohva-TV's approach (e.g., Media3 `PlaybackService`) provides better performance or background playback capabilities.
+- **The Follow-Up:** Once complete, we will scrub remaining generic branding and surgically alter colors/icons to match TVMime's ultimate vision.
