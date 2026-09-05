@@ -3,33 +3,22 @@ package com.tvmime.tv
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.tvmime.theme.DesignSystemTokens
+import com.tvmime.tv.ui.common.TvMimeTheme
 import com.tvmime.tv.ui.TvMimeLiveScreen
-import com.tvmime.tv.ui.player.TvVideoPlayer
 import com.tvmime.tv.ui.settings.SettingsScreen
 import com.tvmime.tv.ui.sync.CloudSyncScreen
 import com.tvmime.tv.viewmodel.TvMainViewModel
 import com.tvmime.tv.viewmodel.TvNavDestination
 import com.tvmime.tv.viewmodel.TvOverlayState
-import kotlinx.coroutines.delay
-
-import com.tvmime.tv.ui.common.TvMimeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,168 +34,23 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
     val bgColor = Color.Black
+    val overlayState by viewModel.overlayState.collectAsStateWithLifecycle()
+    val currentDestination by viewModel.currentDestination.collectAsStateWithLifecycle()
     val activePortals by viewModel.activePortals.collectAsStateWithLifecycle()
     val allPortals by viewModel.allPortals.collectAsStateWithLifecycle()
     val syncProgress by viewModel.syncProgress.collectAsStateWithLifecycle()
-    val categories by viewModel.categories.collectAsStateWithLifecycle()
-    val channels by viewModel.channels.collectAsStateWithLifecycle()
-    val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
-    val selectedChannel by viewModel.selectedChannel.collectAsStateWithLifecycle()
-    val playingChannel by viewModel.playingChannel.collectAsStateWithLifecycle()
-    val currentPlaybackUrl by viewModel.currentPlaybackUrl.collectAsStateWithLifecycle()
-    val epgPrograms by viewModel.epgPrograms.collectAsStateWithLifecycle()
     val showClockOverlay by viewModel.showClockOverlay.collectAsStateWithLifecycle()
-    val autoHideOsdSeconds by viewModel.autoHideOsdSeconds.collectAsStateWithLifecycle()
-    val enableLastChannelZap by viewModel.enableLastChannelZap.collectAsStateWithLifecycle()
-    val overlayState by viewModel.overlayState.collectAsStateWithLifecycle()
-    val currentDestination by viewModel.currentDestination.collectAsStateWithLifecycle()
 
-    val rootFocusRequester = remember { FocusRequester() }
-    val playerFocusRequester = remember { FocusRequester() }
-    val hudFocusRequester = remember { FocusRequester() }
-    val channelListFocusRequester = remember { FocusRequester() }
-    val settingsFocusRequester = remember { FocusRequester() }
-    val guideFocusRequester = remember { FocusRequester() }
-
-    val categoryListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
-    val channelListState = androidx.tv.foundation.lazy.list.rememberTvLazyListState()
-
-    // First-Run Wizard & Boot Flow
-    val context = androidx.compose.ui.platform.LocalContext.current
-    LaunchedEffect(activePortals) {
-        if (activePortals != null && activePortals!!.isNotEmpty()) {
-            viewModel.syncCurrentPortal()
-            com.tvmime.tv.sync.SyncWorkManager.scheduleBackgroundSync(context, 12L)
-        }
-    }
-    
-    var dismissedOnboarding by remember { mutableStateOf(false) }
-
-    if (activePortals == null) {
-        // Still loading from Room Database, show splash or black screen
-        Box(modifier = Modifier.fillMaxSize().background(Color.Black))
-        return
-    }
-
-    if (activePortals!!.isEmpty() && !dismissedOnboarding) {
-        com.tvmime.tv.ui.onboarding.OnboardingScreen(
-            viewModel = viewModel,
-            onComplete = { 
-                 dismissedOnboarding = true 
-                 viewModel.syncCurrentPortal()
-                 viewModel.setOverlayState(TvOverlayState.CHANNEL_LIST)
-            },
-            modifier = Modifier.fillMaxSize()
-        )
-        return
-    }
-
-    // Handle Back Button based on Overlay State
-    BackHandler(enabled = overlayState != TvOverlayState.HIDDEN) {
-        viewModel.setOverlayState(TvOverlayState.HIDDEN)
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(bgColor)
-            .onKeyEvent { event ->
-                if (event.type == KeyEventType.KeyDown) {
-                    when (event.nativeKeyEvent.keyCode) {
-                        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                            if (overlayState == TvOverlayState.HIDDEN) {
-                                viewModel.setOverlayState(TvOverlayState.HUD)
-                                return@onKeyEvent true
-                            }
-                        }
-                        KeyEvent.KEYCODE_DPAD_LEFT -> {
-                            if (overlayState == TvOverlayState.HIDDEN) {
-                                viewModel.setOverlayState(TvOverlayState.CHANNEL_LIST)
-                                return@onKeyEvent true
-                            } else if (overlayState == TvOverlayState.CHANNEL_LIST) {
-                                viewModel.setOverlayState(TvOverlayState.HIDDEN)
-                                return@onKeyEvent true
-                            }
-                        }
-                        KeyEvent.KEYCODE_DPAD_UP -> {
-                            if (overlayState == TvOverlayState.HIDDEN) {
-                                viewModel.zapNext()
-                                viewModel.setOverlayState(TvOverlayState.HUD)
-                                return@onKeyEvent true
-                            }
-                        }
-                        KeyEvent.KEYCODE_DPAD_DOWN -> {
-                            if (overlayState == TvOverlayState.HIDDEN) {
-                                viewModel.zapPrevious()
-                                viewModel.setOverlayState(TvOverlayState.HUD)
-                                return@onKeyEvent true
-                            }
-                        }
-
-                        KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                            if (overlayState == TvOverlayState.HIDDEN && enableLastChannelZap) {
-                                viewModel.toggleLastChannel()
-                                viewModel.setOverlayState(TvOverlayState.HUD)
-                                return@onKeyEvent true
-                            }
-                        }
-                        KeyEvent.KEYCODE_MENU -> {
-                            if (overlayState == TvOverlayState.HIDDEN) {
-                                viewModel.setOverlayState(TvOverlayState.SETTINGS)
-                                return@onKeyEvent true
-                            }
-                        }
-                    }
-                }
-                false
-            }
-            .focusRequester(rootFocusRequester)
-            .focusable()
-    ) {
-        // Base Layer: Perpetual Video Player
-        TvVideoPlayer(
-            channel = playingChannel,
-            playbackUrl = currentPlaybackUrl,
-            isFullscreen = true,
-            onToggleFullscreen = { },
-            onPlayerError = { errMsg ->
-                viewModel.setPlayerError(errMsg)
-            },
-            onAutoSkipNext = {
-                viewModel.zapNext()
-            },
-            modifier = Modifier.fillMaxSize()
-        )
-
-        // Z-Index 1: Sohva-TV Ported Overlays (HUD, Guide, etc)
-        com.tvmime.tv.ui.TvMimeLiveScreen(viewModel)
-            visible = overlayState == TvOverlayState.VOD,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300)),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
-                com.tvmime.tv.ui.vod.VodScreen(
-                    title = if (currentDestination == TvNavDestination.MOVIES) "Movies" else "TV Series",
-                    categories = categories,
-                    selectedCategory = selectedCategory,
-                    onSelectCategory = { viewModel.selectCategory(it) },
-                    items = channels,
-                    onPlayItem = { item ->
-                        viewModel.playChannel(item)
-                        viewModel.setOverlayState(TvOverlayState.HIDDEN)
-                    },
-                    onToggleFavorite = { viewModel.toggleFavorite(it) },
-                    modifier = Modifier.fillMaxSize() // Usually VOD has its own focus internally
-                )
-            }
-        }
+    Box(modifier = Modifier.fillMaxSize().background(bgColor)) {
         
+        // Z-Index 0/1: Live TV Engine (Player & Overlays)
+        if (currentDestination == TvNavDestination.LIVE_TV) {
+            TvMimeLiveScreen(viewModel)
+        }
+
         // Overlay: Cloud Sync
         AnimatedVisibility(
             visible = overlayState == TvOverlayState.CLOUD_SYNC,
-            enter = fadeIn(animationSpec = tween(300)),
-            exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxSize()
         ) {
             Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
@@ -226,43 +70,15 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
         // Overlay: Settings
         AnimatedVisibility(
             visible = overlayState == TvOverlayState.SETTINGS,
-            enter = slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) + fadeIn(),
-            exit = slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) + fadeOut(),
-            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterEnd)
+            modifier = Modifier.fillMaxSize()
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.5f)
-                    .background(Color(0xFA05050A))
-            ) {
+            Box(modifier = Modifier.fillMaxSize().background(Color(0xE605050A))) {
                 SettingsScreen(
-                    channelCount = channels.size,
-                    categoryCount = categories.size,
+                    onDismiss = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
                     showClockOverlay = showClockOverlay,
-                    autoHideOsdSeconds = autoHideOsdSeconds,
-                    enableLastChannelZap = enableLastChannelZap,
-                    onToggleClockOverlay = { viewModel.setShowClockOverlay(!showClockOverlay) },
-                    onChangeAutoHideOsdSeconds = { viewModel.setAutoHideOsdSeconds(it) },
-                    onToggleLastChannelZap = { viewModel.setEnableLastChannelZap(!enableLastChannelZap) },
-                    modifier = Modifier.fillMaxSize().focusRequester(settingsFocusRequester)
+                    onToggleClockOverlay = { viewModel.toggleClockOverlay() }
                 )
             }
-        }
-    }
-
-    LaunchedEffect(overlayState) {
-        delay(100) // Small delay to let AnimatedVisibility mount the nodes
-        try {
-            when (overlayState) {
-                TvOverlayState.HIDDEN -> rootFocusRequester.requestFocus()
-                TvOverlayState.CHANNEL_LIST -> channelListFocusRequester.requestFocus()
-                TvOverlayState.SETTINGS -> settingsFocusRequester.requestFocus()
-                TvOverlayState.GUIDE -> guideFocusRequester.requestFocus()
-                else -> {}
-            }
-        } catch (e: Exception) {
-            // Ignore if not mountable yet
         }
     }
 }
