@@ -142,7 +142,7 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 
 ---
 
-### Sprint 6: "Frankenstein" UI Transplant (Sohva-TV Parity)
+### Sprint 6: "Frankenstein" UI Transplant (Sohva-TV Parity) [COMPLETED]
 - **The Goal:** Wholesale copy the highly-optimized Jetpack Compose UI architectures from the `Sohva-TV` open source repository to achieve immediate 10-foot UI performance and aesthetic parity.
 - **The Rationale:** Bypasses manual trial-and-error prompting for layout and performance tuning (e.g. `TvLazyVerticalGrid` stuttering). Sohva-TV has solved Android TV focus management, typography spacing, and hardware performance.
 - **The Method (Gut & Wire):**
