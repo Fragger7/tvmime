@@ -3,135 +3,38 @@
 > **Repository**: `https://github.com/Fragger7/tvmime.git`  
 > **Canonical Root**: `/Users/admin/Development/tvmime`  
 > **Production Web**: `https://tvmime.vercel.app`  
-> **Direct TV APK**: `https://tvmime.vercel.app/tv.apk`  
-> **Releases Page**: `https://github.com/Fragger7/tvmime/releases`  
 
 **ATTENTION ALL AI AGENTS:** Read this document before modifying the TVMime codebase.
 
-
 ## 1. Project Paradigm
 - **Goal:** Build the fastest, most beautiful IPTV Player for Android TV and Android Mobile.
-- **Architecture:** Kotlin Multiplatform (KMP). Do NOT write Android-specific dependencies in the `shared/` module (e.g., no `OkHttp` or `android.util.Log` in the common codebase). Use `Ktor` and Napier for cross-platform support.
-- **UI Framework:** Jetpack Compose (Material 3) and `androidx.tv` (Compose for TV). Do NOT use legacy Leanback XML fragments.
+- **Architecture:** Kotlin Multiplatform (KMP). Do NOT write Android-specific dependencies in the `shared/` module. Use `Ktor` and Napier for cross-platform support.
+- **UI Framework:** Jetpack Compose (Material 3) and `androidx.tv`. Do NOT use legacy XML fragments.
 
 ## 2. Design System Constraints
 - **Visuals:** The app uses a strict "Deep Black & Crimson Red" color palette with flat translucency. 
-- **Reference:** Always refer to `mockups/tv_livetv_red_black.jpg` for the canonical look. Do NOT introduce heavy 3D geometries or real-time blurs that will kill 60fps performance on $30 Firesticks.
-- **Shared Tokens:** Ensure all Compose UI components use the centralized `DesignSystemTokens` from the `shared` module.
 
-## 3. Critical IPTV Domain Knowledge
-- **OOM Prevention (CRITICAL):** IPTV provider JSONs can be 50MB+. You CANNOT use `Gson` or `Moshi` to deserialize the entire response into RAM. You MUST use low-level token-by-token streaming (e.g., `JsonReader`) and insert directly into the Room Database.
-- **Network Evasion:** Providers block scraping. All Ktor requests to IPTV portals must spoof user-agents (e.g., `IPTVSmartersPro/1.1.1`).
-- **Player Errors:** Handle HTTP 456/884 gracefully as "Stream Egress Disabled", not as a generic crash. ExoPlayer must use a custom DataSource Factory for the User-Agent.
+## 3. The History & The Pivot (V2 -> V3)
+- **The V2 Failure:** We attempted to transplant the `Sohva-TV` UI entirely over the TVMime backend. It resulted in a brittle "Frankenstein" architecture full of dependency conflicts (Coil2 vs Coil3, missing generic resources) that could not compile cleanly through the CI/CD pipeline.
+- **The V3 Pivot:** We have aborted V2. We are now executing the **V3 Master Surgery**. We will measure a billion times and cut once. We will build a highly scalable, Dagger Hilt injected, dual-engine (ExoPlayer + libmpv) architecture with a local proxy for network evasion, based on the best concepts from `StreamVault`, `OwnTV`, and `IPTVMine-Pro`.
 
-## 4. Current State & Feature Inventory (Build 32 / v1.2.2)
-- **Live TV Player & Architecture ("The Player IS The App")**:
-  - The video player runs perpetually at Z-index 0. No mobile-style navigation drawer breaks the viewing experience.
-  - All secondary interfaces (Channel List, HUD, Settings, EPG Guide) render as translucent glass overlays on top of the live video.
-  - Hardware-accelerated Media3 (ExoPlayer) with dynamic buffer profiles (Fast Zap profile with 500ms initial playback vs. Balanced 4K profile).
-  - Black Screen Minimizer: Retains previous video frame until new stream decoder initializes.
-  - Top Bar: Channel number (`CH X`), Channel Name, Live Resolution Badge (`1080p`, `4K`), Active Playlist badge with active-to-max connection tally (`$activeCons/$maxCons Cons`) and status indicator dot.
-  - Dedicated Clock Overlay: Independent corner pill in top-right corner (`h:mm a`), updates every 10s, toggled via settings.
-  - Bottom Controls: Play/Pause, Aspect Ratio (`FIT`/`FILL`/`ZOOM`), Audio Track modal sheet, Subtitle modal sheet, Telemetry HUD toggle, Favorite toggle, TV Guide launcher, and 1-Click Stream Issue Reporter to Firestore.
-  - Telemetry HUD: Real-time bitrate, stream host/IP, buffer depth & cached percentage, video decoder, and audio track.
-  - **Auto-Recovery & Dynamic Failover (v1.2.2)**: Auto-switches between `.ts` and `.m3u8` container extensions upon demuxer/playback errors. Drops active TCP sockets (`stop()`, `clearMediaItems()`) prior to tuning to obey strict `max_connections: 1` IPTV limits.
-  - **Visual Error Guidance Card (v1.2.2)**: Immediately catches HTTP 404, 403, and 456/884 egress blocks, dismisses perpetual buffering spinners, and surfaces an on-screen guidance banner prompting user navigation.
+## 4. Next Agent Hand-Off: The Research Fleet
+The immediate next step for any agent picking up this project is to execute the deep research mandate. You must use autonomous fanning to read the actual code execution paths of the open-source giants cloned in the `scratch/` directory.
 
-- **Streaming Catalog Ingestion & Dummy Header Pruning (v1.2.2)**:
-  - `StreamingCatalogParser.kt` uses low-level `JsonReader` token streaming directly into Room DB to prevent OOMs on 50MB+ catalogs.
-  - Integrated regex sanitization (`^[#=\-_~*]{3,}.*|.*[#=\-_~*]{3,}$`) to discard fake separator headers (e.g., `##### 4K SPORTS #####`), preventing broken 404 stream links.
+### Exact Prompts for the User / Agent:
+To restart this work, the User should run the `/teamwork-preview` or `/goal` command with the following explicit prompt:
 
-- **Multi-Portal Cloud Sync (v1.2.0 - v1.2.2)**:
-  - CloudSync overlay pane with Firebase Firestore integration for syncing multiple IPTV portals across devices.
-  - Full cleartext traffic configuration (`network_security_config.xml`) enabled for unencrypted edge CDN stream redirects.
+```text
+/goal (or /teamwork-preview)
+I need to spin up a fleet of research agents to execute a deep, file-by-file static analysis of the three IPTV repositories cloned in /Users/admin/.gemini/antigravity-cli/brain/f0f5fec6-8870-43fc-930a-0ee6c7ee712b/scratch/repos/. 
 
-- **D-Pad Remote Control Matrix (`tvApp/.../MainActivity.kt`)**:
-  - `[ CENTER / OK ]`: When overlays are hidden, brings up the Bottom HUD and playback controls; selects items when an overlay is open.
-  - `[ UP / DOWN ]`: While HUD is hidden, immediately zaps to the next or previous channel in the current playlist (`zapNext()` / `zapPrevious()`).
-  - `[ LEFT ]`: Slides out the Master Channel List overlay with categories in column 1 and channels in column 2.
-  - `[ RIGHT ]`: Last Channel Quick Zap—instantly swaps between current and previously tuned channel with animated floating toast banner.
-  - `[ MENU ]`: Opens the Settings overlay directly.
-  - `[ BACK ]`: Dismisses active overlays and returns focus to fullscreen playback without exiting the application accidentally.
+Agent 1 (OwnTV): Read OwnTV's PlayerModule.kt and libmpv/ExoPlayer wrappers. Explain exactly how they hand off streams between the dual engines.
+Agent 2 (StreamVault): Read StreamVault's database layer. Explain exactly how they use Kotlin Coroutines and Room to ingest 50MB M3U playlists without triggering Out-Of-Memory errors.
+Agent 3 (IPTVMine-Pro): Read IPTVMine-Pro's OkHttp layer. Explain exactly how they spoof User-Agents and bypass HTTP redirects to evade provider blocks.
 
-- **Focus Management & Trap Prevention**:
-  - Dedicated `FocusRequester` matrix in `MainActivity.kt` (`playerFocusRequester`, `hudFocusRequester`, `channelListFocusRequester`, `settingsFocusRequester`).
-  - `LaunchedEffect(overlayState)` requests focus programmatically on state transitions, preventing lost-focus and unnavigable remotes on Android TV / Fire TV sticks.
+Consolidate these findings into a master document named TVMIME_V3_ARCHITECTURE_BLUEPRINT.md that proves technically how these three systems will be merged into TVMime using Dagger Hilt.
+```
 
-- **Category Filtering & Long-Press Hiding**:
-  - `TvPreferencesManager.kt` persists user-hidden category IDs (`Set<String>`) in `SharedPreferences`.
-  - `TvMainViewModel.kt`'s `categories` StateFlow combines active portal, destination, and hidden categories in real-time.
-  - Long-press (`onLongClick`) on category cards in `LiveTvScreen.kt` instantly hides unwanted categories from the catalog.
-
-- **TiviMate-Style EPG Grid Guide (`tvApp/.../ui/guide/TvGuideScreen.kt`)**:
-  - Interactive grid with 30-minute time intervals, channel rows, program progress indicators, and PIP mini-preview player.
-
-- **Settings & Preferences (`tvApp/.../ui/settings/SettingsScreen.kt`, `TvPreferencesManager.kt`)**:
-  - D-Pad scrollable `TvLazyColumn`.
-  - Preferences for Clock Overlay, OSD Auto-Hide Timeout (3s / 5s / 10s / Always On), and Last Channel Zap.
-  - Hardware & Performance Intelligence display auto-tuned to device RAM/VPU.
-  - In-place OTA updater checking GitHub releases.
-
-- **Cloud Presence & Web Admin (`adminWeb/`)**:
-  - React 19 + Tailwind CSS v4 running on `https://tvmime.vercel.app`.
-  - Firebase Auth & Firestore syncing portal credentials to Room DB.
-  - Serverless proxy `/api/test-portal` for CORS/mixed-content IPTV checks.
-  - Serverless endpoint `/api/version` querying GitHub releases with robust fallbacks.
-  - Direct download cards for `tv.apk` and `mobile.apk`.
-
-## 5. Key Files Map for Quick Navigation
-| Component | Path |
-|---|---|
-| TV App Main & Nav | `tvApp/src/main/java/com/tvmime/tv/MainActivity.kt` |
-| Video Player & HUD | `tvApp/src/main/java/com/tvmime/tv/ui/player/TvVideoPlayer.kt` |
-| TV Guide EPG Grid | `tvApp/src/main/java/com/tvmime/tv/ui/guide/TvGuideScreen.kt` |
-| TV Settings Screen | `tvApp/src/main/java/com/tvmime/tv/ui/settings/SettingsScreen.kt` |
-| Preferences Manager | `tvApp/src/main/java/com/tvmime/tv/settings/TvPreferencesManager.kt` |
-| Main ViewModel | `tvApp/src/main/java/com/tvmime/tv/viewmodel/TvMainViewModel.kt` |
-| Shared Design Tokens | `shared/src/commonMain/kotlin/com/tvmime/theme/DesignSystemTokens.kt` |
-| Xtream Repo & EPG | `shared/src/commonMain/kotlin/com/tvmime/repository/XtreamRepository.kt` |
-| Room Database | `shared/src/commonMain/kotlin/com/tvmime/db/AppDatabase.kt` |
-| CI/CD Build Workflow | `.github/workflows/build.yml` |
-
-## 6. Conventional Commits & Automated Versioning Rules
-All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventional Commit prefixes:
-- `feat:` or `feat(scope):` - User-facing features, new screens, new capabilities (Triggers **MINOR** bump: `1.x.0`).
-- `fix:` or `fix(scope):` - Bug fixes, error handling, edge cases (Triggers **PATCH** bump: `1.0.x`).
-- `perf:` or `perf(scope):` - Performance optimizations, buffer tuning, memory improvements (Triggers **PATCH** bump: `1.0.x`).
-- `feat!:` or `BREAKING CHANGE:` - Incompatible schema migrations or protocol breaking changes (Triggers **MAJOR** bump: `x.0.0`).
-- `docs:`, `chore:`, `style:`, `refactor:` - Documentation, dependency maintenance, refactors without external impact (No version bump).
-- **Android Version Code**: Strictly monotonic integer derived from `git rev-list --count HEAD` so every single commit anywhere guarantees a higher build number than previous builds.
-
-## 7. Next Agent Hand-Off: What Is Left (Prioritized)
-### ⚠️ ARCHITECTURE PIVOT & SOHVA-TV TRANSPLANT (COMPLETED)
-We have successfully executed the **"Sohva-TV UI Transplant"**. We abandoned our initial unoptimized `TvNavigationDrawer` and `AndroidView` wrapper and fully integrated Sohva-TV's highly-optimized Compose architecture and `MediaSessionService`.
-*   **The Blueprint:** You can read `SOHVA_TRANSPLANT_PLAN.md` in the root directory to understand the history of this architectural shift.
-*   **The Paradigm:** The app uses Sohva-TV's UI (`TvUiComponents`, `PlayerOverlays`, `GuideGrid`) and Player (`TvMimePlaybackService`), but is heavily wired to **our TVMime Room Database (`TvMainViewModel`)** via `TvMimeLiveScreen.kt`. Do NOT attempt to build custom EPG grids from scratch; always utilize the imported Sohva UI components for 10-foot UI performance.
-
-### Implementation Tasks Completed:
-- **Pass 4: Systems-Level Architecture (The Premium Tier)**: Background Sync Workers, EPG Local Time-Shift, Catch-Up TV (DVR), and M3U Fallback Pipeline are fully implemented and functionally verified against raw `.ts` CDNs.
-- **Pass 5.1: Auth & Polish**: Excised the broken QR UI and eliminated the blank screen flash on boot by making the `activePortals` flow nullable during Room DB initialization.
-
-### Next Agent Hand-Off: What Is Left (Prioritized):
-1. **Pass 5.2: Mobile App (`androidApp`) Touch EPG**: (Currently Paused/Ignored by User, but remains next logical step). Adapt the TV Grid to a touch-optimized UI.
-2. **Backlog Priority 1 - Sportmate Live Hub (Dedicated Sports Overlay)**: 
-   - Build a `SPORTS_HUB` overlay leveraging a third-party sports API (e.g., TheSportsDB) matched against our local IPTV stream database using the `EventChannelMatcher.kt` logic found in the `Sohva-TV` reference repo.
-   - Assemble dynamic Jetpack Compose graphics utilizing free transparent PNGs from CDNs rendered via `Coil`, utilizing `DeviceCapabilityDetector` to adjust graphics load for low-end dongles.
-3. **Backlog Priority 2 - Titan-Tier IPTV Features**:
-   - **Multi-View:** 2-9 simultaneous ExoPlayer streams.
-   - **Auto-Framerate Matching (AFR):** Dynamic HDMI refresh rate OS-hooks.
-   - **Local Timeshift Buffering:** Writing live `.ts` streams to USB cache for rewind/pause.
-   - **Trakt.tv VOD Sync:** Global sync for movie/series tracking.
-   - **D-Pad Macro Keymapping:** Custom user-defined remote mapping.
-
-## 8. Development Environment & Testing Guide
-- **Web Admin Development**:
-  - Dev server runs on port 3000 via root `npm run dev` (proxied to `tvmime/adminWeb`).
-  - Check health at `http://localhost:3000`.
-- **Android Builds**:
-  - Gradle builds are executed remotely via GitHub Actions (`.github/workflows/build.yml`) on tag push or manual workflow dispatch.
-  - The local container is a Node.js dev container; do NOT attempt to invoke `./gradlew` locally without an installed Android SDK.
-- **Git Push Workflow**:
-  - Repository URL: `https://${GITHUB_PAT}@github.com/Fragger7/tvmime.git`.
-  - Always verify code compiles and lints with `npm run build` and `npm run lint` before committing.
-  - Use conventional commit messages (`feat:`, `fix:`, `perf:`, `docs:`) to maintain automated semver calculation.
-
+## 5. CI/CD Build Rules
+- All compilation happens remotely via `.github/workflows/build.yml`.
+- You MUST use Conventional Commits (`feat:`, `fix:`) so the pipeline bumps the version correctly.

@@ -152,3 +152,15 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
   4. Wire TVMime's robust backend (`TvMainViewModel`, Room DB, `CloudSyncScreen`) to feed these new UI surfaces.
   5. Refactor the ExoPlayer implementation if Sohva-TV's approach (e.g., Media3 `PlaybackService`) provides better performance or background playback capabilities.
 - **The Follow-Up:** Once complete, we will scrub remaining generic branding and surgically alter colors/icons to match TVMime's ultimate vision.
+
+---
+
+## 🔥 ABORT CODE: The V2 Teardown & V3 Master Surgery Pivot 🔥
+> **Date of Pivot:** September 2026
+> **The Catalyst:** Sprint 6 (The Sohva-TV Transplant) exposed irreconcilable differences between the TVMime foundation and the imported Sohva UI. The resulting "Frankenstein" architecture suffered from cascading Kotlin compilation failures, Coil 2 vs Coil 3 incompatibilities, and an unstable Room Database dependency graph.
+> **The Decision:** We have halted all active feature development (including the Sports Hub and Touch EPG) to execute a true "Measure a Billion Times, Cut Once" rebuild. We are stripping TVMime down to its absolute bare metal and engineering a ground-up architecture based on a deep-dive analysis of the best open-source IPTV giants (`OwnTV`, `StreamVault`, `IPTVMine-Pro`).
+
+### Sprint 7: TVMime V3 (The Foundation Re-Architecture)
+- **Step 1: The Autonomous Research Fleet:** We will fan out autonomous AI agents to literally read the execution paths, database ingestion chunks, and `LoadControl` buffers of `OwnTV` (for their dual ExoPlayer/libmpv engine) and `StreamVault` (for their massive M3U Room DB threading).
+- **Step 2: The Evasion Proxy & Hilt DI:** We will abandon the monolithic `TvMainViewModel`. We will implement Dagger Hilt for modularity, and we will build a local proxy (`OkHttp` Interceptor) that strictly spoofs headers to defeat HTTP 403/456 blocks from aggressive IPTV providers.
+- **Step 3: The Native Custom UI:** No more hijacked `R.drawable` resources. We will build a bespoke, featherweight Jetpack Compose interface adhering exclusively to the Deep Black & Crimson Red design language.
