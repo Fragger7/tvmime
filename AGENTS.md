@@ -102,10 +102,10 @@ All agents (Antigravity, Claude Code, Cursor, Copilot, web) MUST use Conventiona
 - **Android Version Code**: Strictly monotonic integer derived from `git rev-list --count HEAD` so every single commit anywhere guarantees a higher build number than previous builds.
 
 ## 7. Next Agent Hand-Off: What Is Left (Prioritized)
-### ⚠️ ARCHITECTURE PIVOT & REFERENCE REPO (MUST READ)
-We have officially executed the **"Sohva-TV Pivot"**. Do NOT use standard `TvNavigationDrawer` or separate Jetpack Compose destinations for Live TV. We are moving to a "Player IS The App" architecture.
-*   **The Blueprint:** If you need to understand how to handle D-Pad focus state machines, ExoPlayer lifecycle hooks, or M3U ingestion, read the reference repository: `https://github.com/Macstered/Sohva-TV`
-*   **The Paradigm:** The app is a single `AndroidView` wrapping ExoPlayer at Z-index 0. D-Pad keys are intercepted at the raw View level (`setOnKeyListener`) to mutate booleans (`channelBrowserVisible`, `chromeVisible`). These booleans render lightweight translucent Compose panes on top of the playing video.
+### ⚠️ ARCHITECTURE PIVOT & SOHVA-TV TRANSPLANT (CRITICAL MUST READ)
+We have officially executed the **"Sohva-TV Pivot"**. We are in the middle of a massive 1-to-1 UI/UX transplant, abandoning our initial `TvNavigationDrawer` and `AndroidView` wrapper for Sohva-TV's highly-optimized Compose architecture and `MediaSessionService`.
+*   **The Blueprint:** You MUST read `SOHVA_TRANSPLANT_PLAN.md` in the root directory before touching any code. It dictates exactly which phase of the transplant we are in, what has been gutted, and what remains to be copied.
+*   **The Paradigm:** The app uses Sohva-TV's UI (`TvUiComponents`, `PlayerChrome`, `GuideGrid`) and Player (`StreamMatePlaybackService`), but is heavily wired to **our TVMime Room Database (`TvMainViewModel`)**. Do NOT copy Sohva's flattened database schema; adapt their UI to our relational multi-portal schema.
 
 ### Implementation Tasks Completed:
 - **Pass 4: Systems-Level Architecture (The Premium Tier)**: Background Sync Workers, EPG Local Time-Shift, Catch-Up TV (DVR), and M3U Fallback Pipeline are fully implemented and functionally verified against raw `.ts` CDNs.
