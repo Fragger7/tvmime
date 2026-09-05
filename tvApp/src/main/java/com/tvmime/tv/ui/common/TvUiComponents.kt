@@ -414,11 +414,13 @@ fun TvUrlField(
     LaunchedEffect(restoreDisplayFocus) {
         if (restoreDisplayFocus) {
             repeat(FOCUS_RESTORE_ATTEMPTS) {
-                displayFocusRequester.requestFocus()
-                restoreDisplayFocus = false
-                return@LaunchedEffect
+                withFrameNanos { }
+                try {
+                    displayFocusRequester.requestFocus()
+                    restoreDisplayFocus = false
+                    return@LaunchedEffect
+                } catch(e: Exception) {}
 
-                }
             }
             restoreDisplayFocus = false
         }

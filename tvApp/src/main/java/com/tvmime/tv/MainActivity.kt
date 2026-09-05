@@ -76,7 +76,7 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
                 SettingsScreen(
                     channelCount = viewModel.channels.value.size, categoryCount = viewModel.categories.value.size,
                     showClockOverlay = showClockOverlay,
-                    onToggleClockOverlay = { viewModel.toggleClockOverlay() }
+                    onToggleClockOverlay = { viewModel.setShowClockOverlay(!showClockOverlay) }
                 )
             }
         }

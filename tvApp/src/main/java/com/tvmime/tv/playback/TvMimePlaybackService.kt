@@ -133,7 +133,7 @@ class TvMimePlaybackService : MediaSessionService() {
                         sourceId = channel.portalId,
                         channelId = channel.id,
                         channelName = channel.name,
-                        streamUrl = "${portal.url}/live/${portal.username}/${portal.password}/${channel.streamId}.${channel.containerExtension}",
+                        streamUrl = "${portal.serverUrl}/live/${portal.username}/${portal.password}/${channel.streamId}.${channel.containerExtension}",
                         headers = mapOf("User-Agent" to "IPTVSmartersPro/1.1.1"),
                         connectionLimit = 1
                     )
