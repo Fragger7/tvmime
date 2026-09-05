@@ -37,11 +37,11 @@ Sohva-TV uses a `MediaSessionService` which is vastly superior to our `AndroidVi
 - [ ] Copy Sohva-TV's `List<Destination>` manual backstack routing logic into `MainActivity.kt` (or a dedicated `AppNavigation.kt`).
 - [ ] Ensure D-Pad key events properly push/pop the destination stack.
 
-## Phase 5: Sportmate Hub Integration
+## Phase 5: Sportmate Hub Integration (MOVED TO BACKLOG)
 - [ ] Copy the `sportmate` module.
 - [ ] Connect `api-sports.io` key input to TVMime Settings screen.
 - [ ] Verify local Room caching (`SportsCacheDao`) operates correctly to avoid free-tier API bans.
 
 ## Phase 6: Brand Scrubbing & Polish
-- [ ] Replace all hardcoded colors in `TvMimeTheme` with TVMime's canonical "Deep Black & Crimson Red" hex codes.
+- [x] Replace all hardcoded colors in `TvMimeTheme` with TVMime's canonical "Deep Black & Crimson Red" hex codes.
 - [ ] Run a final global Regex search for `StreamMate`, `Sohva`, `own.tv`, and remove any lingering strings.

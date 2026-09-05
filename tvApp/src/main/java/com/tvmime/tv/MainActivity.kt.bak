@@ -27,6 +27,7 @@ import com.tvmime.tv.ui.sync.CloudSyncScreen
 import com.tvmime.tv.viewmodel.TvMainViewModel
 import com.tvmime.tv.viewmodel.TvNavDestination
 import com.tvmime.tv.viewmodel.TvOverlayState
+import com.tvmime.tv.ui.hud.TvHudOverlay
 import kotlinx.coroutines.delay
 
 import com.tvmime.tv.ui.common.TvMimeTheme
@@ -178,8 +179,102 @@ fun TVMimeTvApp(viewModel: TvMainViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize()
         )
 
-        // Z-Index 1: Sohva-TV Ported Overlays (HUD, Guide, etc)
-        com.tvmime.tv.ui.TvMimeLiveScreen(viewModel)
+        // Overlay: HUD (Bottom Info Banner)
+        AnimatedVisibility(
+            visible = overlayState == TvOverlayState.HUD,
+            enter = slideInVertically(initialOffsetY = { it }, animationSpec = tween(300)) + fadeIn(),
+            exit = slideOutVertically(targetOffsetY = { it }, animationSpec = tween(300)) + fadeOut(),
+            modifier = Modifier.align(androidx.compose.ui.Alignment.BottomCenter)
+        ) {
+            TvHudOverlay(
+                channel = playingChannel,
+                epgPrograms = epgPrograms,
+                activePortals = activePortals ?: emptyList(),
+                onDismiss = { viewModel.setOverlayState(TvOverlayState.HIDDEN) }
+            )
+        }
+
+        // Overlay: MAIN MENU (Removed as part of Pass 2 Pivot)
+
+
+        // Overlay: Channel List (Left Side Glass Pane)
+        AnimatedVisibility(
+            visible = overlayState == TvOverlayState.CHANNEL_LIST,
+            enter = slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300)) + fadeIn(),
+            exit = slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300)) + fadeOut(),
+            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterStart)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.55f)
+                    .background(Color(0xD90A0A10))
+                    .focusProperties {
+                        // Prevent focus from escaping to the right
+                    }
+            ) {
+                TvMimeLiveScreen(
+                    categories = categories,
+                    selectedCategory = selectedCategory,
+                    onSelectCategory = { viewModel.selectCategory(it) },
+                    onHideCategory = { viewModel.toggleCategoryVisibility(it, true) },
+                    channels = channels,
+                    selectedChannel = selectedChannel,
+                    playingChannel = playingChannel,
+                    onPlayChannel = { 
+                        viewModel.playChannel(it)
+                        viewModel.setOverlayState(TvOverlayState.HIDDEN)
+                    },
+                    onToggleFavorite = { viewModel.toggleFavorite(it) },
+                    isFullscreen = false,
+                    onToggleFullscreen = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
+                    onToggleLastChannel = { viewModel.toggleLastChannel() },
+                    activePortals = activePortals ?: emptyList(),
+                    showClockOverlay = showClockOverlay,
+                    autoHideOsdSeconds = autoHideOsdSeconds,
+                    enableLastChannelZap = enableLastChannelZap,
+                    onSyncPortal = { viewModel.syncCurrentPortal() },
+                    categoryListState = categoryListState,
+                    channelListState = channelListState,
+                    modifier = Modifier.fillMaxSize().focusRequester(channelListFocusRequester)
+                )
+            }
+        }
+
+        // Overlay: TV Guide
+        AnimatedVisibility(
+            visible = overlayState == TvOverlayState.GUIDE,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300)),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xE605050A))
+            ) {
+                com.tvmime.tv.ui.guide.TvGuideScreen(
+                    categories = categories,
+                    selectedCategory = selectedCategory,
+                    onSelectCategory = { viewModel.selectCategory(it) },
+                    channels = channels,
+                    selectedChannel = selectedChannel,
+                    playingChannel = playingChannel,
+                    onPlayChannel = { viewModel.playChannel(it) },
+                    onPlayCatchup = { channel, program -> 
+                        viewModel.playCatchup(channel, program)
+                        viewModel.setOverlayState(TvOverlayState.HIDDEN)
+                    },
+                    onToggleFullscreen = { viewModel.setOverlayState(TvOverlayState.HIDDEN) },
+                    epgPrograms = epgPrograms,
+                    onHideCategory = { cat -> viewModel.toggleCategoryVisibility(cat, true) },
+                    modifier = Modifier.fillMaxSize().focusRequester(guideFocusRequester)
+                )
+            }
+        }
+
+        // Overlay: VOD
+        AnimatedVisibility(
             visible = overlayState == TvOverlayState.VOD,
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(300)),
