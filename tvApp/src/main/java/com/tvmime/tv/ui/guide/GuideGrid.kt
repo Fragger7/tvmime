@@ -53,11 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.tv.material3.Text
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.tvmime.tv.ui.common.TvMimeThemeTokens
-import com.streammate.tv.core.model.ChannelStreamTags
 import com.tvmime.tv.ui.common.tvSurfaceColors
-import com.streammate.tv.iptv.R
 import com.tvmime.tv.ui.guide.GuideTimelineChannel
 import com.tvmime.tv.ui.guide.GuideTimelineProgramme
 import java.time.Instant
@@ -271,8 +269,8 @@ private fun GuideChannelRow(
         Box(modifier = Modifier.width(timelineWidth).fillMaxHeight()) {
             if (channel.programmes.isEmpty()) {
                 ProgrammeCell(
-                    title = stringResource(R.string.guide_no_epg),
-                    subtitle = stringResource(R.string.guide_watch_channel),
+                    title = "No Program Info",
+                    subtitle = "Watch Live",
                     x = 0.dp,
                     width = timelineWidth,
                     selected = selection?.channel?.id == channel.id && selection.programme == null,
@@ -415,7 +413,7 @@ private fun GuideChannelCell(
             // read off the channel name, the same markers the stream switcher
             // shows. Falls back to the group when a name says nothing.
             val streamTags = remember(channel.name) {
-                ChannelStreamTags.read(channel.name).joinToString(" · ") { it.label }
+                ""
             }
             Text(
                 text = streamTags.ifBlank { channel.groupTitle ?: channel.sourceName },
@@ -603,14 +601,14 @@ private fun formatWindowDate(windowStart: Long, timeZoneId: String): String {
 
 @Composable
 private fun formatWindowDay(windowStart: Long, now: Long, timeZoneId: String): String {
-    if (GuideTimeWindow.isAtNow(windowStart, now)) return stringResource(R.string.guide_window_now)
+    if (GuideTimeWindow.isAtNow(windowStart, now)) return "Now"
     val zone = runCatching { ZoneId.of(timeZoneId) }.getOrDefault(ZoneId.systemDefault())
     val day = Instant.ofEpochMilli(windowStart).atZone(zone).toLocalDate()
     val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate()
     return when (day) {
-        today -> stringResource(R.string.guide_window_today)
-        today.plusDays(1) -> stringResource(R.string.guide_window_tomorrow)
-        today.minusDays(1) -> stringResource(R.string.guide_window_yesterday)
+        today -> "Today"
+        today.plusDays(1) -> "Tomorrow"
+        today.minusDays(1) -> "Yesterday"
         else -> ""
     }
 }

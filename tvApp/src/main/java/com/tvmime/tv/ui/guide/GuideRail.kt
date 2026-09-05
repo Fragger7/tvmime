@@ -27,7 +27,6 @@ import com.tvmime.tv.ui.common.TvActionButton
 import com.tvmime.tv.ui.common.TvIcons
 import com.tvmime.tv.ui.common.TvListRow
 import com.tvmime.tv.ui.common.TvUrlField
-import com.streammate.tv.iptv.R
 
 /**
  * The group rail: favourites, everything, the lists someone has made and the

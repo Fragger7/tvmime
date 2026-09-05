@@ -318,7 +318,7 @@ fun TvActionButton(
             // fill flip and the lift. The default indication would also draw
             // at the unlifted bounds, since it sits outside the layer.
             .clickable(
-                interactionSource = null,
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
                 indication = null,
                 enabled = enabled,
                 role = Role.Button,
@@ -414,10 +414,10 @@ fun TvUrlField(
     LaunchedEffect(restoreDisplayFocus) {
         if (restoreDisplayFocus) {
             repeat(FOCUS_RESTORE_ATTEMPTS) {
-                withFrameNanos { }
-                if (displayFocusRequester.requestFocus()) {
-                    restoreDisplayFocus = false
-                    return@LaunchedEffect
+                displayFocusRequester.requestFocus()
+                restoreDisplayFocus = false
+                return@LaunchedEffect
+
                 }
             }
             restoreDisplayFocus = false
@@ -709,7 +709,7 @@ fun TvSurface(
             // fill flip and the lift. The default indication would also draw
             // at the unlifted bounds, since it sits outside the layer.
             .clickable(
-                interactionSource = null,
+                interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
                 indication = null,
                 enabled = enabled,
                 role = Role.Button,

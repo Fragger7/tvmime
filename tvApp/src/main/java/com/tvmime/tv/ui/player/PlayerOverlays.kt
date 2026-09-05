@@ -16,7 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import com.tvmime.tv.ui.common.TvTagTone
 import com.tvmime.tv.ui.common.TvTagChip
 import com.tvmime.tv.ui.common.TvSurface
-import com.streammate.tv.core.model.ChannelStreamTags
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.res.painterResource
@@ -70,15 +69,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Text
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.tvmime.tv.ui.common.TvMimeThemeTokens
 import com.tvmime.tv.ui.common.TvActionButton
 import com.tvmime.tv.ui.common.TvIcons
-import com.streammate.tv.iptv.R
 import com.tvmime.tv.ui.player.EnrichedMetadata
-import com.streammate.tv.iptv.repository.GuideChannel
-import com.streammate.tv.iptv.repository.GuideTimelineChannel
-import com.streammate.tv.iptv.repository.GuideTimelineProgramme
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

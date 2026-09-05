@@ -35,7 +35,6 @@ import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import androidx.tv.material3.Text
 import com.tvmime.tv.ui.common.TvMimeThemeTokens
-import com.streammate.tv.iptv.R
 
 /**
  * What the player can tell us about the stream, for diagnosing a provider that

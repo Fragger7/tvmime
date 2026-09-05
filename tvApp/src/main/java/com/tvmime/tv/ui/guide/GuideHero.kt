@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import com.tvmime.tv.ui.player.EnrichedMetadata
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,14 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Text
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.tvmime.tv.ui.common.TvMimeThemeTokens
 import com.tvmime.tv.ui.common.TvActionButton
 import com.tvmime.tv.ui.common.TvIcons
 import com.tvmime.tv.ui.common.TvTagChip
 import com.tvmime.tv.ui.common.TvTagTone
-import com.streammate.tv.iptv.R
-import com.streammate.tv.iptv.metadata.EnrichedMetadata
 
 /**
  * The hero: what the block under the cursor actually is.
