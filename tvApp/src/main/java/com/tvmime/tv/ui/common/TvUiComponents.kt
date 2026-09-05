@@ -178,7 +178,7 @@ fun SohvaTvBrand(
 ) {
     val palette = TvMimeThemeTokens.palette
     SohvaWordmark(
-        name = stringResource(R.string.brand_sohva_tv),
+        name = "TVMime",
         accent = palette.focus,
         fontSize = fontSize,
         modifier = modifier,
@@ -188,7 +188,7 @@ fun SohvaTvBrand(
 @Composable
 fun SohvaSportBrand(modifier: Modifier = Modifier) {
     SohvaWordmark(
-        name = stringResource(R.string.brand_sohva_sport),
+        name = "TVMime Sports",
         accent = TvMimeThemeTokens.palette.accent,
         fontSize = 30.sp,
         modifier = modifier,
@@ -227,36 +227,36 @@ private fun SohvaWordmark(
  * guarantee it exists at all.
  */
 object TvIcons {
-    val Home: Int = R.drawable.ic_tv_home
-    val Back: Int = R.drawable.ic_tv_back
-    val Aspect: Int = R.drawable.ic_tv_aspect
-    val Audio: Int = R.drawable.ic_tv_audio
-    val Subtitles: Int = R.drawable.ic_tv_subtitles
-    val Stats: Int = R.drawable.ic_tv_stats
-    val ChevronRight: Int = R.drawable.ic_tv_chevron_right
-    val ChevronDown: Int = R.drawable.ic_tv_chevron_down
-    val Lock: Int = R.drawable.ic_tv_lock
-    val Link: Int = R.drawable.ic_tv_link
-    val Key: Int = R.drawable.ic_tv_key
-    val Refresh: Int = R.drawable.ic_tv_refresh
-    val Check: Int = R.drawable.ic_tv_check
-    val Play: Int = R.drawable.ic_tv_play
-    val Pause: Int = R.drawable.ic_tv_pause
-    val Save: Int = R.drawable.ic_tv_save
-    val Settings: Int = R.drawable.ic_tv_settings
-    val Delete: Int = R.drawable.ic_tv_delete
-    val Close: Int = R.drawable.ic_tv_close
-    val Channels: Int = R.drawable.ic_tv_channels
-    val Target: Int = R.drawable.ic_tv_target
-    val Guide: Int = R.drawable.ic_tv_guide
-    val Epg: Int = R.drawable.ic_tv_epg
-    val Info: Int = R.drawable.ic_tv_info
-    val Search: Int = R.drawable.ic_tv_search
-    val Replay: Int = R.drawable.ic_tv_replay
-    val Forward: Int = R.drawable.ic_tv_forward
-    val Rewind: Int = R.drawable.ic_tv_rewind
-    val Star: Int = R.drawable.ic_tv_star
-    val StarOutline: Int = R.drawable.ic_tv_star_outline
+    val Home: Int = android.R.drawable.ic_menu_sort_by_size
+    val Back: Int = android.R.drawable.ic_menu_revert
+    val Aspect: Int = android.R.drawable.ic_menu_crop
+    val Audio: Int = android.R.drawable.ic_media_play
+    val Subtitles: Int = android.R.drawable.ic_dialog_info
+    val Stats: Int = android.R.drawable.ic_menu_info_details
+    val ChevronRight: Int = android.R.drawable.ic_media_play
+    val ChevronDown: Int = android.R.drawable.ic_menu_help
+    val Lock: Int = android.R.drawable.ic_menu_help
+    val Link: Int = android.R.drawable.ic_menu_help
+    val Key: Int = android.R.drawable.ic_menu_help
+    val Refresh: Int = android.R.drawable.ic_menu_help
+    val Check: Int = android.R.drawable.ic_menu_help
+    val Play: Int = android.R.drawable.ic_menu_help
+    val Pause: Int = android.R.drawable.ic_menu_help
+    val Save: Int = android.R.drawable.ic_menu_help
+    val Settings: Int = android.R.drawable.ic_menu_help
+    val Delete: Int = android.R.drawable.ic_menu_help
+    val Close: Int = android.R.drawable.ic_menu_help
+    val Channels: Int = android.R.drawable.ic_menu_help
+    val Target: Int = android.R.drawable.ic_menu_help
+    val Guide: Int = android.R.drawable.ic_menu_help
+    val Epg: Int = android.R.drawable.ic_menu_help
+    val Info: Int = android.R.drawable.ic_menu_help
+    val Search: Int = android.R.drawable.ic_menu_help
+    val Replay: Int = android.R.drawable.ic_menu_help
+    val Forward: Int = android.R.drawable.ic_menu_help
+    val Rewind: Int = android.R.drawable.ic_menu_help
+    val Star: Int = android.R.drawable.ic_menu_help
+    val StarOutline: Int = android.R.drawable.ic_menu_help
 }
 
 /**
