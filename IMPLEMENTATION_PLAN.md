@@ -174,3 +174,10 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 1:** Define the Room Entity `ImportStageEntity` and the `CatalogSyncDao`. This DAO will contain the `@Insert` for 1000-item batch chunks and the raw SQLite `INSERT INTO ... SELECT ... WHERE NOT EXISTS` differential queries.
 - **Step 2:** Build the `BoundedInputStream` and `M3uParser` classes. These will parse the 50MB M3U network streams linearly without buffering the entire string array into RAM.
 - **Step 3:** Build the `SyncManager` repository (provided via Hilt) that orchestrates the streaming parser, batches entities into arrays of 1000, flushes them to the `CatalogSyncDao`, and then executes the final reconciliation transaction.
+
+### Sprint 10: Execution of V3 Phase 3 (OwnTV Dual-Engine Playback)
+- **Step 1:** Inject the `dev.jdtech.mpv:libmpv` library into Gradle.
+- **Step 2:** Define the abstract `TvMimeVideoEngine` interface so the UI layer is completely blind to which engine is actually rendering the video.
+- **Step 3:** Implement the `LivePreviewEngine` (ExoPlayer via Media3) configured with a 500ms `LoadControl` for instant zapping.
+- **Step 4:** Implement the `MainPlayer` (libmpv) to handle heavy VOD files and full-screen streams.
+- **Step 5:** Build the `EngineController` singleton (provided via Dagger Hilt). This controller will receive `play()` commands from the UI and internally manage the `0x80001000` hardware codec claim failure by injecting a 508ms suspension delay when hot-swapping between ExoPlayer and libmpv.
