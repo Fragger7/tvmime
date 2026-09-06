@@ -145,7 +145,49 @@ object MockDomainModule {
     }
 
     @Provides @Singleton fun provideDownloadManager(): com.streamvault.domain.repository.DownloadManager = createMock()
-    @Provides @Singleton fun provideEpgRepository(): com.streamvault.domain.repository.EpgRepository = createMock()
+    @Provides @Singleton fun provideEpgRepository(database: com.tvmime.db.AppDatabase): com.streamvault.domain.repository.EpgRepository {
+        return createMock { method, args ->
+            when (method.name) {
+                "getProgramsForChannel" -> {
+                    val providerId = args?.get(0) as? Long ?: 1L
+                    val channelId = args?.get(1) as? String ?: ""
+                    val startTime = args?.get(2) as? Long ?: 0L
+                    kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(providerId.toString(), channelId, startTime)) { entities ->
+                        entities.map { entity ->
+                            com.streamvault.domain.model.Program(
+                                id = entity.id.hashCode().toLong(),
+                                channelId = entity.epgChannelId,
+                                title = entity.title,
+                                description = entity.description ?: "",
+                                startTime = entity.startEpoch,
+                                endTime = entity.endEpoch,
+                                providerId = providerId
+                            )
+                        }
+                    }
+                }
+                "getNowPlaying" -> {
+                    val providerId = args?.get(0) as? Long ?: 1L
+                    val channelId = args?.get(1) as? String ?: ""
+                    kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(providerId.toString(), channelId, System.currentTimeMillis(), 1)) { entities ->
+                        entities.firstOrNull()?.let { entity ->
+                            com.streamvault.domain.model.Program(
+                                id = entity.id.hashCode().toLong(),
+                                channelId = entity.epgChannelId,
+                                title = entity.title,
+                                description = entity.description ?: "",
+                                startTime = entity.startEpoch,
+                                endTime = entity.endEpoch,
+                                providerId = providerId,
+                                isNowPlaying = true
+                            )
+                        }
+                    }
+                }
+                else -> null
+            }
+        }
+    }
     @Provides @Singleton fun provideEpgSourceRepository(): com.streamvault.domain.repository.EpgSourceRepository = createMock()
     @Provides @Singleton fun provideExternalRatingsRepository(): com.streamvault.domain.repository.ExternalRatingsRepository = createMock()
     @Provides @Singleton fun provideExternalSubtitleRepository(): com.streamvault.domain.repository.ExternalSubtitleRepository = createMock()
@@ -160,8 +202,34 @@ object MockDomainModule {
     @Provides @Singleton fun provideSyncMetadataRepository(): com.streamvault.domain.repository.SyncMetadataRepository = createMock()
     @Provides @Singleton fun provideVodRepository(): com.streamvault.domain.repository.VodRepository = createMock()
     
+    
     // Player Engine Mocks
-    @Provides @Singleton fun provideMedia3PlayerEngine(): com.streamvault.player.Media3PlayerEngine = createMock()
+    @Provides @Singleton @com.streamvault.app.di.MainPlayerEngine fun provideMainPlayerEngine(engineController: com.tvmime.tv.player.EngineController): com.streamvault.player.PlayerEngine {
+        return createMock { method, args ->
+            when (method.name) {
+                "prepare" -> {
+                    val streamInfo = args?.get(0) as? com.streamvault.domain.model.StreamInfo
+                    streamInfo?.url?.let { engineController.startLivePreview(it) }
+                    Unit
+                }
+                "renewStreamUrl" -> {
+                    val streamInfo = args?.get(0) as? com.streamvault.domain.model.StreamInfo
+                    streamInfo?.url?.let { engineController.handoffToMainPlayer(it) }
+                    Unit
+                }
+                "stop", "release" -> {
+                    engineController.teardownAll()
+                    Unit
+                }
+                "play" -> Unit
+                "pause" -> Unit
+                "getPlaybackState", "playbackState" -> kotlinx.coroutines.flow.MutableStateFlow(com.streamvault.player.PlaybackState.READY)
+                "getIsPlaying", "isPlaying" -> kotlinx.coroutines.flow.MutableStateFlow(true)
+                else -> null
+            }
+        }
+    }
+
     @Provides @Singleton fun provideAudioCompatibilityMemoryStore(): com.streamvault.player.AudioCompatibilityMemoryStore = createMock()
     
     // Preferences Mock

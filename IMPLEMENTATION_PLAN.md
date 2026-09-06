@@ -221,3 +221,4 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 
 ### Remaining Work
 - Bridge `Media3PlayerEngine` to `TvMimeVideoEngine` for true playback.
+- **Sprint 19**: Replaced the dummy `PlayerEngine` proxy with a functional interceptor. When StreamVault UI calls `prepare(StreamInfo)`, the URL is extracted and handed off to TVMime's `EngineController.startLivePreview()`. When it calls `renewStreamUrl()`, it triggers `EngineController.handoffToMainPlayer()`. Upgraded the `EpgRepository` proxy to map `EpgProgramEntity` from TVMime's SQLite to StreamVault's `Program` models, completing the Live TV MVP.
