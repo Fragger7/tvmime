@@ -33,9 +33,8 @@
 - [x] Decoupled `AppNavigation` from StreamVault's God-Object `MainActivity` via `StreamVaultNavViewModel`.
 - [x] Wired StreamVault UI to TVMime's `AppDatabase` via custom `CategoryRepository` and `ChannelRepository` Proxy Adapters. 
 - [x] Routed TVMime's `TvNavigation.kt` to boot into `AppNavigation()` upon successful Firebase Authentication.
-- [x] **Sprint 19: Player Execution:** Bridged StreamVault's `@MainPlayerEngine` to TVMime's `EngineController`. StreamVault's `prepare()` and `renewStreamUrl()` now successfully hand off to TVMime's `LivePreviewEngine` and `MainPlayer`!
+- [x] **Sprint 19: Player Execution:** Bridged StreamVault's `@MainPlayerEngine` to TVMime's `EngineController`.
 - [x] **Sprint 19: EPG Data:** Bridged StreamVault's `EpgRepository` to read directly from TVMime's `EpgDao`.
+- [x] Fixed all `build.gradle.kts` errors and completely stripped the dead `dev.jdtech.mpv:libmpv` JitPack dependency to unblock the compilation pipeline.
+- [x] Bridged all missing StreamVault Android Resources (`ic_launcher_vault_art`, etc) that were breaking AAPT2 packaging.
 
-## 🏃 Next Up (Post-MVP Enhancements)
-- [ ] Connect `Media3PlayerEngine` timeshift parameters for DVR functionality.
-- [ ] Persist the Settings in-memory map to actual Android DataStore.
