@@ -8,6 +8,8 @@
 3. **NO UI BACKEND WIRING:** A UI component (`LiveTvGrid`, `VodCard`) must NEVER query a database, initiate a network call, or hold a ViewModel. It must only accept raw data classes (e.g., `channels: List<ChannelEntity>`) and lambda callbacks (e.g., `onZap: (ChannelEntity) -> Unit`).
 4. **THE ORCHESTRATOR PATTERN:** All data fetching from the V3 backend (SQLite/Ktor) happens in a top-level route (e.g., `LiveTvRoute.kt`), which collects standard Android ViewModels (no Hilt) and passes raw state down to the stateless Compose shells.
 
+5. **THE SURVIVAL PROTOCOL:** If you ever find yourself stuck in a loop of compiling errors (the "Whac-A-Mole Compile"), or if you are outputting massive monolithic PRs that mix UI and Backend logic, **STOP IMMEDIATELY**. Read `AI_SURVIVAL_MANIFESTO.md` in the root directory to reset your context and remember the "Stateless Visual Cloning" escape strategy.
+
 ## 2. YOUR IMMEDIATE DIRECTIVE
 Read `TODO.md` and `IMPLEMENTATION_PLAN.md`. You are to execute "Sprint 20: The Purge" to eradicate Dagger Hilt and proxy stubs, followed by "Sprint 21: Stateless Live TV Shell". Stop over-engineering. Build stateless UI and wire it cleanly.
 
