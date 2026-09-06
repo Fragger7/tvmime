@@ -61,11 +61,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.streamvault.app.device.rememberIsTelevisionDevice
@@ -509,8 +509,8 @@ private fun PlayerTopBar(
 
                 TvClickableSurface(
                     onClick = onClose,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Color.White.copy(alpha = 0.12f),
                         focusedContainerColor = Primary.copy(alpha = 0.9f)
                     )
@@ -1200,8 +1200,8 @@ private fun PlayerVodInfo(
                     )
                     TvClickableSurface(
                         onClick = onTogglePlayPause,
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.84f),
                             focusedContainerColor = Primary
                         ),
@@ -1456,8 +1456,8 @@ private fun PlayerQuickSettingsButton(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.1f),
             focusedContainerColor = Primary.copy(alpha = 0.9f)
         ),
@@ -1512,8 +1512,8 @@ private fun PlayerTransportButton(
 
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.1f),
             focusedContainerColor = Color.White.copy(alpha = 0.3f)
         ),
@@ -1743,8 +1743,8 @@ private fun LiveTimeshiftScrubber(
                     )
                     TvClickableSurface(
                         onClick = onTogglePlayPause,
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.84f),
                             focusedContainerColor = Primary
                         ),

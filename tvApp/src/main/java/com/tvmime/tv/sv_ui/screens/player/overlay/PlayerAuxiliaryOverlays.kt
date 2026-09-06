@@ -55,7 +55,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -169,8 +169,8 @@ fun ChannelListOverlay(
                                             onOverlayInteracted()
                                             onOpenLastGroup()
                                         },
-                                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                                        colors = ClickableClickableSurfaceDefaults.colors(
+                                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                                        colors = ClickableSurfaceDefaults.colors(
                                             containerColor = AppColors.SurfaceEmphasis,
                                             focusedContainerColor = Primary
                                         ),
@@ -235,8 +235,8 @@ fun ChannelListOverlay(
                                                     onSelectChannel(channel.id)
                                                     onDismiss()
                                                 },
-                                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                                                colors = ClickableClickableSurfaceDefaults.colors(
+                                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                                                colors = ClickableSurfaceDefaults.colors(
                                                     containerColor = AppColors.SurfaceEmphasis,
                                                     focusedContainerColor = Primary
                                                 ),
@@ -306,9 +306,9 @@ fun ChannelListOverlay(
                                         if (shouldRequestFocus) Modifier.focusRequester(overlayFocusRequester)
                                         else Modifier
                                     ),
-                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-                                colors = ClickableClickableSurfaceDefaults.colors(
+                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+                                colors = ClickableSurfaceDefaults.colors(
                                     containerColor = bgColor,
                                     focusedContainerColor = bgColor
                                 )
@@ -431,11 +431,11 @@ fun ChannelListOverlay(
                     .align(if (isRtl) Alignment.CenterEnd else Alignment.CenterStart)
                     .offset(x = if (isRtl) 28.dp else (-28).dp)
                     .onFocusChanged { if (it.isFocused) onOverlayInteracted() },
-                shape = ClickableClickableSurfaceDefaults.shape(
+                shape = ClickableSurfaceDefaults.shape(
                     if (isRtl) RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)
                     else RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)
                 ),
-                colors = ClickableClickableSurfaceDefaults.colors(
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = AppColors.SurfaceEmphasis.copy(alpha = 0.92f),
                     focusedContainerColor = Primary
                 )
@@ -1101,9 +1101,9 @@ fun CategoryListOverlay(
                                         if (shouldRequestFocus) Modifier.focusRequester(overlayFocusRequester)
                                         else Modifier
                                     ),
-                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                                colors = ClickableClickableSurfaceDefaults.colors(
+                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                                colors = ClickableSurfaceDefaults.colors(
                                     containerColor = bgColor,
                                     focusedContainerColor = bgColor
                                 )

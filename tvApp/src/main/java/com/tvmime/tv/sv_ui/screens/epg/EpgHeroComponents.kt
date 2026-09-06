@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.ChannelLogoBadge
@@ -505,12 +505,12 @@ internal fun GuideToolbarButton(
             if (it.isFocused && !focused) onFocused()
             focused = it.isFocused
         },
-        colors = ClickableClickableSurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-        border = ClickableClickableSurfaceDefaults.border(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(14.dp)

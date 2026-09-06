@@ -41,10 +41,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.ChannelLogoBadge
@@ -404,7 +404,7 @@ fun ChannelInfoOverlay(
                             }
                         },
                         onInteraction = { handleMainActionFocus(ChannelInfoPanel.LIVE_DVR.takeIf { showTimeshiftControls }) },
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (expandedPanel == ChannelInfoPanel.LIVE_DVR) {
                                 Primary.copy(alpha = 0.30f)
                             } else {
@@ -547,7 +547,7 @@ fun ChannelInfoOverlay(
                         label = stringResource(R.string.player_record),
                         onClick = { togglePanel(ChannelInfoPanel.RECORD) },
                         onInteraction = { handleMainActionFocus(ChannelInfoPanel.RECORD) },
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (expandedPanel == ChannelInfoPanel.RECORD) Primary.copy(alpha = 0.22f) else AppColors.SurfaceEmphasis,
                             focusedContainerColor = Primary.copy(alpha = 0.85f)
                         ),
@@ -567,7 +567,7 @@ fun ChannelInfoOverlay(
                             label = stringResource(R.string.player_catchup_badge),
                             onClick = { togglePanel(ChannelInfoPanel.CATCH_UP) },
                             onInteraction = { handleMainActionFocus(ChannelInfoPanel.CATCH_UP) },
-                            colors = ClickableClickableSurfaceDefaults.colors(
+                            colors = ClickableSurfaceDefaults.colors(
                                 containerColor = if (expandedPanel == ChannelInfoPanel.CATCH_UP) Primary.copy(alpha = 0.22f) else AppColors.SurfaceEmphasis,
                                 focusedContainerColor = Primary.copy(alpha = 0.85f)
                             ),
@@ -828,8 +828,8 @@ private fun CompactTimeshiftTransport(
                     TvClickableSurface(
                         onClick = { runTransportAction(transportReady, onTogglePlayPause) },
                         enabled = transportReady,
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.88f),
                             focusedContainerColor = Primary,
                             disabledContainerColor = Primary.copy(alpha = 0.28f)
@@ -931,8 +931,8 @@ private fun CompactTransportButton(
     TvClickableSurface(
         onClick = onClick,
         enabled = enabled,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (highlighted) {
                 Primary.copy(alpha = 0.18f)
             } else {
@@ -1023,13 +1023,13 @@ private fun CompactMenuActionButton(
             onInteraction()
             onClick()
         },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.08f),
             focusedContainerColor = Color.White.copy(alpha = 0.16f)
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.0f),
-        border = ClickableClickableSurfaceDefaults.border(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.0f),
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = androidx.compose.foundation.BorderStroke(1.5.dp, Color.White.copy(alpha = 0.75f))
             )

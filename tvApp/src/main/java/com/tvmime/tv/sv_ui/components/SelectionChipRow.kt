@@ -22,7 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -119,20 +119,20 @@ fun ChipRowSection(
                             }
                             wasFocused = it.isFocused
                         },
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                         focusedContainerColor = if (isSelected && focusedContainerBoostWhenSelected) Primary.copy(alpha = 0.28f) else SurfaceHighlight,
                         contentColor = if (isSelected) Primary else OnSurface,
                         focusedContentColor = OnSurface
                     ),
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    border = ClickableClickableSurfaceDefaults.border(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    border = ClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(2.dp, FocusBorder),
                             shape = RoundedCornerShape(999.dp)
                         )
                     ),
-                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
                 ) {
                     Column(
                         modifier = Modifier.padding(horizontal = chipHorizontalPadding.dp, vertical = 10.dp),

@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme
@@ -320,13 +320,13 @@ private fun CategoryModeChip(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Color(0xFF3E7BFA).copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant,
             focusedContainerColor = Color(0xFF3E7BFA).copy(alpha = 0.28f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        border = ClickableSurfaceDefaults.border(),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = label,
@@ -456,8 +456,8 @@ private fun SettingsActionButton(
     TvClickableSurface(
         onClick = onClick,
         enabled = enabled,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = when {
                 !enabled -> MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
                 emphasized -> Color(0xFF3E7BFA).copy(alpha = 0.18f)
@@ -469,7 +469,7 @@ private fun SettingsActionButton(
                 MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
             }
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = label,
@@ -499,9 +499,9 @@ private fun CategoryProtectionCard(
             .fillMaxWidth()
             .onFocusChanged { isFocused = it.isFocused }
             .border(2.dp, borderColor, RoundedCornerShape(18.dp)),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             focusedContainerColor = MaterialTheme.colorScheme.surface
         )
@@ -574,9 +574,9 @@ private fun CategoryVisibilityCard(
             .fillMaxWidth()
             .onFocusChanged { isFocused = it.isFocused }
             .border(2.dp, borderColor, RoundedCornerShape(18.dp)),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             focusedContainerColor = MaterialTheme.colorScheme.surface
         )

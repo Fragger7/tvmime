@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -144,12 +144,12 @@ private fun NumericSettingsTextField(
             acceptsInput = true
             pendingInputActivation = true
         },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.08f),
             focusedContainerColor = Color.White.copy(alpha = 0.12f)
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged { hasContainerFocus = it.isFocused }

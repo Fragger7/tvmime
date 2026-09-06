@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -70,8 +70,8 @@ internal fun CategorySortModeDialog(
                 CategorySortMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == currentMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),

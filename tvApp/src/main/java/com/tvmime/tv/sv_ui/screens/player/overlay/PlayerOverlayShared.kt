@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -51,7 +51,7 @@ internal fun PlayerOverlayPanel(
                 AppColors.Focus.copy(alpha = 0.05f)
             )
         ),
-        colors = androidx.tv.material3.ClickableClickableSurfaceDefaults.colors(
+        colors = androidx.tv.material3.ClickableSurfaceDefaults.colors(
             containerColor = AppColors.Canvas.copy(alpha = 0.38f)
         )
     ) {
@@ -124,7 +124,7 @@ internal fun QuickActionButton(
     icon: String,
     label: String,
     modifier: Modifier = Modifier,
-    colors: androidx.tv.material3.ClickableSurfaceColors = ClickableClickableSurfaceDefaults.colors(
+    colors: androidx.tv.material3.ClickableSurfaceColors = ClickableSurfaceDefaults.colors(
         containerColor = AppColors.SurfaceEmphasis,
         focusedContainerColor = Primary.copy(alpha = 0.85f)
     ),
@@ -141,9 +141,9 @@ internal fun QuickActionButton(
             .onFocusChanged {
                 if (it.isFocused) onInteraction()
             },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
         colors = colors,
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.01f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.01f)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),

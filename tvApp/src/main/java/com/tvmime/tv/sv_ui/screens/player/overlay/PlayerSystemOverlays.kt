@@ -54,10 +54,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import coil3.compose.AsyncImage
 import com.tvmime.tv.R
@@ -136,8 +136,8 @@ fun PlayerNoticeBanner(
                     notice.actions.forEach { action ->
                         TvClickableSurface(
                             onClick = { onAction(action) },
-                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                            colors = ClickableClickableSurfaceDefaults.colors(
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
                                 containerColor = Color.White.copy(alpha = 0.12f),
                                 focusedContainerColor = focusedContainerColor
                             )
@@ -206,8 +206,8 @@ fun PlayerErrorOverlay(
                 recoveryActions.forEach { action ->
                     TvClickableSurface(
                         onClick = { onAction(action) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (action == PlayerNoticeAction.RETRY) Primary else Color.White.copy(alpha = 0.08f),
                             focusedContainerColor = if (action == PlayerNoticeAction.RETRY) PrimaryLight else Color.White.copy(alpha = 0.18f)
                         )
@@ -222,8 +222,8 @@ fun PlayerErrorOverlay(
                 onBack?.let { back ->
                     TvClickableSurface(
                         onClick = back,
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = Color.White.copy(alpha = 0.08f),
                             focusedContainerColor = Color.White.copy(alpha = 0.18f)
                         )
@@ -1053,14 +1053,14 @@ fun PlayerEpisodeSelectionDialog(
                                         val isSelectedSeason = season.seasonNumber == selectedSeason.seasonNumber
                                         TvClickableSurface(
                                             onClick = { selectedSeasonNumber = season.seasonNumber },
-                                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-                                            colors = ClickableClickableSurfaceDefaults.colors(
+                                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+                                            colors = ClickableSurfaceDefaults.colors(
                                                 containerColor = if (isSelectedSeason) AppColors.BrandMuted.copy(alpha = 0.72f) else AppColors.SurfaceElevated.copy(alpha = 0.62f),
                                                 focusedContainerColor = AppColors.Surface.copy(alpha = 0.76f),
                                                 contentColor = Color.White,
                                                 focusedContentColor = Color.White
                                             ),
-                                            border = ClickableClickableSurfaceDefaults.border(
+                                            border = ClickableSurfaceDefaults.border(
                                                 border = Border(
                                                     border = androidx.compose.foundation.BorderStroke(
                                                         1.dp,
@@ -1071,7 +1071,7 @@ fun PlayerEpisodeSelectionDialog(
                                                     border = androidx.compose.foundation.BorderStroke(2.dp, AppColors.Focus)
                                                 )
                                             ),
-                                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+                                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
                                             modifier = Modifier
                                                 .then(
                                                     if (isSelectedSeason) Modifier.focusRequester(selectedSeasonFocusRequester) else Modifier
@@ -1148,12 +1148,12 @@ fun PlayerEpisodeSelectionDialog(
                                         val isSelectedEpisode = episode.id == currentEpisodeId
                                         TvClickableSurface(
                                             onClick = { onSelectEpisode(episode) },
-                                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-                                            colors = ClickableClickableSurfaceDefaults.colors(
+                                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+                                            colors = ClickableSurfaceDefaults.colors(
                                                 containerColor = if (isSelectedEpisode) AppColors.BrandMuted.copy(alpha = 0.62f) else AppColors.SurfaceElevated.copy(alpha = 0.44f),
                                                 focusedContainerColor = AppColors.Surface.copy(alpha = 0.74f)
                                             ),
-                                            border = ClickableClickableSurfaceDefaults.border(
+                                            border = ClickableSurfaceDefaults.border(
                                                 border = Border(
                                                     border = androidx.compose.foundation.BorderStroke(
                                                         1.dp,
@@ -1164,7 +1164,7 @@ fun PlayerEpisodeSelectionDialog(
                                                     border = androidx.compose.foundation.BorderStroke(2.dp, AppColors.Focus)
                                                 )
                                             ),
-                                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+                                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .then(
@@ -1362,8 +1362,8 @@ private fun TrackSelectionItem(
 ) {
     TvClickableSurface(
         onClick = { if (enabled) onClick() },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.2f) else Color.Transparent,
             focusedContainerColor = SurfaceHighlight
         ),
@@ -1465,8 +1465,8 @@ fun PlayerResumePrompt(
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 TvClickableSurface(
                     onClick = onStartOver,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = SurfaceElevated,
                         focusedContainerColor = SurfaceHighlight
                     ),
@@ -1489,8 +1489,8 @@ fun PlayerResumePrompt(
 
                 TvClickableSurface(
                     onClick = onResume,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Primary,
                         focusedContainerColor = PrimaryLight
                     ),
@@ -1635,8 +1635,8 @@ fun NextEpisodeCountdownOverlay(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TvClickableSurface(
                     onClick = onPlayNow,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Primary,
                         focusedContainerColor = PrimaryLight
                     ),
@@ -1656,8 +1656,8 @@ fun NextEpisodeCountdownOverlay(
                 }
                 TvClickableSurface(
                     onClick = onCancel,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = SurfaceElevated,
                         focusedContainerColor = SurfaceHighlight
                     ),

@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -209,14 +209,14 @@ private fun DashboardShelfActionChip(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (emphasized) Primary.copy(alpha = 0.16f) else Color.White.copy(alpha = 0.05f),
             focusedContainerColor = if (emphasized) Primary.copy(alpha = 0.24f) else Color.White.copy(alpha = 0.1f),
             contentColor = OnSurface,
             focusedContentColor = OnSurface
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(12.dp)

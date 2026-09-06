@@ -17,7 +17,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -45,12 +45,12 @@ internal fun InternetSpeedTestCard(
     TvClickableSurface(
         onClick = onRunTest,
         enabled = !isRunning,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = Primary.copy(alpha = 0.18f)
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
@@ -114,8 +114,8 @@ internal fun InternetSpeedTestCard(
                 TvClickableSurface(
                     onClick = onRunTest,
                     enabled = !isRunning,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Primary.copy(alpha = 0.18f),
                         focusedContainerColor = Primary.copy(alpha = 0.32f)
                     )
@@ -130,8 +130,8 @@ internal fun InternetSpeedTestCard(
                 TvClickableSurface(
                     onClick = onApplyWifi,
                     enabled = canApplyRecommendation && !isRunning,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Secondary.copy(alpha = 0.16f),
                         focusedContainerColor = Secondary.copy(alpha = 0.28f)
                     )
@@ -146,8 +146,8 @@ internal fun InternetSpeedTestCard(
                 TvClickableSurface(
                     onClick = onApplyEthernet,
                     enabled = canApplyRecommendation && !isRunning,
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Secondary.copy(alpha = 0.16f),
                         focusedContainerColor = Secondary.copy(alpha = 0.28f)
                     )

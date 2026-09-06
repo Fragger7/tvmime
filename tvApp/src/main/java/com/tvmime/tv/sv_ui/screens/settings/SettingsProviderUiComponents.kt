@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.interaction.TvClickableSurface
@@ -51,12 +51,12 @@ internal fun ProviderSelectorTab(
                 focusRequester = focusRequester,
                 onClick = onClick
             ),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
             focusedContainerColor = Primary.copy(alpha = 0.34f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(
                     width = 1.dp,
@@ -70,7 +70,7 @@ internal fun ProviderSelectorTab(
                 )
             )
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),

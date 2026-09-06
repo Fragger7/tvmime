@@ -44,10 +44,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import coil3.compose.AsyncImage
 import com.tvmime.tv.R
@@ -511,12 +511,12 @@ private fun DashboardShortcutCard(
         modifier = Modifier
             .width(cardWidth)
             .height(76.dp),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, accentColor.copy(alpha = 0.28f)),
                 shape = RoundedCornerShape(16.dp)
@@ -914,8 +914,8 @@ private fun FavoriteChannelsRow(
             )
             TvClickableSurface(
                 onClick = onSeeAll,
-                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                colors = ClickableClickableSurfaceDefaults.colors(
+                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = Primary.copy(alpha = 0.12f),
                     focusedContainerColor = Primary.copy(alpha = 0.22f),
                     contentColor = TextTertiary
@@ -951,12 +951,12 @@ private fun FavoriteChannelLogoCard(
     TvClickableSurface(
         onClick = onClick,
         modifier = Modifier.width(86.dp),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(18.dp)

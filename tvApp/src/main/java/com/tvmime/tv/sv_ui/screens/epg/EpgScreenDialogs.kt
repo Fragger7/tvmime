@@ -44,10 +44,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.Border
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.interaction.TvClickableSurface
@@ -608,15 +608,15 @@ internal fun EpgOverrideDialog(
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-                                colors = ClickableClickableSurfaceDefaults.colors(
+                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+                                colors = ClickableSurfaceDefaults.colors(
                                     containerColor = if (isCurrent) SurfaceHighlight else SurfaceElevated,
                                     focusedContainerColor = SurfaceHighlight,
                                     contentColor = OnSurface,
                                     focusedContentColor = OnSurface
                                 ),
-                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                                border = ClickableClickableSurfaceDefaults.border(
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                                border = ClickableSurfaceDefaults.border(
                                     focusedBorder = Border(
                                         border = BorderStroke(2.dp, FocusBorder),
                                         shape = RoundedCornerShape(14.dp)
@@ -785,7 +785,7 @@ internal fun GuideCategoryPickerDialog(
                             } else {
                                 Modifier
                             },
-                            colors = ClickableClickableSurfaceDefaults.colors(
+                            colors = ClickableSurfaceDefaults.colors(
                                 containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceHighlight,
                                 focusedContainerColor = if (isSelected) {
                                     Primary.copy(alpha = 0.22f)
@@ -795,9 +795,9 @@ internal fun GuideCategoryPickerDialog(
                                 contentColor = if (isSelected) Primary else OnSurface,
                                 focusedContentColor = if (isSelected) Primary else OnSurface
                             ),
-                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                            border = ClickableClickableSurfaceDefaults.border(
+                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                            border = ClickableSurfaceDefaults.border(
                                 focusedBorder = Border(
                                     border = BorderStroke(2.dp, FocusBorder),
                                     shape = RoundedCornerShape(14.dp)

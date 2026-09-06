@@ -71,14 +71,14 @@ object MockDomainModule {
             when (method.name) {
                 "getActiveProvider" -> {
                     kotlinx.coroutines.flow.map(database.portalDao().getActivePortal()) { portal ->
-                        if (portal != null) LegacyProvider(id = 1L, name = portal.name, type = ProviderType.M3U, serverUrl = portal.serverUrl)
+                        if (portal != null) LegacyProvider(id = portal.id.hashCode().toLong(), name = portal.name, type = ProviderType.M3U, serverUrl = portal.serverUrl)
                         else LegacyProvider(id = 1L, name = "TVMime Cloud", type = ProviderType.M3U, serverUrl = "https://tvmime.com")
                     }
                 }
                 "getProviders" -> {
                     kotlinx.coroutines.flow.map(database.portalDao().getActivePortals()) { portals ->
                         if (portals.isNotEmpty()) {
-                            portals.map { LegacyProvider(id = 1L, name = it.name, type = ProviderType.M3U, serverUrl = it.serverUrl) }
+                            portals.map { LegacyProvider(id = it.id.hashCode().toLong(), name = it.name, type = ProviderType.M3U, serverUrl = it.serverUrl) }
                         } else {
                             listOf(LegacyProvider(id = 1L, name = "TVMime Cloud", type = ProviderType.M3U, serverUrl = "https://tvmime.com"))
                         }
@@ -93,7 +93,23 @@ object MockDomainModule {
     @Provides @Singleton fun provideCombinedM3uRepository(): com.streamvault.domain.repository.CombinedM3uRepository {
         return createMock { method, _ ->
             when (method.name) {
-                "getActiveLiveSource" -> flowOf(ActiveLiveSource.ProviderSource(providerId = 1L))
+                "getActiveLiveSource" -> {
+                    kotlinx.coroutines.flow.map(database.portalDao().getActivePortals()) { portals ->
+                        if (portals.isEmpty()) ActiveLiveSource.ProviderSource(providerId = 1L)
+                        else if (portals.size == 1) ActiveLiveSource.ProviderSource(providerId = portals.first().id.hashCode().toLong())
+                        else ActiveLiveSource.CombinedM3uSource(
+                            id = 999L,
+                            name = "All Active Portals",
+                            profiles = portals.map { p -> 
+                                com.streamvault.domain.model.CombinedM3uProfileMember(
+                                    profileId = 999L,
+                                    providerId = p.id.hashCode().toLong(),
+                                    enabled = true
+                                ) 
+                            }
+                        )
+                    }
+                }
                                 "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
@@ -141,7 +157,7 @@ object MockDomainModule {
                                     streamUrl = entity.directSourceUrl,
                                     categoryId = catHash,
                                     categoryName = "Live TV",
-                                    providerId = 1L,
+                                    providerId = portalId.hashCode().toLong(),
                                     number = entity.num,
                                     epgChannelId = entity.epgChannelId,
                                     logoUrl = entity.streamIcon
@@ -159,7 +175,7 @@ object MockDomainModule {
                                     id = entity.id.hashCode().toLong(),
                                     name = entity.name,
                                     streamUrl = entity.directSourceUrl,
-                                    providerId = 1L,
+                                    providerId = portalId.hashCode().toLong(),
                                     number = entity.num,
                                     epgChannelId = entity.epgChannelId,
                                     logoUrl = entity.streamIcon
@@ -192,7 +208,7 @@ object MockDomainModule {
                                     description = entity.description ?: "",
                                     startTime = entity.startEpoch * 1000L,
                                     endTime = entity.endEpoch * 1000L,
-                                    providerId = 1L
+                                    providerId = portalId.hashCode().toLong()
                                 )
                             }
                         }
@@ -211,7 +227,7 @@ object MockDomainModule {
                                     description = entity.description ?: "",
                                     startTime = entity.startEpoch * 1000L,
                                     endTime = entity.endEpoch * 1000L,
-                                    providerId = 1L,
+                                    providerId = portalId.hashCode().toLong(),
                                     isNowPlaying = true
                                 )
                             }

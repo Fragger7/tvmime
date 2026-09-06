@@ -27,11 +27,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.theme.FocusBorder
@@ -82,12 +82,12 @@ fun LiveSourceSwitcher(
                     onClick = { showSourceList = !showSourceList }
                 )
                 .onFocusChanged { isFocused = it.isFocused },
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-            colors = ClickableClickableSurfaceDefaults.colors(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = if (isFocused) Primary.copy(alpha = 0.12f) else SurfaceElevated.copy(alpha = 0.96f),
                 focusedContainerColor = Primary.copy(alpha = 0.18f)
             ),
-            border = ClickableClickableSurfaceDefaults.border(
+            border = ClickableSurfaceDefaults.border(
                 border = Border(
                     border = BorderStroke(1.dp, Primary.copy(alpha = 0.14f)),
                     shape = RoundedCornerShape(12.dp)
@@ -166,8 +166,8 @@ private fun LiveSourceItem(
                 onClick = onClick
             )
             .onFocusChanged { isFocused = it.isFocused },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(4.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(4.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.2f) else androidx.compose.ui.graphics.Color.Transparent,
             focusedContainerColor = Primary.copy(alpha = 0.3f)
         )

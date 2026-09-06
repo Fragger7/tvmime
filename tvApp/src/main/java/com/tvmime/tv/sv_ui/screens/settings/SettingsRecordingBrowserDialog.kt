@@ -33,8 +33,8 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.TvEmptyState
@@ -247,14 +247,14 @@ private fun RecordingPickerRow(
     val accent = recordingStatusAccent(item.status)
     TvClickableSurface(
         onClick = onSelected,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) accent.copy(alpha = 0.14f) else Color.Transparent,
             contentColor = OnBackground,
             focusedContainerColor = SurfaceHighlight.copy(alpha = 0.48f),
             focusedContentColor = OnBackground
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(
                     1.dp,
@@ -267,7 +267,7 @@ private fun RecordingPickerRow(
                 shape = RoundedCornerShape(12.dp)
             )
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged { focusState ->

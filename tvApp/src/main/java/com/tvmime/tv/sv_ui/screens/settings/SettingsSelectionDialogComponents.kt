@@ -30,7 +30,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -90,8 +90,8 @@ internal fun PremiumSelectionDialog(
                     ) {
                         TvClickableSurface(
                             onClick = { if (canInteract) onDismiss() },
-                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-                            colors = ClickableClickableSurfaceDefaults.colors(
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
                                 containerColor = Primary.copy(alpha = 0.2f),
                                 focusedContainerColor = Primary.copy(alpha = 0.4f)
                             )

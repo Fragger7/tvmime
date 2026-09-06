@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Border
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.ChannelLogoBadge
@@ -397,12 +397,12 @@ fun EpgRow(
                     }
                     isFocused = it.isFocused
                 },
-            colors = ClickableClickableSurfaceDefaults.colors(
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = if (transparentOverlay) SurfaceElevated.copy(alpha = 0.62f) else SurfaceElevated,
                 focusedContainerColor = if (transparentOverlay) SurfaceHighlight.copy(alpha = 0.88f) else SurfaceHighlight
             ),
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            border = ClickableClickableSurfaceDefaults.border(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            border = ClickableSurfaceDefaults.border(
                 focusedBorder = Border(
                     border = BorderStroke(2.dp, FocusBorder),
                     shape = RoundedCornerShape(8.dp)
@@ -626,7 +626,7 @@ fun ProgramItem(
                 }
                 isFocused = it.isFocused
             },
-        colors = ClickableClickableSurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = when {
                 isCurrent && transparentOverlay -> Primary.copy(alpha = 0.28f)
                 isCurrent -> Primary.copy(alpha = 0.2f)
@@ -635,8 +635,8 @@ fun ProgramItem(
             },
             focusedContainerColor = if (transparentOverlay) SurfaceHighlight.copy(alpha = 0.88f) else SurfaceHighlight
         ),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        border = ClickableClickableSurfaceDefaults.border(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, Color.White.copy(alpha = 0.12f)),
                 shape = RoundedCornerShape(8.dp)

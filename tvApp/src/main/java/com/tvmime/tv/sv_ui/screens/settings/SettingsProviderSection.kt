@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -157,12 +157,12 @@ internal fun LazyListScope.providerSection(
     item {
         TvClickableSurface(
             onClick = onAddProvider,
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableClickableSurfaceDefaults.colors(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = Primary.copy(alpha = 0.15f),
                 focusedContainerColor = Primary.copy(alpha = 0.3f)
             ),
-            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

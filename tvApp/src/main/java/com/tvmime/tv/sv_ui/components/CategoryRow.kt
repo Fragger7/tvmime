@@ -15,7 +15,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -65,14 +65,14 @@ fun <T : Any> CategoryRow(
                             focusRequester = seeAllFocusRequester,
                             onClick = onSeeAll
                         ),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = SurfaceElevated,
                         focusedContainerColor = SurfaceHighlight,
                         contentColor = Primary,
                         focusedContentColor = OnSurface
                     ),
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    border = ClickableClickableSurfaceDefaults.border(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    border = ClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(2.dp, FocusBorder),
                             shape = RoundedCornerShape(999.dp)

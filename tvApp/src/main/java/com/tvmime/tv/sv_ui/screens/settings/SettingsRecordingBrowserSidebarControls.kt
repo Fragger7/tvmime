@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -110,12 +110,12 @@ private fun RecordingBrowserSearchField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(searchFocusRequester),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, OnSurfaceDim.copy(alpha = 0.3f)),
                 shape = RoundedCornerShape(8.dp)
@@ -125,7 +125,7 @@ private fun RecordingBrowserSearchField(
                 shape = RoundedCornerShape(8.dp)
             )
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Box(
             modifier = Modifier

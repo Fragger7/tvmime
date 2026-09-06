@@ -1570,12 +1570,12 @@ private fun AdvancedProviderOptionsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .mouseClickable(onClick = { showAdvancedOptions = !showAdvancedOptions }),
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-            colors = ClickableClickableSurfaceDefaults.colors(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = if (showAdvancedOptions) Primary.copy(alpha = 0.12f) else Surface,
                 focusedContainerColor = Primary.copy(alpha = 0.24f)
             ),
-            border = ClickableClickableSurfaceDefaults.border(
+            border = ClickableSurfaceDefaults.border(
                 border = Border(
                     BorderStroke(
                         1.dp,
@@ -1584,7 +1584,7 @@ private fun AdvancedProviderOptionsSection(
                 ),
                 focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
             ),
-            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -1626,12 +1626,12 @@ private fun AdvancedProviderOptionsSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .mouseClickable(onClick = onToggleM3uVodClassification),
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (uiState.m3uVodClassificationEnabled) Primary.copy(alpha = 0.1f) else Surface,
                             focusedContainerColor = Primary.copy(alpha = 0.22f)
                         ),
-                        border = ClickableClickableSurfaceDefaults.border(
+                        border = ClickableSurfaceDefaults.border(
                             border = Border(
                                 BorderStroke(
                                     1.dp,
@@ -1640,7 +1640,7 @@ private fun AdvancedProviderOptionsSection(
                             ),
                             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
                         ),
-                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -2000,12 +2000,12 @@ private fun AdvancedProviderOptionsSection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentDescription = "Use HTTP proxy" },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (stalkerProxyEnabled) Primary.copy(alpha = 0.1f) else Surface,
                             focusedContainerColor = Primary.copy(alpha = 0.22f)
                         ),
-                        border = ClickableClickableSurfaceDefaults.border(
+                        border = ClickableSurfaceDefaults.border(
                             border = Border(
                                 BorderStroke(
                                     1.dp,
@@ -2014,7 +2014,7 @@ private fun AdvancedProviderOptionsSection(
                             ),
                             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
                         ),
-                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -2075,16 +2075,16 @@ private fun StalkerLinkOptionButton(
     Surface(
         onClick = onClick,
         modifier = Modifier.mouseClickable(onClick = onClick),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.18f) else Surface,
             focusedContainerColor = Primary.copy(alpha = 0.28f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (selected) Primary else SurfaceHighlight)),
             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = text,
@@ -2209,14 +2209,14 @@ private fun RequestRuleActionButton(
             .height(40.dp)
             .mouseClickable(onClick = onClick)
             .semantics { contentDescription = text },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (compact) SurfaceHighlight.copy(alpha = 0.9f) else Primary,
             focusedContainerColor = if (compact) SurfaceHighlight else PrimaryLight
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-        glow = ClickableClickableSurfaceDefaults.glow(focusedGlow = Glow.None),
-        border = ClickableClickableSurfaceDefaults.border(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        glow = ClickableSurfaceDefaults.glow(focusedGlow = Glow.None),
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 BorderStroke(
                     1.dp,
@@ -2258,12 +2258,12 @@ private fun XtreamLiveSyncModeOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .mouseClickable(onClick = onSelect),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.12f) else Color.Transparent,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.26f) else SurfaceHighlight.copy(alpha = 0.9f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 BorderStroke(
                     1.dp,
@@ -2272,7 +2272,7 @@ private fun XtreamLiveSyncModeOptionRow(
             ),
             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -2322,12 +2322,12 @@ private fun StalkerAuthModeOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .mouseClickable(onClick = onSelect),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.12f) else Color.Transparent,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.26f) else SurfaceHighlight.copy(alpha = 0.9f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 BorderStroke(
                     1.dp,
@@ -2336,7 +2336,7 @@ private fun StalkerAuthModeOptionRow(
             ),
             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -2397,12 +2397,12 @@ private fun EpgSyncModeOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .mouseClickable(onClick = onSelect),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.12f) else Color.Transparent,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.26f) else SurfaceHighlight.copy(alpha = 0.9f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 BorderStroke(
                     1.dp,
@@ -2411,7 +2411,7 @@ private fun EpgSyncModeOptionRow(
             ),
             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -2500,12 +2500,12 @@ private fun PolicyOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .mouseClickable(onClick = onSelect),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.12f) else Color.Transparent,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.26f) else SurfaceHighlight.copy(alpha = 0.9f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 BorderStroke(
                     1.dp,
@@ -2514,7 +2514,7 @@ private fun PolicyOptionRow(
             ),
             focusedBorder = Border(BorderStroke(3.dp, PrimaryLight))
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -2656,12 +2656,12 @@ private fun SourceTypeCard(
     Surface(
         onClick = { if (enabled) onClick() },
         modifier = Modifier.fillMaxWidth().mouseClickable(enabled = enabled, onClick = onClick),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor  = if (selected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.28f) else SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (selected) Primary.copy(alpha = 0.5f) else SurfaceHighlight)),
             focusedBorder = Border(BorderStroke(2.dp, FocusBorder))
         )
@@ -3204,14 +3204,14 @@ private fun ProviderActionButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(height),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (!isLoading) Primary else SurfaceHighlight,
             focusedContainerColor = if (!isLoading) Primary else SurfaceHighlight
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-        glow = ClickableClickableSurfaceDefaults.glow(focusedGlow = Glow.None),
-        border = ClickableClickableSurfaceDefaults.border(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        glow = ClickableSurfaceDefaults.glow(focusedGlow = Glow.None),
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (!isLoading) PrimaryLight else SurfaceHighlight)),
             focusedBorder = Border(BorderStroke(2.dp, FocusBorder))
         )
@@ -3245,12 +3245,12 @@ private fun ImportOptionsButton(
             .height(if (compact) 38.dp else 44.dp)
             .onFocusEvent { isFocused = it.hasFocus }
             .semantics { contentDescription = text },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Surface.copy(alpha = 0.9f),
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (isFocused) PrimaryLight else SurfaceHighlight)),
             focusedBorder = Border(BorderStroke(2.dp, FocusBorder))
         )
@@ -3416,12 +3416,12 @@ private fun FileSelectorCard(
     Surface(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().height(80.dp).onFocusEvent { isFocused = it.hasFocus }.mouseClickable(onClick = onClick),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        border = ClickableClickableSurfaceDefaults.border(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, borderColor)),
             focusedBorder = Border(BorderStroke(2.dp, FocusBorder))
         ),
-        colors = ClickableClickableSurfaceDefaults.colors(containerColor = bgColor, focusedContainerColor = bgColor)
+        colors = ClickableSurfaceDefaults.colors(containerColor = bgColor, focusedContainerColor = bgColor)
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -3447,12 +3447,12 @@ private fun TabButton(text: String, isSelected: Boolean, onClick: () -> Unit, ba
     Surface(
         onClick = onClick,
         modifier = Modifier.onFocusEvent { isFocused = it.hasFocus }.mouseClickable(onClick = onClick),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.2f) else Surface,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (isSelected) Primary.copy(alpha = 0.4f) else SurfaceHighlight)),
             focusedBorder = Border(BorderStroke(2.dp, FocusBorder))
         )

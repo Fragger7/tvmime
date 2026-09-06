@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -77,12 +77,12 @@ internal fun ProviderM3uOptionsPanel(
             TvClickableSurface(
                 onClick = onRefreshM3uClassification,
                 enabled = !isSyncing,
-                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-                colors = ClickableClickableSurfaceDefaults.colors(
+                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = Primary.copy(alpha = 0.15f),
                     focusedContainerColor = Primary.copy(alpha = 0.3f)
                 ),
-                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
             ) {
                 Text(
                     text = stringResource(R.string.settings_m3u_vod_classification_refresh),
@@ -146,8 +146,8 @@ private fun ProviderWarningRetryButton(
     TvClickableSurface(
         onClick = onClick,
         enabled = !isSyncing,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Secondary.copy(alpha = 0.16f),
             focusedContainerColor = Secondary.copy(alpha = 0.35f)
         )
@@ -225,20 +225,20 @@ private fun ProviderActionButton(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (filled) accent else accent.copy(alpha = 0.2f),
             focusedContainerColor = if (filled) accent.copy(alpha = 0.8f) else accent.copy(alpha = 0.5f),
             contentColor = contentColor,
             focusedContentColor = contentColor
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, Color.White),
                 shape = RoundedCornerShape(6.dp)
             )
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = label,

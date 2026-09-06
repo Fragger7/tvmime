@@ -19,10 +19,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -145,9 +145,9 @@ fun ProgramHistoryDialog(
                                         },
                                         shape = RoundedCornerShape(8.dp)
                                     ),
-                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.0f),
-                                colors = ClickableClickableSurfaceDefaults.colors(
+                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1.0f),
+                                colors = ClickableSurfaceDefaults.colors(
                                     containerColor = Color.Transparent,
                                     focusedContainerColor = focusedContainerColor
                                 )

@@ -67,11 +67,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.streamvault.app.MainActivity
@@ -394,12 +394,12 @@ private fun TopNavigationButton(
                 }
                 isFocused = it.isFocused
             },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) AppColors.BrandMuted else Color.Transparent,
             focusedContainerColor = AppColors.SurfaceEmphasis
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = RoundedCornerShape(14.dp)
@@ -520,8 +520,8 @@ fun AppSectionHeader(
                         focusRequester = actionFocusRequester,
                         onClick = onActionClick
                     ),
-                shape = ClickableClickableSurfaceDefaults.shape(shapes.pill),
-                colors = ClickableClickableSurfaceDefaults.colors(
+                shape = ClickableSurfaceDefaults.shape(shapes.pill),
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = AppColors.Brand.copy(alpha = 0.12f),
                     focusedContainerColor = AppColors.Brand.copy(alpha = 0.22f),
                     contentColor = actionContentColor
@@ -634,12 +634,12 @@ fun LoadMoreCard(
                 focusRequester = focusRequester,
                 onClick = onClick
             ),
-        shape = ClickableClickableSurfaceDefaults.shape(shapes.medium),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(shapes.medium),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = AppColors.SurfaceElevated,
             focusedContainerColor = AppColors.SurfaceEmphasis
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = shapes.medium
@@ -790,12 +790,12 @@ private fun RailButton(
                 scaleY = scale
             }
             .onFocusChanged { isFocused = it.isFocused },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (selected) AppColors.BrandMuted else Color.Transparent,
             focusedContainerColor = AppColors.SurfaceEmphasis
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = RoundedCornerShape(18.dp)

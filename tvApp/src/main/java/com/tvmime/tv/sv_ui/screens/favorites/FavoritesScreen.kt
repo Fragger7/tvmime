@@ -49,10 +49,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.SelectionChip
@@ -802,14 +802,14 @@ private fun SavedHistoryRow(
             items(items, key = { "${it.history.contentType}:${it.history.contentId}" }) { item ->
                 TvClickableSurface(
                     onClick = { onItemClick(item) },
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Surface,
                         focusedContainerColor = SurfaceHighlight,
                         contentColor = OnSurface,
                         focusedContentColor = OnSurface
                     ),
-                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.04f),
+                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1.04f),
                     modifier = Modifier.width(cardWidth)
                 ) {
                     Column(
@@ -867,8 +867,8 @@ private fun SavedGroupManagementRow(
                 TvClickableSurface(
                     onClick = { onGroupClick(group) },
                     onLongClick = { onGroupLongClick(group) },
-                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                    colors = ClickableClickableSurfaceDefaults.colors(
+                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                    colors = ClickableSurfaceDefaults.colors(
                         containerColor = Surface,
                         focusedContainerColor = SurfaceHighlight
                     ),
@@ -1082,14 +1082,14 @@ private fun FavoriteRow(
                     Modifier
                 }
             ),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (isReorderingThis) Primary.copy(alpha = 0.18f) else SurfaceElevated,
             focusedContainerColor = if (isReorderingThis) Primary else SurfaceHighlight,
             contentColor = if (isReorderingThis) Primary else OnSurface,
             focusedContentColor = if (isReorderingThis) OnPrimary else OnSurface
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = androidx.compose.foundation.BorderStroke(
                     width = if (isReorderingThis) 2.dp else 0.dp,

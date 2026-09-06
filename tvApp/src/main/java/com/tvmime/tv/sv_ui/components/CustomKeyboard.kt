@@ -101,8 +101,8 @@ private fun KeyboardButton(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = backgroundColor,
             focusedContainerColor = Primary,
             pressedContainerColor = Primary.copy(alpha = 0.8f)

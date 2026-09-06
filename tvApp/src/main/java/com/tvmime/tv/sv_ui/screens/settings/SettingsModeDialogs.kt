@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -47,8 +47,8 @@ internal fun VodViewModeDialog(
                 VodViewMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -98,8 +98,8 @@ internal fun LiveChannelNumberingModeDialog(
                 ChannelNumberingMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -149,8 +149,8 @@ internal fun LiveChannelGroupingModeDialog(
                 LiveChannelGroupingMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -200,8 +200,8 @@ internal fun GroupedChannelLabelModeDialog(
                 GroupedChannelLabelMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -251,8 +251,8 @@ internal fun VodDuplicateHandlingModeDialog(
                 VodDuplicateHandlingMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -302,8 +302,8 @@ internal fun VodVariantPreferenceModeDialog(
                 VodVariantPreferenceMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -353,8 +353,8 @@ internal fun LiveVariantPreferenceModeDialog(
                 LiveVariantPreferenceMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -406,8 +406,8 @@ internal fun RemoteShortcutSelectionDialog(
                     val isSelected = selection == selectedSelection.normalizedForProfile(target.profile)
                     TvClickableSurface(
                         onClick = { onSelection(selection) },
-                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableClickableSurfaceDefaults.colors(
+                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableSurfaceDefaults.colors(
                             containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),

@@ -37,10 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -144,8 +144,8 @@ internal fun CompactSettingsActionChip(
     TvClickableSurface(
         onClick = onClick,
         enabled = enabled,
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = accent.copy(alpha = if (enabled) 0.14f else 0.08f),
             contentColor = accent.copy(alpha = if (enabled) 1f else 0.42f),
             focusedContainerColor = accent.copy(alpha = if (enabled) 0.28f else 0.08f),
@@ -153,7 +153,7 @@ internal fun CompactSettingsActionChip(
             disabledContainerColor = accent.copy(alpha = 0.08f),
             disabledContentColor = accent.copy(alpha = 0.42f)
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, Color.White.copy(alpha = if (enabled) 0.08f else 0.04f)),
                 shape = RoundedCornerShape(8.dp)
@@ -163,7 +163,7 @@ internal fun CompactSettingsActionChip(
                 shape = RoundedCornerShape(8.dp)
             )
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = label,
@@ -255,12 +255,12 @@ internal fun EpgSourceTextField(
             pendingInputActivation = true
             requestBringIntoView()
         },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.08f),
             focusedContainerColor = Color.White.copy(alpha = 0.12f)
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .bringIntoViewRequester(bringIntoViewRequester)

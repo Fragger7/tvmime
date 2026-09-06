@@ -211,8 +211,8 @@ fun SettingsScreen(
                                     isCheckingUpdate = false
                                 }
                             },
-                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                            colors = ClickableClickableSurfaceDefaults.colors(
+                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableSurfaceDefaults.colors(
                                 containerColor = crimson,
                                 focusedContainerColor = crimsonBright
                             ),
@@ -306,8 +306,8 @@ private fun SettingToggleRow(
         }
         Surface(
             onClick = onClick,
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableClickableSurfaceDefaults.colors(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = if (isChecked) Color(0xFF065F46) else Color(0xFF262636),
                 focusedContainerColor = crimsonBright
             ),
@@ -356,8 +356,8 @@ private fun SettingActionRow(
         }
         Surface(
             onClick = onClick,
-            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableClickableSurfaceDefaults.colors(
+            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = Color(0xFF1E1E2C),
                 focusedContainerColor = crimsonBright
             ),

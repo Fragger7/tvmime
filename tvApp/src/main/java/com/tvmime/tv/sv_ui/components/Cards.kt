@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import com.tvmime.tv.sv_ui.design.LocalAppShapes
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
@@ -157,16 +157,16 @@ fun FocusableCard(
                 }
                 isFocused = it.isFocused
             },
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        scale = ClickableClickableSurfaceDefaults.scale(
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        scale = ClickableSurfaceDefaults.scale(
             focusedScale = 1f,
             pressedScale = FocusSpec.PressedScale
         ),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = Surface,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableClickableSurfaceDefaults.border(
+        border = ClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(0.dp, Color.Transparent),
                 shape = RoundedCornerShape(12.dp)

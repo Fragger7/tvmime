@@ -19,10 +19,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.interaction.TvClickableSurface
@@ -53,13 +53,13 @@ internal fun RecordingInfoCard(
     TvClickableSurface(
         onClick = { },
         modifier = Modifier.fillMaxWidth(),
-        colors = ClickableClickableSurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceElevated
         ),
-        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
-        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-        border = ClickableClickableSurfaceDefaults.border(
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+        border = ClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(16.dp)
@@ -266,18 +266,18 @@ internal fun RecordingActionsCard(
             TvClickableSurface(
                 onClick = { onWifiOnlyRecordingChange(!wifiOnlyRecording) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                colors = ClickableClickableSurfaceDefaults.colors(
+                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = Color.Transparent,
                     focusedContainerColor = Primary.copy(alpha = 0.12f)
                 ),
-                border = ClickableClickableSurfaceDefaults.border(
+                border = ClickableSurfaceDefaults.border(
                     focusedBorder = Border(
                         border = BorderStroke(2.dp, Color.White),
                         shape = RoundedCornerShape(10.dp)
                     )
                 ),
-                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
+                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
             ) {
                 Row(
                     modifier = Modifier
