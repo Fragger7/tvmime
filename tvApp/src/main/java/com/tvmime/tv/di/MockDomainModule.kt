@@ -230,6 +230,17 @@ object MockDomainModule {
         }
     }
 
+    
+    @Provides @Singleton @com.streamvault.app.di.AuxiliaryPlayerEngine fun provideAuxiliaryPlayerEngine(): com.streamvault.player.PlayerEngine {
+        return createMock { method, _ ->
+            when (method.name) {
+                "getPlaybackState", "playbackState" -> kotlinx.coroutines.flow.MutableStateFlow(com.streamvault.player.PlaybackState.READY)
+                "getIsPlaying", "isPlaying" -> kotlinx.coroutines.flow.MutableStateFlow(false)
+                else -> null
+            }
+        }
+    }
+
     @Provides @Singleton fun provideAudioCompatibilityMemoryStore(): com.streamvault.player.AudioCompatibilityMemoryStore = createMock()
     
     // Preferences Mock
