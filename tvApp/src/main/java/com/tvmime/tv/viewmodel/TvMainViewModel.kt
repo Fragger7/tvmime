@@ -106,4 +106,38 @@ class TvMainViewModel @Inject constructor(
             }
         }
     }
+
+    // 5. Email/Password Authentication
+    fun loginWithEmail(email: String, pass: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            val loginResult = firebaseClient.signInWithEmail(email, pass)
+            if (loginResult.isFailure) {
+                onError(loginResult.exceptionOrNull()?.message ?: "Login failed")
+                return@launch
+            }
+
+            val session = loginResult.getOrNull()!!
+            val portalsResult = firebaseClient.fetchPortals(session)
+            
+            if (portalsResult.isFailure) {
+                onError("Failed to load portals.")
+                return@launch
+            }
+
+            val portals = portalsResult.getOrNull() ?: emptyList()
+            val activePortal = portals.firstOrNull { it.isActive && !it.m3uUrl.isNullOrBlank() }
+
+            if (activePortal != null) {
+                // We have a valid portal with an M3U! Trigger the ingestion engine.
+                runCatching {
+                    syncManager.importPlaylist(activePortal.id, activePortal.m3uUrl!!)
+                    onSuccess()
+                }.onFailure {
+                    onError("Failed to ingest playlist.")
+                }
+            } else {
+                onError("No active M3U portal found on this account.")
+            }
+        }
+    }
 }
