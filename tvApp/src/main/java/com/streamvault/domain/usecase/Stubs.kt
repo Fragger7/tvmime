@@ -13,3 +13,6 @@ class InspectBackupCommand
 class InspectBackupResult
 class SyncProviderCommand
 class SyncProviderResult
+class UnlockParentalCategory @javax.inject.Inject constructor()
+class ScheduleRecording @javax.inject.Inject constructor()
+class UnlockParentalCategoryCommand
