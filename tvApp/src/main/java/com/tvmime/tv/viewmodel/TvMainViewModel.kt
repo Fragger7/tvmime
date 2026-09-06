@@ -65,8 +65,8 @@ class TvMainViewModel @Inject constructor(
         viewModelScope.launch {
             // Fake categories for the UI
             database.categoryDao().insertCategories(listOf(
-                CategoryEntity("${activePortalId}_LIVE_all", activePortalId, "all", "All Channels", "LIVE", 0),
-                CategoryEntity("${activePortalId}_LIVE_news", activePortalId, "news", "News", "LIVE", 1)
+                CategoryEntity("${activePortalId}_LIVE_all", activePortalId, "all", "All Channels", 0, "LIVE", 0),
+                CategoryEntity("${activePortalId}_LIVE_news", activePortalId, "news", "News", 0, "LIVE", 1)
             ))
             // The massive ingestion engine
             runCatching {
