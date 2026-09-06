@@ -198,3 +198,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 2:** Refactor the Onboarding UI to use pure Compose TV `androidx.tv.material3` components, removing legacy XML or mobile modifiers.
 - **Step 3:** Wire the `TvMimeNavHost` to boot into the `OnboardingScreen` first.
 - **Step 4:** Connect the Firebase Email/Password and QR token listeners to the V3 backend. Upon successful credential retrieval, pass the portal URL to the `SyncManagerM3uImporter` and navigate to `LiveTvScreen`.
+
+### Sprint 14: Execution of V3 Phase 7 (Firebase Cloud Sync Listener)
+- **Step 1:** Ensure Firebase Firestore dependencies are present in the Gradle configuration.
+- **Step 2:** Implement the `FirebaseSyncManager` (or integrate into `TvMainViewModel`). This service will listen to a specific Firestore document (`/tv_sessions/{sessionCode}`) for incoming IPTV credentials.
+- **Step 3:** Wire the `OnboardingScreen` to trigger this listener upon generating the QR code. When credentials arrive, the app will execute the `SyncManagerM3uImporter` and securely delete the session document.
