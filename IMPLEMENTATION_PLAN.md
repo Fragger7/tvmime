@@ -213,3 +213,11 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Completed:** V3 Backend Foundation (Network Evasion Proxy, Mass SQLite Ingestion Engine, Dual-Engine Playback, Ktor Firebase REST Client).
 - **Decision Reached:** We are executing a full UI transplant of **StreamVault-IPTV** using the Adapter pattern.
 - **Next Phase:** We will aggressively focus on extracting and wiring only the StreamVault **Live TV Ecosystem** (Grid, EPG, Player Controls) to our V3 backend, heavily stubbing the rest of the application until the golden path is functional.
+
+### V3 Master Surgery: Phase 2 Execution (Completed)
+- **Sprint 16**: Performed massive code extraction. Imported StreamVault's `ui`, `domain`, and `player` completely into `tvApp` to fix 113+ unresolved references at compile time.
+- **Sprint 17**: Handled the Dagger Hilt catastrophe. Because we didn't import the implementations of the 19 domain repositories, Dagger Hilt would crash. Implemented `MockDomainModule.kt` utilizing `java.lang.reflect.Proxy` to create dynamic instances of all interfaces returning empty Flows. Later patched `CategoryRepository` and `ChannelRepository` proxies to directly map to TVMime's `AppDatabase` via Room DAOs.
+- **Sprint 18**: Built a dynamic `MemoryPrefs` map backing the `PreferencesRepository` proxy to ensure the StreamVault Settings Screen toggles actually read and persist locally in-memory during the session. Wired `TvNavigation.kt` to boot into StreamVault's `AppNavigation` post-login using a custom `StreamVaultNavViewModel`.
+
+### Remaining Work
+- Bridge `Media3PlayerEngine` to `TvMimeVideoEngine` for true playback.

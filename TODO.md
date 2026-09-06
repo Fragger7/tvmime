@@ -1,19 +1,13 @@
-# TVMime Master Surgery - Next Steps (StreamVault UI Transplant)
+# TVMime Sprint Backlog
 
-## The Strategic Pivot
-After deploying a fleet of research agents to analyze OwnTV, IPTVMine-Pro, and StreamVault, we have decided to adopt the **StreamVault UI/UX** for TVMime V3.
-- **Why:** The side-panel overlay design is incredibly modern and fits our vision best.
-- **The Challenge:** StreamVault's UI is heavily coupled to its own domain models.
-- **The Solution:** We will use the "Adapter/Strangler Fig" pattern. We will copy the UI, stub the domain models to get it compiling, and slowly wire it to our V3 Backend over multiple sprints.
-- **The Prime Objective:** We are stripping away the 1-day constraint. Our immediate, singular focus is to get the **Live TV Ecosystem** (Cloud Sync Settings, 3-Tier Grid, EPG, and Player Controls) 100% functional before touching VOD or Catch-up.
+## ✅ Completed (V3 Master Surgery & Sprint 16-18)
+- [x] Extracted StreamVault `ui/`, `domain/`, and `player/` packages natively to avoid compiler crashes.
+- [x] Stubbed 19 StreamVault Repositories using `java.lang.reflect.Proxy` via `MockDomainModule.kt` to satisfy Dagger Hilt dynamically.
+- [x] Built the `PreferencesRepository` memory state map to support the Settings Screen natively.
+- [x] Decoupled `AppNavigation` from StreamVault's God-Object `MainActivity` via `StreamVaultNavViewModel`.
+- [x] Wired StreamVault UI to TVMime's `AppDatabase` via custom `CategoryRepository` and `ChannelRepository` Proxy Adapters. 
+- [x] Routed TVMime's `TvNavigation.kt` to boot into `AppNavigation()` upon successful Firebase Authentication.
 
-## Upcoming Sprints
-- [ ] **Sprint 16: The Great Extraction**
-  - Copy StreamVault's `app/src/main/java/.../ui/` (specifically `theme`, `design`, `home`, `player`, `epg`).
-  - Create `com.tvmime.tv.mocks` to stub the expected domain interfaces and ViewModels to resolve all compiler errors.
-- [ ] **Sprint 17: UI Data Wiring (The Grid)**
-  - Replace the mock Live TV ViewModels with our V3 `TvMainViewModel`.
-  - Build an Adapter layer mapping our SQLite Room entities (`ChannelEntity`, `CategoryEntity`) into the data classes the StreamVault UI expects.
-- [ ] **Sprint 18: Player & EPG Integration**
-  - Hook the StreamVault Player Overlays into our `TvMimeVideoEngine` (ExoPlayer + libmpv dual-engine).
-  - Wire the EPG grid UI to our Room EPG DAOs.
+## 🏃 Next Up (Sprint 19: Player Execution & Final Polish)
+- [ ] Connect `Media3PlayerEngine` calls from StreamVault UI to TVMime's `TvMimeVideoEngine`.
+- [ ] Enable EPG mapping in `EpgRepository` proxy to render the TV Guide natively.
