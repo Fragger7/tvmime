@@ -1,24 +1,19 @@
-# TVMime Master Task List 📝
+# TVMime Master Surgery - Next Steps (StreamVault UI Transplant)
 
-> **Status:** The V2 (Sohva-TV Transplant) has been formally aborted due to deep architectural incompatibility, brittle compilation states, and conflicting frameworks (Coil3 vs Coil2, Experimental Compose APIs, missing resources). We have pivoted to the **V3 Master Surgery**.
+## The Strategic Pivot
+After deploying a fleet of research agents to analyze OwnTV, IPTVMine-Pro, and StreamVault, we have decided to adopt the **StreamVault UI/UX** for TVMime V3.
+- **Why:** The side-panel overlay design is incredibly modern and fits our vision best.
+- **The Challenge:** StreamVault's UI is heavily coupled to its own domain models.
+- **The Solution:** We will use the "Adapter/Strangler Fig" pattern. We will copy the UI, stub the domain models to get it compiling, and slowly wire it to our V3 Backend over multiple sprints.
+- **The Prime Objective:** We are stripping away the 1-day constraint. Our immediate, singular focus is to get the **Live TV Ecosystem** (Cloud Sync Settings, 3-Tier Grid, EPG, and Player Controls) 100% functional before touching VOD or Catch-up.
 
-## Phase 6: V3 Master Surgery & Deep Architecture Research [ACTIVE SPRINT]
-We are adopting a strict "Measure a Billion Times, Cut Once" philosophy.
-
-- [ ] **Step 1: Spawning the Autonomous Research Fleet**
-  - Run the exact `/teamwork-preview` or `/goal` command documented in `AGENTS.md` to trigger a massive, overnight deep-read of `OwnTV`, `IPTVMine-Pro`, and `StreamVault`.
-  - The fleet must literally trace the execution path of their database ingestion (Room DB chunking), ExoPlayer buffering (`LoadControl`), and dual-engine integration (`libmpv`).
-- [ ] **Step 2: Produce `TVMIME_V3_ARCHITECTURE_BLUEPRINT.md`**
-  - Based on the team's findings, generate an uncompromising technical blueprint merging StreamVault's DB layer, OwnTV's dual-engine, and IPTVMine-Pro's lightweight network evasion.
-- [ ] **Step 3: The Core Teardown & Rebuild**
-  - Delete all `v2.0` UI code. Inject Dagger Hilt for modular DI. Build the Network Evasion Proxy and the Room Database ingestion flow.
-- [ ] **Step 4: The Jetpack Compose UI Rebuild**
-  - Write custom, lightweight Compose vectors tailored specifically for the TVMime "Deep Black & Crimson Red" brand. No more hijacked `R.drawable` resources.
-
-## Phase 7: Rich VOD Integration (Movies & Series) [UPCOMING]
-- [ ] Integrate `libmpv` natively to handle heavy `.mkv` files and obscure codecs.
-- [ ] Implement TMDB API integration for posters and backdrops.
-- [ ] Wire Trakt.tv API for cross-platform watch syncing.
-
-## Phase 8: The Sports Hub [UPCOMING]
-- [ ] Aggregate a 3rd-party sports API (e.g., TheSportsDB) against the local Room DB to build a dedicated, graphical "Live Now" sports overlay.
+## Upcoming Sprints
+- [ ] **Sprint 16: The Great Extraction**
+  - Copy StreamVault's `app/src/main/java/.../ui/` (specifically `theme`, `design`, `home`, `player`, `epg`).
+  - Create `com.tvmime.tv.mocks` to stub the expected domain interfaces and ViewModels to resolve all compiler errors.
+- [ ] **Sprint 17: UI Data Wiring (The Grid)**
+  - Replace the mock Live TV ViewModels with our V3 `TvMainViewModel`.
+  - Build an Adapter layer mapping our SQLite Room entities (`ChannelEntity`, `CategoryEntity`) into the data classes the StreamVault UI expects.
+- [ ] **Sprint 18: Player & EPG Integration**
+  - Hook the StreamVault Player Overlays into our `TvMimeVideoEngine` (ExoPlayer + libmpv dual-engine).
+  - Wire the EPG grid UI to our Room EPG DAOs.
