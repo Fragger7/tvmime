@@ -187,3 +187,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 2:** Build the `TvNavigation.kt` graph using `androidx.navigation.compose`.
 - **Step 3:** Implement a lightweight, natively compiled `LiveTvScreen` utilizing `androidx.tv.material3` (Compose for TV), replacing the heavy "Sohva-TV" transplants.
 - **Step 4:** Wire the UI layer directly into `MainActivity.kt`, consuming the Hilt-injected backends.
+
+### Sprint 12: Execution of V3 Phase 5 (The Jetpack Compose UI Wiring)
+- **Step 1:** Build the `TvMainViewModel` (injected via `@HiltViewModel`). This acts as the sole bridge between the Compose UI and our backend engines, exposing the database as a reactive `StateFlow` and handling D-Pad intent routing.
+- **Step 2:** Construct the `LiveTvScreen` layout using `androidx.tv.material3`. It will feature a left-side Category Rail (TiviMate style) and a center Channel List.
+- **Step 3:** Mount the `TvMimeVideoEngine` surface behind the UI using an `AndroidView` (since `libmpv` and `ExoPlayer` require raw Android `SurfaceView`s to render hardware-accelerated video).
