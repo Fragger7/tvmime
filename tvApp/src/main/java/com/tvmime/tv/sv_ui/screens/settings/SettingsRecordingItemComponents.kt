@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -53,7 +53,7 @@ internal fun RecordingItemCard(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(
@@ -247,18 +247,18 @@ internal fun RecordingItemCard(
 internal fun CompactRecordingActionChip(label: String, accent: Color, onClick: () -> Unit) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = accent.copy(alpha = 0.14f),
             focusedContainerColor = accent.copy(alpha = 0.3f)
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, Color.White),
                 shape = RoundedCornerShape(8.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(
             text = label,

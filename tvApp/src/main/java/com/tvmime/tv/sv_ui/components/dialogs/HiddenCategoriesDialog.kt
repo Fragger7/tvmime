@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -59,18 +59,18 @@ fun HiddenCategoriesDialog(
                 onClick = onUnhideAll,
                 enabled = hiddenCategories.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                colors = ClickableSurfaceDefaults.colors(
+                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                colors = ClickableClickableSurfaceDefaults.colors(
                     containerColor = SurfaceElevated,
                     focusedContainerColor = SurfaceHighlight
                 ),
-                border = ClickableSurfaceDefaults.border(
+                border = ClickableClickableSurfaceDefaults.border(
                     focusedBorder = Border(
                         border = BorderStroke(2.dp, PrimaryLight),
                         shape = RoundedCornerShape(10.dp)
                     )
                 ),
-                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
             ) {
                 Box(
                     modifier = Modifier
@@ -111,18 +111,18 @@ private fun HiddenCategoryRow(
     TvClickableSurface(
         onClick = onUnhide,
         modifier = Modifier.fillMaxWidth(),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated.copy(alpha = 0.4f),
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, PrimaryLight),
                 shape = RoundedCornerShape(8.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier

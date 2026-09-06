@@ -21,10 +21,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -94,7 +94,7 @@ fun SavedCategoryShortcutsRow(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 shape = RoundedCornerShape(14.dp),
-                colors = SurfaceDefaults.colors(containerColor = SurfaceElevated)
+                colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated)
             ) {
                 Text(
                     text = emptyHint,
@@ -118,8 +118,8 @@ fun SavedCategoryShortcutsRow(
                     Surface(
                         onClick = onPrimaryShortcutClick,
                         modifier = Modifier.width(shortcutWidth).mouseClickable(onClick = onPrimaryShortcutClick),
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (isPrimaryShortcutSelected) {
                                 Primary.copy(alpha = 0.18f)
                             } else {
@@ -129,13 +129,13 @@ fun SavedCategoryShortcutsRow(
                             contentColor = if (isPrimaryShortcutSelected) Primary else OnSurface,
                             focusedContentColor = OnSurface
                         ),
-                        border = ClickableSurfaceDefaults.border(
+                        border = ClickableClickableSurfaceDefaults.border(
                             focusedBorder = Border(
                                 border = BorderStroke(FocusSpec.BorderWidth, FocusBorder),
                                 shape = RoundedCornerShape(14.dp)
                             )
                         ),
-                        scale = ClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
+                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
                     ) {
                         Column(
                             modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -169,20 +169,20 @@ fun SavedCategoryShortcutsRow(
                         onClick = { onShortcutClick(shortcut.name) },
                         onLongClick = onShortcutLongClick?.let { handler -> { handler(shortcut.name) } }
                     ),
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                         focusedContainerColor = Primary.copy(alpha = 0.22f),
                         contentColor = if (isSelected) Primary else OnSurface,
                         focusedContentColor = OnSurface
                     ),
-                    border = ClickableSurfaceDefaults.border(
+                    border = ClickableClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(FocusSpec.BorderWidth, FocusBorder),
                             shape = RoundedCornerShape(14.dp)
                         )
                     ),
-                    scale = ClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
+                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
                 ) {
                     Column(
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),

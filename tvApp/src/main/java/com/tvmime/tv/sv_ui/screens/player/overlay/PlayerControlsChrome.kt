@@ -61,11 +61,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.streamvault.app.device.rememberIsTelevisionDevice
@@ -509,8 +509,8 @@ private fun PlayerTopBar(
 
                 TvClickableSurface(
                     onClick = onClose,
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = Color.White.copy(alpha = 0.12f),
                         focusedContainerColor = Primary.copy(alpha = 0.9f)
                     )
@@ -612,7 +612,7 @@ private fun PlayerBottomBar(
                 Modifier.fillMaxWidth()
             },
             shape = RoundedCornerShape(if (isVod) 20.dp else 28.dp),
-            colors = SurfaceDefaults.colors(containerColor = Color(0xFF0C1624).copy(alpha = 0.92f))
+            colors = ClickableSurfaceDefaults.colors(containerColor = Color(0xFF0C1624).copy(alpha = 0.92f))
         ) {
             Column(
                 modifier = Modifier
@@ -1165,7 +1165,7 @@ private fun PlayerVodInfo(
 
     Surface(
         shape = RoundedCornerShape(18.dp),
-        colors = SurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.06f))
+        colors = ClickableSurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.06f))
     ) {
         Row(
             modifier = Modifier
@@ -1176,7 +1176,7 @@ private fun PlayerVodInfo(
         ) {
             Surface(
                 shape = RoundedCornerShape(999.dp),
-                colors = SurfaceDefaults.colors(containerColor = Color.Black.copy(alpha = 0.24f))
+                colors = ClickableSurfaceDefaults.colors(containerColor = Color.Black.copy(alpha = 0.24f))
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = transportGroupHorizontalPadding, vertical = 6.dp),
@@ -1200,8 +1200,8 @@ private fun PlayerVodInfo(
                     )
                     TvClickableSurface(
                         onClick = onTogglePlayPause,
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.84f),
                             focusedContainerColor = Primary
                         ),
@@ -1356,7 +1356,7 @@ private fun PlayerSeekPreviewCard(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        colors = SurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.08f))
+        colors = ClickableSurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.08f))
     ) {
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(
@@ -1456,8 +1456,8 @@ private fun PlayerQuickSettingsButton(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.1f),
             focusedContainerColor = Primary.copy(alpha = 0.9f)
         ),
@@ -1512,8 +1512,8 @@ private fun PlayerTransportButton(
 
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.1f),
             focusedContainerColor = Color.White.copy(alpha = 0.3f)
         ),
@@ -1562,7 +1562,7 @@ private fun PlayerMetaPill(
 ) {
     Surface(
         shape = RoundedCornerShape(999.dp),
-        colors = SurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (accent) Primary.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.10f)
         )
     ) {
@@ -1715,7 +1715,7 @@ private fun LiveTimeshiftScrubber(
 
     Surface(
         shape = RoundedCornerShape(20.dp),
-        colors = SurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.06f)),
+        colors = ClickableSurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.06f)),
         modifier = modifier
     ) {
         Row(
@@ -1728,7 +1728,7 @@ private fun LiveTimeshiftScrubber(
             // Transport controls pill
             Surface(
                 shape = RoundedCornerShape(999.dp),
-                colors = SurfaceDefaults.colors(containerColor = Color.Black.copy(alpha = 0.24f))
+                colors = ClickableSurfaceDefaults.colors(containerColor = Color.Black.copy(alpha = 0.24f))
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -1743,8 +1743,8 @@ private fun LiveTimeshiftScrubber(
                     )
                     TvClickableSurface(
                         onClick = onTogglePlayPause,
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(50)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.84f),
                             focusedContainerColor = Primary
                         ),

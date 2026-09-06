@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.ChannelLogoBadge
@@ -158,7 +158,7 @@ internal fun ImmersiveGuideHero(
 
     Surface(
         modifier = modifier.height(96.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
@@ -293,7 +293,7 @@ internal fun GuideHeroBadge(
 ) {
     Surface(
         shape = RoundedCornerShape(999.dp),
-        colors = SurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = if (highlight) accentColor.copy(alpha = 0.18f) else SurfaceHighlight
         )
     ) {
@@ -325,7 +325,7 @@ internal fun GuidePreviewPane(
 
     Surface(
         modifier = modifier.height(150.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
@@ -505,12 +505,12 @@ internal fun GuideToolbarButton(
             if (it.isFocused && !focused) onFocused()
             focused = it.isFocused
         },
-        colors = ClickableSurfaceDefaults.colors(
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-        border = ClickableSurfaceDefaults.border(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(14.dp)

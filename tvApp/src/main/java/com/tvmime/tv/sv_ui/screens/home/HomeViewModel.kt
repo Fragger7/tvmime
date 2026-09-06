@@ -468,7 +468,7 @@ class HomeViewModel @Inject constructor(
                     val customCats = values[1] as List<Category>
                     val defaultId = values[2] as Long?
                     val lastVisitedCategoryId = values[3] as Long?
-                    val hiddenCategoryIds = values[4] as Set<Long>
+                    val hiddenCategoryIds = (values[4] as Set<String>).mapNotNull { it.toLongOrNull() }.toSet()
                     val sortMode = values[5] as CategorySortMode
                     val pinnedCategoryIds = values[6] as Set<Long>
                     val recentCategory = Category(

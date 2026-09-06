@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -97,12 +97,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         )
         TvClickableSurface(
             onClick = { viewModel.setShowLiveSourceSwitcher(!uiState.showLiveSourceSwitcher) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -119,12 +119,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         }
         TvClickableSurface(
             onClick = { viewModel.setShowFavoritesCategory(!uiState.showFavoritesCategory) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -141,12 +141,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         }
         TvClickableSurface(
             onClick = { viewModel.setShowAllChannelsCategory(!uiState.showAllChannelsCategory) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -163,12 +163,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         }
         TvClickableSurface(
             onClick = { viewModel.setShowRecentChannelsCategory(!uiState.showRecentChannelsCategory) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -195,12 +195,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         )
         TvClickableSurface(
             onClick = { viewModel.setHideDecorativeLiveRows(!uiState.hideDecorativeLiveRows) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -308,12 +308,12 @@ internal fun LazyListScope.settingsBrowsingSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { onShowLanguageDialogChange(true) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -437,12 +437,12 @@ private fun RemoteShortcutProfileTab(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.16f) else Color.White.copy(alpha = 0.04f),
             focusedContainerColor = Primary.copy(alpha = 0.22f)
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = modifier
     ) {
         Box(
@@ -509,12 +509,12 @@ private fun RemoteShortcutButtonCard(
 
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = button.accentColor().copy(alpha = 0.10f),
             focusedContainerColor = button.accentColor().copy(alpha = 0.18f)
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = modifier
     ) {
         Column(

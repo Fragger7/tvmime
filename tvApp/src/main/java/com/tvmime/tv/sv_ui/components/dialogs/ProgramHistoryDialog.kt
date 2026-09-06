@@ -19,10 +19,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +80,7 @@ fun ProgramHistoryDialog(
         val dialogContent: @Composable (Modifier) -> Unit = { resolvedModifier ->
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                colors = SurfaceDefaults.colors(containerColor = MaterialTheme.colorScheme.surface),
+                colors = ClickableSurfaceDefaults.colors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = resolvedModifier
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
@@ -145,9 +145,9 @@ fun ProgramHistoryDialog(
                                         },
                                         shape = RoundedCornerShape(8.dp)
                                     ),
-                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1.0f),
-                                colors = ClickableSurfaceDefaults.colors(
+                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.0f),
+                                colors = ClickableClickableSurfaceDefaults.colors(
                                     containerColor = Color.Transparent,
                                     focusedContainerColor = focusedContainerColor
                                 )

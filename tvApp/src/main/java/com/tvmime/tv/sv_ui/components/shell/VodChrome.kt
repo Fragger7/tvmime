@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.streamvault.app.device.rememberIsTelevisionDevice
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.sv_ui.design.AppColors
 import com.tvmime.tv.sv_ui.components.ChipRowItem
@@ -114,18 +114,18 @@ fun VodHeroStrip(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .height(132.dp),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(22.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(22.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceHighlight,
             focusedContainerColor = Primary.copy(alpha = 0.22f)
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(22.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier
@@ -155,7 +155,7 @@ fun VodHeroStrip(
             }
             Surface(
                 shape = RoundedCornerShape(999.dp),
-                colors = SurfaceDefaults.colors(containerColor = Primary)
+                colors = ClickableSurfaceDefaults.colors(containerColor = Primary)
             ) {
                 Text(
                     text = actionLabel,
@@ -250,18 +250,18 @@ fun VodCategoryPickerDialog(
                                         onDismiss()
                                     }
                                 },
-                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                                colors = ClickableSurfaceDefaults.colors(
+                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                                colors = ClickableClickableSurfaceDefaults.colors(
                                     containerColor = SurfaceElevated,
                                     focusedContainerColor = SurfaceHighlight
                                 ),
-                                border = ClickableSurfaceDefaults.border(
+                                border = ClickableClickableSurfaceDefaults.border(
                                     focusedBorder = Border(
                                         border = BorderStroke(2.dp, FocusBorder),
                                         shape = RoundedCornerShape(14.dp)
                                     )
                                 ),
-                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                             ) {
                                 Row(
                                     modifier = Modifier
@@ -394,20 +394,20 @@ private fun VodBrowseOptionChip(
 ) {
     Surface(
         onClick = onClick,
-        colors = ClickableSurfaceDefaults.colors(
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.28f) else SurfaceHighlight,
             contentColor = if (selected) Primary else TextPrimary,
             focusedContentColor = TextPrimary
         ),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        border = ClickableSurfaceDefaults.border(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(999.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 11.dp),

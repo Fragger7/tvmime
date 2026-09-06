@@ -40,6 +40,7 @@ interface PreferencesRepository {
     
     fun getAspectRatioForChannel(channelId: Long): Flow<Float?>
     fun getHiddenCategoryIds(providerId: Long, type: ContentType): Flow<Set<String>>
+    fun getPinnedCategoryIds(providerId: Long, type: ContentType): Flow<Set<Long>>
     fun getLastLiveCategoryId(providerId: Long): Flow<String?>
     fun observeAudioVideoOffsetForChannel(channelId: Long): Flow<Long?>
     suspend fun clearAudioVideoOffsetForChannel(channelId: Long)

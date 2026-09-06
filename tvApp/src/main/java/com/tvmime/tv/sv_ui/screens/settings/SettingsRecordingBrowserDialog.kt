@@ -33,8 +33,8 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.TvEmptyState
@@ -87,7 +87,7 @@ internal fun RecordingBrowserDialog(
                 modifier = Modifier
                     .fillMaxWidth(0.93f)
                     .fillMaxHeight(0.9f),
-                colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+                colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(
@@ -189,7 +189,7 @@ private fun RecordingBrowserPanel(
             modifier = Modifier
                 .width(380.dp)
                 .fillMaxHeight(),
-            colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+            colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
@@ -247,14 +247,14 @@ private fun RecordingPickerRow(
     val accent = recordingStatusAccent(item.status)
     TvClickableSurface(
         onClick = onSelected,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (selected) accent.copy(alpha = 0.14f) else Color.Transparent,
             contentColor = OnBackground,
             focusedContainerColor = SurfaceHighlight.copy(alpha = 0.48f),
             focusedContentColor = OnBackground
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(
                     1.dp,
@@ -267,7 +267,7 @@ private fun RecordingPickerRow(
                 shape = RoundedCornerShape(12.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged { focusState ->
@@ -332,7 +332,7 @@ private fun RecordingDetailPanel(
     val dateTimeFormat = remember(appTimeFormat) { appTimeFormat.createDateTimeFormat() }
     Surface(
         modifier = modifier,
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(

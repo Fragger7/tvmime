@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -65,12 +65,12 @@ internal fun LazyListScope.settingsPrivacySection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.toggleIncognitoMode() },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -88,12 +88,12 @@ internal fun LazyListScope.settingsPrivacySection(
         Spacer(Modifier.height(2.dp))
         TvClickableSurface(
             onClick = { viewModel.toggleXtreamTextClassification() },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -111,12 +111,12 @@ internal fun LazyListScope.settingsPrivacySection(
         Spacer(Modifier.height(2.dp))
         TvClickableSurface(
             onClick = { viewModel.toggleXtreamBase64TextCompatibility() },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -134,12 +134,12 @@ internal fun LazyListScope.settingsPrivacySection(
         Spacer(Modifier.height(2.dp))
         TvClickableSurface(
             onClick = { onShowClearHistoryDialogChange(true) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

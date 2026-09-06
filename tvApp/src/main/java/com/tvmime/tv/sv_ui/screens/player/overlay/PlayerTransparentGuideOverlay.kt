@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.model.isArchivePlayable
@@ -128,7 +128,7 @@ fun PlayerTransparentGuideOverlay(
                     .fillMaxWidth()
                     .padding(start = 18.dp, top = 16.dp, end = 18.dp),
                 shape = RoundedCornerShape(18.dp),
-                colors = SurfaceDefaults.colors(
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = Color.Black.copy(alpha = 0.32f)
                 )
             ) {

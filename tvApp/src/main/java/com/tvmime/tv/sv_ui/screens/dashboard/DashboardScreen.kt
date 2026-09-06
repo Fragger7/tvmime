@@ -44,10 +44,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import coil3.compose.AsyncImage
 import com.tvmime.tv.R
@@ -430,7 +430,7 @@ private fun DashboardStatRow(
         items(statItems, key = { it }) { statLabel ->
             Surface(
                 shape = RoundedCornerShape(999.dp),
-                colors = SurfaceDefaults.colors(
+                colors = ClickableSurfaceDefaults.colors(
                     containerColor = AppColors.Surface.copy(alpha = 0.64f)
                 )
             ) {
@@ -511,12 +511,12 @@ private fun DashboardShortcutCard(
         modifier = Modifier
             .width(cardWidth)
             .height(76.dp),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, accentColor.copy(alpha = 0.28f)),
                 shape = RoundedCornerShape(16.dp)
@@ -621,7 +621,7 @@ private fun DashboardProviderHealthCard(
             .fillMaxWidth()
             .padding(horizontal = 48.dp, vertical = 4.dp),
         shape = RoundedCornerShape(22.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceHighlight)
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceHighlight)
     ) {
         Row(
             modifier = Modifier
@@ -693,7 +693,7 @@ private fun DashboardHealthPill(
 ) {
     Surface(
         shape = RoundedCornerShape(18.dp),
-        colors = SurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.08f))
+        colors = ClickableSurfaceDefaults.colors(containerColor = Color.White.copy(alpha = 0.08f))
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -723,7 +723,7 @@ private fun DashboardProviderWarningCard(
             .fillMaxWidth()
             .padding(horizontal = 48.dp, vertical = 6.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated)
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 22.dp, vertical = 18.dp),
@@ -760,7 +760,7 @@ private fun DashboardUpdateCard(
             .fillMaxWidth()
             .padding(horizontal = 48.dp, vertical = 6.dp),
         shape = RoundedCornerShape(20.dp),
-        colors = SurfaceDefaults.colors(containerColor = Primary.copy(alpha = 0.16f)),
+        colors = ClickableSurfaceDefaults.colors(containerColor = Primary.copy(alpha = 0.16f)),
         border = Border(BorderStroke(1.dp, Primary.copy(alpha = 0.45f)))
     ) {
         Column(
@@ -829,7 +829,7 @@ private fun EmptyDashboard(
 
         Surface(
             shape = RoundedCornerShape(28.dp),
-            colors = SurfaceDefaults.colors(
+            colors = ClickableSurfaceDefaults.colors(
                 containerColor = SurfaceHighlight
             )
         ) {
@@ -914,8 +914,8 @@ private fun FavoriteChannelsRow(
             )
             TvClickableSurface(
                 onClick = onSeeAll,
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                colors = ClickableSurfaceDefaults.colors(
+                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                colors = ClickableClickableSurfaceDefaults.colors(
                     containerColor = Primary.copy(alpha = 0.12f),
                     focusedContainerColor = Primary.copy(alpha = 0.22f),
                     contentColor = TextTertiary
@@ -951,12 +951,12 @@ private fun FavoriteChannelLogoCard(
     TvClickableSurface(
         onClick = onClick,
         modifier = Modifier.width(86.dp),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated,
             focusedContainerColor = SurfaceHighlight
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(18.dp)

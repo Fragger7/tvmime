@@ -136,8 +136,8 @@ fun CloudSyncScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Surface(
                     onClick = onRefreshCloudPortals,
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = Color(0xFF2563EB),
                         focusedContainerColor = Color(0xFF3B82F6)
                     ),
@@ -165,8 +165,8 @@ fun CloudSyncScreen(
 
                 Surface(
                     onClick = onSyncCurrentPortal,
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = crimson,
                         focusedContainerColor = Color(0xFFFF1E27)
                     ),
@@ -194,8 +194,8 @@ fun CloudSyncScreen(
 
                 Surface(
                     onClick = onLoadDemoPortal,
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = cardBg,
                         focusedContainerColor = Color(0xFF262638)
                     ),
@@ -253,8 +253,8 @@ fun CloudSyncScreen(
                             onClick = {
                                 onTogglePortal(portal.id, !isCurrentActive)
                             },
-                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = if (isCurrentActive) Color(0x33E50914) else cardBg,
                                 focusedContainerColor = Color(0xFF2B2B3D)
                             ),

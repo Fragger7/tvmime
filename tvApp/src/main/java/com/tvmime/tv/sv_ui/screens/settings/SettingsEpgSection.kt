@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import androidx.compose.foundation.lazy.items
@@ -227,17 +227,17 @@ private fun PolicyChip(
     TvClickableSurface(
         onClick = onClick,
         modifier = Modifier,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.22f) else Color(0xFF0F1B29),
             focusedContainerColor = if (selected) Primary.copy(alpha = 0.32f) else Color(0xFF1A2A3B)
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             border = Border(BorderStroke(1.dp, if (selected) Primary else Color(0xFF2D4358))),
             focusedBorder = Border(BorderStroke(2.dp, Primary))
         ),
-        glow = ClickableSurfaceDefaults.glow(),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f)
+        glow = ClickableClickableSurfaceDefaults.glow(),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.02f)
     ) {
         Text(
             text = text,
@@ -330,13 +330,13 @@ private fun ShiftAdjustButton(
     TvClickableSurface(
         onClick = onClick,
         enabled = enabled,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color(0xFF262626),
             focusedContainerColor = Primary,
             disabledContainerColor = Color(0xFF1A1A1A)
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = androidx.compose.foundation.BorderStroke(2.dp, Primary)
             )

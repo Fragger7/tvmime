@@ -22,7 +22,7 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Border
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -44,7 +44,7 @@ fun SavedCategoryContextCard(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        colors = SurfaceDefaults.colors(
+        colors = ClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated
         )
     ) {

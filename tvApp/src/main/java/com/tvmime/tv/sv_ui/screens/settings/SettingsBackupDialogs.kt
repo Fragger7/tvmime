@@ -18,7 +18,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -181,12 +181,12 @@ private fun BackupDialogItemSurface(
     TvClickableSurface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(16.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = SurfaceElevated.copy(alpha = 0.72f),
             focusedContainerColor = Primary.copy(alpha = 0.28f),
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.02f),
     ) {
         Row(
             modifier = Modifier
@@ -250,13 +250,13 @@ private fun BackupDialogManagementRow(
         TvClickableSurface(
             onClick = onDelete,
             enabled = enabled,
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.White.copy(alpha = 0.08f),
                 focusedContainerColor = Color.White.copy(alpha = 0.18f),
                 disabledContainerColor = Color.White.copy(alpha = 0.04f),
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         ) {
             Text(
                 text = stringResource(R.string.settings_delete),

@@ -29,10 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.components.dialogs.PremiumDialog
@@ -68,7 +68,7 @@ internal fun CombinedM3uProfilesCard(
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated),
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -315,12 +315,12 @@ internal fun CreateCombinedM3uDialog(
                                 }
                             },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = if (isSelected) Primary.copy(alpha = 0.16f) else Color.White.copy(alpha = 0.04f),
                                 focusedContainerColor = Primary.copy(alpha = 0.24f)
                             ),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Row(
                                 modifier = Modifier
@@ -407,12 +407,12 @@ internal fun AddCombinedProviderDialog(
                         TvClickableSurface(
                             onClick = { selectedProviderId = provider.id },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = if (isSelected) Primary.copy(alpha = 0.16f) else Color.White.copy(alpha = 0.04f),
                                 focusedContainerColor = Primary.copy(alpha = 0.22f)
                             ),
-                            border = ClickableSurfaceDefaults.border(
+                            border = ClickableClickableSurfaceDefaults.border(
                                 border = Border(
                                     border = BorderStroke(
                                         1.dp,
@@ -425,7 +425,7 @@ internal fun AddCombinedProviderDialog(
                                     shape = RoundedCornerShape(12.dp)
                                 )
                             ),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Row(
                                 modifier = Modifier
@@ -476,8 +476,8 @@ private fun ProviderChip(
 ) {
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.16f) else Color.Transparent,
             focusedContainerColor = Primary.copy(alpha = 0.24f)
         )

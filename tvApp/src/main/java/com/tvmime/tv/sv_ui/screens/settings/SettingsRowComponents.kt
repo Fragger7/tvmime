@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -72,12 +72,12 @@ internal fun SettingsRow(label: String, value: String) {
     val focusRequester = remember { FocusRequester() }
     TvClickableSurface(
         onClick = {},
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.Transparent,
             focusedContainerColor = Primary.copy(alpha = 0.15f)
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
@@ -110,12 +110,12 @@ internal fun ClickableSettingsRow(
     val focusRequester = remember { FocusRequester() }
     TvClickableSurface(
         onClick = { if (enabled) onClick() },
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.Transparent,
             focusedContainerColor = if (enabled) Primary.copy(alpha = 0.15f) else Color.Transparent
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
@@ -157,12 +157,12 @@ internal fun SwitchSettingsRow(
     val focusRequester = remember { FocusRequester() }
     TvClickableSurface(
         onClick = { if (enabled) onCheckedChange(!checked) },
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.Transparent,
             focusedContainerColor = if (enabled) Primary.copy(alpha = 0.15f) else Color.Transparent
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
@@ -298,12 +298,12 @@ internal fun SettingsNavItem(
     val focusRequester = remember { FocusRequester() }
     TvClickableSurface(
         onClick = onClick,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(0.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(0.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.11f) else Color.Transparent,
             focusedContainerColor = Primary.copy(alpha = 0.22f)
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
         modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)

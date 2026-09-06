@@ -142,7 +142,7 @@ fun OnboardingScreen(
                         }
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
-                    colors = SurfaceDefaults.colors(containerColor = if (isLoading) Color.DarkGray else MaterialTheme.colorScheme.surfaceVariant)
+                    colors = ClickableSurfaceDefaults.colors(containerColor = if (isLoading) Color.DarkGray else MaterialTheme.colorScheme.surfaceVariant)
                 ) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(text = if (isLoading) "Loading Portals..." else "Login & Sync")

@@ -43,7 +43,7 @@ fun LiveTvScreen(
                     Surface(
                         onClick = { viewModel.selectCategory(category.categoryId) },
                         modifier = Modifier.fillMaxWidth().height(50.dp),
-                        colors = androidx.tv.material3.SurfaceDefaults.colors(
+                        colors = androidx.tv.material3.ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.onSurface
                         )
@@ -69,7 +69,7 @@ fun LiveTvScreen(
                                 viewModel.triggerMockSync("https://iptv-org.github.io/iptv/countries/us.m3u")
                             },
                             modifier = Modifier.fillMaxWidth().height(80.dp),
-                            colors = androidx.tv.material3.SurfaceDefaults.colors(containerColor = MaterialTheme.colorScheme.primary)
+                            colors = androidx.tv.material3.ClickableClickableSurfaceDefaults.colors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
                             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                 Text("Click to trigger V3 Mass Ingestion Engine (Test M3U)")
@@ -82,7 +82,7 @@ fun LiveTvScreen(
                     Surface(
                         onClick = { viewModel.playChannel(channel) },
                         modifier = Modifier.fillMaxWidth().height(60.dp),
-                        colors = androidx.tv.material3.SurfaceDefaults.colors(
+                        colors = androidx.tv.material3.ClickableClickableSurfaceDefaults.colors(
                             containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {

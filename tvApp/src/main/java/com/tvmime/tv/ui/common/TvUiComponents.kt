@@ -88,7 +88,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.tv.material3.LocalContentColor
-import com.tvmime.tv.ui.common.TvMimeThemeTokens
 
 @Composable
 fun StreamMateScreenBackground(
@@ -96,8 +95,8 @@ fun StreamMateScreenBackground(
     contentPadding: PaddingValues? = null,
     content: @Composable (Modifier) -> Unit,
 ) {
-    val palette = TvMimeThemeTokens.palette
-    val spacing = TvMimeThemeTokens.spacing
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
+    val spacing = androidx.compose.foundation.layout.PaddingValues(8.dp)
     val padding = contentPadding ?: PaddingValues(
         horizontal = spacing.safeHorizontal,
         vertical = spacing.safeVertical,
@@ -176,7 +175,7 @@ fun SohvaTvBrand(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 34.sp,
 ) {
-    val palette = TvMimeThemeTokens.palette
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
     SohvaWordmark(
         name = "TVMime",
         accent = palette.focus,
@@ -189,7 +188,7 @@ fun SohvaTvBrand(
 fun SohvaSportBrand(modifier: Modifier = Modifier) {
     SohvaWordmark(
         name = "TVMime Sports",
-        accent = TvMimeThemeTokens.palette.accent,
+        accent = androidx.compose.ui.graphics.Color(0xFFDC143C),
         fontSize = 30.sp,
         modifier = modifier,
     )
@@ -209,7 +208,7 @@ private fun SohvaWordmark(
             addStyle(SpanStyle(color = accent), name.lastIndexOf(' ') + 1, name.length)
         },
         modifier = modifier,
-        color = TvMimeThemeTokens.palette.textPrimary,
+        color = androidx.compose.ui.graphics.Color.White,
         fontSize = fontSize,
         fontWeight = FontWeight.Bold,
         letterSpacing = (-0.4).sp,
@@ -227,36 +226,36 @@ private fun SohvaWordmark(
  * guarantee it exists at all.
  */
 object TvIcons {
-    val Home: Int = android.android.R.drawable.ic_menu_help
-    val Back: Int = android.android.R.drawable.ic_menu_help
-    val Aspect: Int = android.android.R.drawable.ic_menu_help
-    val Audio: Int = android.android.R.drawable.ic_menu_help
-    val Subtitles: Int = android.android.R.drawable.ic_menu_help
-    val Stats: Int = android.android.R.drawable.ic_menu_help
-    val ChevronRight: Int = android.android.R.drawable.ic_menu_help
-    val ChevronDown: Int = android.android.R.drawable.ic_menu_help
-    val Lock: Int = android.android.R.drawable.ic_menu_help
-    val Link: Int = android.android.R.drawable.ic_menu_help
-    val Key: Int = android.android.R.drawable.ic_menu_help
-    val Refresh: Int = android.android.R.drawable.ic_menu_help
-    val Check: Int = android.android.R.drawable.ic_menu_help
-    val Play: Int = android.android.R.drawable.ic_menu_help
-    val Pause: Int = android.android.R.drawable.ic_menu_help
-    val Save: Int = android.android.R.drawable.ic_menu_help
-    val Settings: Int = android.android.R.drawable.ic_menu_help
-    val Delete: Int = android.android.R.drawable.ic_menu_help
-    val Close: Int = android.android.R.drawable.ic_menu_help
-    val Channels: Int = android.android.R.drawable.ic_menu_help
-    val Target: Int = android.android.R.drawable.ic_menu_help
-    val Guide: Int = android.android.R.drawable.ic_menu_help
-    val Epg: Int = android.android.R.drawable.ic_menu_help
-    val Info: Int = android.android.R.drawable.ic_menu_help
-    val Search: Int = android.android.R.drawable.ic_menu_help
-    val Replay: Int = android.android.R.drawable.ic_menu_help
-    val Forward: Int = android.android.R.drawable.ic_menu_help
-    val Rewind: Int = android.android.R.drawable.ic_menu_help
-    val Star: Int = android.android.R.drawable.ic_menu_help
-    val StarOutline: Int = android.android.R.drawable.ic_menu_help
+    val Home: Int = android.R.drawable.ic_menu_help
+    val Back: Int = android.R.drawable.ic_menu_help
+    val Aspect: Int = android.R.drawable.ic_menu_help
+    val Audio: Int = android.R.drawable.ic_menu_help
+    val Subtitles: Int = android.R.drawable.ic_menu_help
+    val Stats: Int = android.R.drawable.ic_menu_help
+    val ChevronRight: Int = android.R.drawable.ic_menu_help
+    val ChevronDown: Int = android.R.drawable.ic_menu_help
+    val Lock: Int = android.R.drawable.ic_menu_help
+    val Link: Int = android.R.drawable.ic_menu_help
+    val Key: Int = android.R.drawable.ic_menu_help
+    val Refresh: Int = android.R.drawable.ic_menu_help
+    val Check: Int = android.R.drawable.ic_menu_help
+    val Play: Int = android.R.drawable.ic_menu_help
+    val Pause: Int = android.R.drawable.ic_menu_help
+    val Save: Int = android.R.drawable.ic_menu_help
+    val Settings: Int = android.R.drawable.ic_menu_help
+    val Delete: Int = android.R.drawable.ic_menu_help
+    val Close: Int = android.R.drawable.ic_menu_help
+    val Channels: Int = android.R.drawable.ic_menu_help
+    val Target: Int = android.R.drawable.ic_menu_help
+    val Guide: Int = android.R.drawable.ic_menu_help
+    val Epg: Int = android.R.drawable.ic_menu_help
+    val Info: Int = android.R.drawable.ic_menu_help
+    val Search: Int = android.R.drawable.ic_menu_help
+    val Replay: Int = android.R.drawable.ic_menu_help
+    val Forward: Int = android.R.drawable.ic_menu_help
+    val Rewind: Int = android.R.drawable.ic_menu_help
+    val Star: Int = android.R.drawable.ic_menu_help
+    val StarOutline: Int = android.R.drawable.ic_menu_help
 }
 
 /**
@@ -280,8 +279,8 @@ fun TvActionButton(
     danger: Boolean = false,
     selected: Boolean = false,
 ) {
-    val palette = TvMimeThemeTokens.palette
-    val typography = TvMimeThemeTokens.typography
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
+    val typography = androidx.compose.material3.Typography()
     var focused by remember { mutableStateOf(false) }
     val colors = tvSurfaceColors(
         focused = focused,
@@ -307,7 +306,7 @@ fun TvActionButton(
     val scale by animateFloatAsState(if (focused) 1.03f else 1f, label = "button scale")
     val requesterModifier = focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier
     val tagModifier = testTag?.let { Modifier.testTag(it) } ?: Modifier
-    val shape = TvMimeThemeTokens.shapes.small
+    val shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
     Box(
         modifier = modifier
             .then(requesterModifier)
@@ -381,15 +380,15 @@ fun TvUrlField(
     editOnClickOnly: Boolean = false,
     compact: Boolean = false,
 ) {
-    val palette = TvMimeThemeTokens.palette
-    val typography = TvMimeThemeTokens.typography
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
+    val typography = androidx.compose.material3.Typography()
     var displayFocused by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf(!editOnClickOnly) }
     var restoreDisplayFocus by remember { mutableStateOf(false) }
     val displayFocusRequester = remember { FocusRequester() }
     val editorFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val shapes = TvMimeThemeTokens.shapes
+    val shapes = androidx.compose.material3.Shapes()
     val fieldShape = if (compact) shapes.small else shapes.medium
     val horizontalPadding = if (compact) 12.dp else 16.dp
     val verticalPadding = if (compact) 8.dp else 14.dp
@@ -634,7 +633,7 @@ fun tvSurfaceColors(
     resting: Color? = null,
     restingContent: Color? = null,
 ): TvSurfaceColors {
-    val palette = TvMimeThemeTokens.palette
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
     return when {
         !enabled -> TvSurfaceColors(
             background = resting ?: Color.Transparent,
@@ -690,13 +689,13 @@ fun TvSurface(
     contentAlignment: Alignment = Alignment.CenterStart,
     content: @Composable (colors: TvSurfaceColors) -> Unit,
 ) {
-    val palette = TvMimeThemeTokens.palette
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
     var focused by remember { mutableStateOf(false) }
     // A ringed surface keeps its resting fill and content under focus: the
     // ring is the signal, and flipping the fill as well would hide the
     // artwork it frames and leave dark ink on a dark ground.
     val colors = tvSurfaceColors(focused && !focusRing, selected, enabled, danger, resting, restingContent)
-    val resolvedShape = shape ?: TvMimeThemeTokens.shapes.small
+    val resolvedShape = shape ?: androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
     val background by animateColorAsState(colors.background, label = "surface background")
     val scale by animateFloatAsState(if (focused) focusScale else 1f, label = "surface scale")
     val requesterModifier = focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier
@@ -769,9 +768,9 @@ fun TvListRow(
     focusRequester: FocusRequester? = null,
     testTag: String? = null,
 ) {
-    val palette = TvMimeThemeTokens.palette
-    val typography = TvMimeThemeTokens.typography
-    val spacing = TvMimeThemeTokens.spacing
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
+    val typography = androidx.compose.material3.Typography()
+    val spacing = androidx.compose.foundation.layout.PaddingValues(8.dp)
     val labelStyle = if (dense) typography.label else typography.body
     var focused by remember { mutableStateOf(false) }
     Box(
@@ -808,7 +807,7 @@ fun TvListRow(
                         Modifier
                             .width(3.dp)
                             .height(22.dp)
-                            .clip(TvMimeThemeTokens.shapes.small)
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
                             // On the focused fill the bar has to invert too,
                             // or cyan-on-white swallows it.
                             .background(if (focused) palette.background else palette.focus),
@@ -892,8 +891,8 @@ fun TvTagChip(
     modifier: Modifier = Modifier,
     tone: TvTagTone = TvTagTone.MUTED,
 ) {
-    val palette = TvMimeThemeTokens.palette
-    val typography = TvMimeThemeTokens.typography
+    val palette = com.tvmime.theme.DesignSystemTokens.Colors
+    val typography = androidx.compose.material3.Typography()
     val color = when (tone) {
         TvTagTone.PRIMARY -> palette.focus
         TvTagTone.ACCENT -> palette.accent
@@ -912,7 +911,7 @@ fun TvTagChip(
         fontWeight = FontWeight.Bold,
         maxLines = 1,
         modifier = modifier
-            .clip(TvMimeThemeTokens.shapes.small)
+            .clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
             .background(if (filled) color else color.copy(alpha = 0.14f))
             .padding(horizontal = 8.dp, vertical = 3.dp),
     )

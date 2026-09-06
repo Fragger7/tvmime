@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -71,8 +71,8 @@ internal fun ParentalControlCard(
 
             TvClickableSurface(
                 onClick = onChangeLevel,
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-                colors = ClickableSurfaceDefaults.colors(
+                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                colors = ClickableClickableSurfaceDefaults.colors(
                     containerColor = Secondary.copy(alpha = 0.2f),
                     focusedContainerColor = Secondary.copy(alpha = 0.5f),
                     contentColor = Secondary,
@@ -98,8 +98,8 @@ internal fun ParentalControlCard(
 
             TvClickableSurface(
                 onClick = onChangePin,
-                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
-                colors = ClickableSurfaceDefaults.colors(
+                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(6.dp)),
+                colors = ClickableClickableSurfaceDefaults.colors(
                     containerColor = Primary.copy(alpha = 0.2f),
                     focusedContainerColor = Primary.copy(alpha = 0.5f),
                     contentColor = Primary,
@@ -132,8 +132,8 @@ internal fun LiveTvChannelModeDialog(
                 LiveTvChannelMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),
@@ -183,8 +183,8 @@ internal fun LiveTvQuickFilterVisibilityDialog(
                 LiveTvQuickFilterVisibilityMode.entries.forEach { mode ->
                     TvClickableSurface(
                         onClick = { onModeSelected(mode) },
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (mode == selectedMode) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                             focusedContainerColor = Primary.copy(alpha = 0.28f)
                         ),

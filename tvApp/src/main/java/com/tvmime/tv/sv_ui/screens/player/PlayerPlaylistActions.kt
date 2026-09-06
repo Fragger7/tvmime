@@ -144,13 +144,13 @@ internal fun PlayerViewModel.observeLastVisitedCategory() {
             playerPreferencesCoordinator.getHiddenCategoryIds(currentProviderId, ContentType.LIVE)
         ) { providerCategories, customCategories, lastVisitedCategoryId, hiddenCategoryIds ->
             val visibleProviderCategories = providerCategories.filter { category ->
-                category.id == ChannelRepository.ALL_CHANNELS_ID || category.id !in hiddenCategoryIds
+                category.id == ChannelRepository.ALL_CHANNELS_ID || category.id.toString() !in hiddenCategoryIds
             }
             val adjustedProviderCategories = visibleProviderCategories.map { category ->
                 if (category.id == ChannelRepository.ALL_CHANNELS_ID) {
                     category.copy(
                         count = providerCategories
-                            .filter { it.id != ChannelRepository.ALL_CHANNELS_ID && it.id !in hiddenCategoryIds }
+                            .filter { it.id != ChannelRepository.ALL_CHANNELS_ID && it.id.toString() !in hiddenCategoryIds }
                             .sumOf { it.count }
                     )
                 } else {

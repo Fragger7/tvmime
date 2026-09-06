@@ -38,7 +38,7 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Border
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.sv_ui.design.requestFocusSafely
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -84,7 +84,7 @@ fun RenameGroupDialog(
             Surface(
                 modifier = resolvedModifier,
                 shape = RoundedCornerShape(24.dp),
-                colors = SurfaceDefaults.colors(containerColor = SurfaceElevated)
+                colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated)
             ) {
                 Column(
                     modifier = Modifier

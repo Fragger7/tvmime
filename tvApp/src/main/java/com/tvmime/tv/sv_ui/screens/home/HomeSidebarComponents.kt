@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Border
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.streamvault.app.device.rememberIsTelevisionDevice
@@ -85,18 +85,18 @@ internal fun CompactSplitLauncherButton(
         modifier = modifier
             .widthIn(min = 112.dp)
             .height(34.dp),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Primary.copy(alpha = 0.18f),
             focusedContainerColor = Primary.copy(alpha = 0.3f),
             contentColor = OnBackground
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             border = Border(
                 border = BorderStroke(1.dp, Primary.copy(alpha = 0.55f))
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
@@ -134,7 +134,7 @@ internal fun LivePreviewPane(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(18.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceElevated.copy(alpha = 0.72f))
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated.copy(alpha = 0.72f))
     ) {
         Column(
             modifier = Modifier
@@ -300,14 +300,14 @@ internal fun CategoryItem(
                     }
                 } else false
             },
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.15f) else Color.Transparent,
             focusedContainerColor = SurfaceHighlight.copy(alpha = 0.82f),
             contentColor = if (isSelected) Primary else OnSurface
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, Primary.copy(alpha = 0.85f)),
                 shape = RoundedCornerShape(10.dp)
@@ -487,12 +487,12 @@ internal fun ReorderSidePanel(
                                     }
                                 } else false
                             },
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             focusedContainerColor = if (isDraggingThis) Primary else Primary.copy(alpha = 0.2f),
                             containerColor = if (isDraggingThis) Primary.copy(alpha = 0.5f) else Color.Transparent
                         ),
-                        border = ClickableSurfaceDefaults.border(
+                        border = ClickableClickableSurfaceDefaults.border(
                             focusedBorder = Border(
                                 border = BorderStroke(2.dp, FocusBorder),
                                 shape = RoundedCornerShape(8.dp)

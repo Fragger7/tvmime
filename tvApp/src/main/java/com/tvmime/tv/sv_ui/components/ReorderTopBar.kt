@@ -46,7 +46,7 @@ fun ReorderTopBar(
     ) {
         Surface(
             shape = RoundedCornerShape(24.dp),
-            colors = SurfaceDefaults.colors(containerColor = SurfaceElevated)
+            colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated)
         ) {
             Row(
                 modifier = Modifier

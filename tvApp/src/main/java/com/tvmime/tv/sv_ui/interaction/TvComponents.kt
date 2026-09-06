@@ -18,7 +18,7 @@ import androidx.tv.material3.ButtonScale
 import androidx.tv.material3.ButtonShape
 import androidx.tv.material3.ClickableSurfaceBorder
 import androidx.tv.material3.ClickableSurfaceColors
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.ClickableSurfaceGlow
 import androidx.tv.material3.ClickableSurfaceScale
 import androidx.tv.material3.ClickableSurfaceShape
@@ -36,11 +36,11 @@ fun TvClickableSurface(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: ClickableSurfaceShape = ClickableSurfaceDefaults.shape(),
-    colors: ClickableSurfaceColors = ClickableSurfaceDefaults.colors(),
-    border: ClickableSurfaceBorder = ClickableSurfaceDefaults.border(),
-    scale: ClickableSurfaceScale = ClickableSurfaceDefaults.scale(),
-    glow: ClickableSurfaceGlow = ClickableSurfaceDefaults.glow(),
+    shape: ClickableSurfaceShape = ClickableClickableSurfaceDefaults.shape(),
+    colors: ClickableSurfaceColors = ClickableClickableSurfaceDefaults.colors(),
+    border: ClickableSurfaceBorder = ClickableClickableSurfaceDefaults.border(),
+    scale: ClickableSurfaceScale = ClickableClickableSurfaceDefaults.scale(),
+    glow: ClickableSurfaceGlow = ClickableClickableSurfaceDefaults.glow(),
     interactionSource: MutableInteractionSource? = null,
     onLongClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,

@@ -21,7 +21,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.tvmime.tv.sv_ui.theme.OnSurface
@@ -44,7 +44,7 @@ fun M3uSeriesAssignmentDialog(
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(0.55f),
-            colors = SurfaceDefaults.colors(containerColor = SurfaceElevated)
+            colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceElevated)
         ) {
             Column(
                 modifier = Modifier.padding(28.dp),

@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -83,20 +83,20 @@ fun VodClassicSplitLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .onFocusChanged { isFocused = it.isFocused },
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(14.dp)),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = if (category.isSelected) AppColors.Brand.copy(alpha = 0.22f) else AppColors.SurfaceElevated,
                         focusedContainerColor = AppColors.SurfaceEmphasis,
                         contentColor = if (category.isSelected) AppColors.BrandStrong else AppColors.TextPrimary,
                         focusedContentColor = AppColors.TextPrimary
                     ),
-                    border = ClickableSurfaceDefaults.border(
+                    border = ClickableClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                             shape = RoundedCornerShape(14.dp)
                         )
                     ),
-                    scale = ClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
+                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = FocusSpec.FocusedScale)
                 ) {
                     Row(
                         modifier = Modifier
@@ -204,20 +204,20 @@ private fun VodClassicHeaderActionButton(
     TvClickableSurface(
         onClick = action.onClick,
         modifier = modifier,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(18.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) AppColors.Brand.copy(alpha = 0.18f) else AppColors.SurfaceElevated,
             focusedContainerColor = AppColors.SurfaceEmphasis,
             contentColor = if (isSelected) AppColors.BrandStrong else AppColors.TextPrimary,
             focusedContentColor = AppColors.TextPrimary
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = RoundedCornerShape(18.dp)
             )
         ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),

@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.sv_ui.design.FocusSpec
@@ -96,12 +96,12 @@ internal fun EpgSourceCard(
                                     )
                                 },
                                 enabled = !savingTimezone,
-                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                                colors = ClickableSurfaceDefaults.colors(
+                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                colors = ClickableClickableSurfaceDefaults.colors(
                                     containerColor = Primary.copy(alpha = 0.15f),
                                     focusedContainerColor = Primary.copy(alpha = 0.3f)
                                 ),
-                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                             ) {
                                 Text(
                                     if (savingTimezone) "Saving..." else "Save timezone",
@@ -113,12 +113,12 @@ internal fun EpgSourceCard(
                             TvClickableSurface(
                                 onClick = { editingTimezone = false },
                                 enabled = !savingTimezone,
-                                shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                                colors = ClickableSurfaceDefaults.colors(
+                                shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                                colors = ClickableClickableSurfaceDefaults.colors(
                                     containerColor = Color.White.copy(alpha = 0.08f),
                                     focusedContainerColor = Color.White.copy(alpha = 0.15f)
                                 ),
-                                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                             ) {
                                 Text(
                                     "Cancel",
@@ -141,13 +141,13 @@ internal fun EpgSourceCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TvClickableSurface(
                         onClick = { editingTimezone = !editingTimezone },
-                        shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = Color.White.copy(alpha = 0.08f),
                             focusedContainerColor = Color.White.copy(alpha = 0.15f)
                         ),
                         border = epgActionBorder(sourceActionShape),
-                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                     ) {
                         Text(
                             "Timezone",
@@ -158,13 +158,13 @@ internal fun EpgSourceCard(
                     }
                     TvClickableSurface(
                         onClick = { onToggleEnabled(!source.enabled) },
-                        shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (source.enabled) Color(0xFF66BB6A).copy(alpha = 0.2f) else Color.White.copy(alpha = 0.08f),
                             focusedContainerColor = if (source.enabled) Color(0xFF66BB6A).copy(alpha = 0.4f) else Color.White.copy(alpha = 0.15f)
                         ),
                         border = epgActionBorder(sourceActionShape),
-                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                     ) {
                         Text(
                             if (source.enabled) "ON" else "OFF",
@@ -175,13 +175,13 @@ internal fun EpgSourceCard(
                     }
                     TvClickableSurface(
                         onClick = onRefresh,
-                        shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = Primary.copy(alpha = 0.15f),
                             focusedContainerColor = Primary.copy(alpha = 0.3f)
                         ),
                         border = epgActionBorder(sourceActionShape, enabled = !isRefreshing),
-                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
                         enabled = !isRefreshing
                     ) {
                         Text(
@@ -194,38 +194,38 @@ internal fun EpgSourceCard(
                     if (pendingDelete) {
                         TvClickableSurface(
                             onClick = { onSetPendingDelete(false) },
-                            shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = Color.White.copy(alpha = 0.08f),
                                 focusedContainerColor = Color.White.copy(alpha = 0.15f)
                             ),
                             border = epgActionBorder(sourceActionShape),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Text("Cancel", modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, color = OnSurfaceDim)
                         }
                         TvClickableSurface(
                             onClick = onDelete,
-                            shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = Color(0xFFEF5350).copy(alpha = 0.25f),
                                 focusedContainerColor = Color(0xFFEF5350).copy(alpha = 0.45f)
                             ),
                             border = epgActionBorder(sourceActionShape),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Text("Confirm Delete", modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, color = Color(0xFFEF5350))
                         }
                     } else {
                         TvClickableSurface(
                             onClick = { onSetPendingDelete(true) },
-                            shape = ClickableSurfaceDefaults.shape(sourceActionShape),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(sourceActionShape),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = Color(0xFFEF5350).copy(alpha = 0.12f),
                                 focusedContainerColor = Color(0xFFEF5350).copy(alpha = 0.25f)
                             ),
                             border = epgActionBorder(sourceActionShape),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Text("Delete", modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), style = MaterialTheme.typography.labelSmall, color = Color(0xFFEF5350))
                         }
@@ -278,13 +278,13 @@ internal fun AddEpgSourceCard(viewModel: SettingsViewModel) {
                 val addActionShape = RoundedCornerShape(8.dp)
                 TvClickableSurface(
                     onClick = { filePickerLauncher.launch(arrayOf("*/*")) },
-                    shape = ClickableSurfaceDefaults.shape(addActionShape),
-                    colors = ClickableSurfaceDefaults.colors(
+                    shape = ClickableClickableSurfaceDefaults.shape(addActionShape),
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = Primary.copy(alpha = 0.15f),
                         focusedContainerColor = Primary.copy(alpha = 0.3f)
                     ),
                     border = epgActionBorder(addActionShape),
-                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                 ) {
                     Text("Browse", modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp), style = MaterialTheme.typography.labelMedium, color = Primary)
                 }
@@ -314,13 +314,13 @@ internal fun AddEpgSourceCard(viewModel: SettingsViewModel) {
                     }
                 },
                 enabled = newName.isNotBlank() && newUrl.isNotBlank() && !isSubmitting,
-                shape = ClickableSurfaceDefaults.shape(addSourceShape),
-                colors = ClickableSurfaceDefaults.colors(
+                shape = ClickableClickableSurfaceDefaults.shape(addSourceShape),
+                colors = ClickableClickableSurfaceDefaults.colors(
                     containerColor = Color(0xFF66BB6A).copy(alpha = 0.2f),
                     focusedContainerColor = Color(0xFF66BB6A).copy(alpha = 0.4f)
                 ),
                 border = epgActionBorder(addSourceShape),
-                scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
             ) {
                 Text("Add Source", modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), color = Color(0xFF66BB6A), fontWeight = FontWeight.Medium)
             }
@@ -330,7 +330,7 @@ internal fun AddEpgSourceCard(viewModel: SettingsViewModel) {
 
 @Composable
 internal fun epgActionBorder(shape: RoundedCornerShape, enabled: Boolean = true) =
-    ClickableSurfaceDefaults.border(
+    ClickableClickableSurfaceDefaults.border(
         border = Border(
             border = BorderStroke(1.dp, Color.White.copy(alpha = if (enabled) 0.08f else 0.04f)),
             shape = shape

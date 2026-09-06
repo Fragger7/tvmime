@@ -52,7 +52,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -324,14 +324,14 @@ internal fun GuideSearchField(
             .focusRequester(focusRequester)
             .bringIntoViewRequester(bringIntoViewRequester)
             .onFocusChanged { hasContainerFocus = it.isFocused },
-        colors = ClickableSurfaceDefaults.colors(
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isFocused) SurfaceHighlight else SurfaceElevated,
             focusedContainerColor = SurfaceHighlight,
             contentColor = OnSurface,
             focusedContentColor = OnSurface
         ),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        border = ClickableSurfaceDefaults.border(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(10.dp)
@@ -547,14 +547,14 @@ internal fun GuideDayRow(
                 val isSelected = dayStart == selectedDayStart
                 TvClickableSurface(
                     onClick = { onDaySelected(dayStart) },
-                    colors = ClickableSurfaceDefaults.colors(
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                         focusedContainerColor = SurfaceHighlight,
                         contentColor = if (isSelected) Primary else OnSurface,
                         focusedContentColor = OnSurface
                     ),
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    border = ClickableSurfaceDefaults.border(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    border = ClickableClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(2.dp, FocusBorder),
                             shape = RoundedCornerShape(999.dp)
@@ -598,14 +598,14 @@ internal fun GuideViewOptionsRow(
             item {
                 TvClickableSurface(
                     onClick = onToggleScheduledOnly,
-                    colors = ClickableSurfaceDefaults.colors(
+                    colors = ClickableClickableSurfaceDefaults.colors(
                         containerColor = if (showScheduledOnly) Primary.copy(alpha = 0.18f) else SurfaceElevated,
                         focusedContainerColor = SurfaceHighlight,
                         contentColor = if (showScheduledOnly) Primary else OnSurface,
                         focusedContentColor = OnSurface
                     ),
-                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-                    border = ClickableSurfaceDefaults.border(
+                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+                    border = ClickableClickableSurfaceDefaults.border(
                         focusedBorder = Border(
                             border = BorderStroke(2.dp, FocusBorder),
                             shape = RoundedCornerShape(999.dp)
@@ -676,14 +676,14 @@ internal fun GuideShortcutChip(
     TvClickableSurface(
         onClick = onClick,
         modifier = modifier,
-        colors = ClickableSurfaceDefaults.colors(
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (isSelected) Primary.copy(alpha = 0.18f) else SurfaceElevated,
             focusedContainerColor = SurfaceHighlight,
             contentColor = if (isSelected) Primary else OnSurface,
             focusedContentColor = OnSurface
         ),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
-        border = ClickableSurfaceDefaults.border(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(999.dp)),
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, FocusBorder),
                 shape = RoundedCornerShape(999.dp)

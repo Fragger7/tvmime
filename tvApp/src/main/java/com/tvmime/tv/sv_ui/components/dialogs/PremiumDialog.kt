@@ -42,7 +42,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.streamvault.app.device.rememberIsTelevisionDevice
 import com.tvmime.tv.sv_ui.design.requestFocusSafely
@@ -109,7 +109,7 @@ fun PremiumDialog(
                     Surface(
                         modifier = dialogModifier,
                         shape = RoundedCornerShape(28.dp),
-                        colors = SurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
+                        colors = ClickableSurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
                     ) {
                         Column(
                             modifier = Modifier
@@ -176,7 +176,7 @@ fun PremiumDialog(
                     Surface(
                         modifier = dialogModifier,
                         shape = RoundedCornerShape(28.dp),
-                        colors = SurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
+                        colors = ClickableSurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
                     ) {
                         Column(
                             modifier = Modifier

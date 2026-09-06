@@ -24,7 +24,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -166,8 +166,8 @@ private fun BackupStrategyChip(
     TvClickableSurface(
         onClick = onClick,
         modifier = modifier,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(24.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(24.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = if (selected) Primary.copy(alpha = 0.2f) else SurfaceElevated,
             focusedContainerColor = Primary.copy(alpha = 0.35f)
         )

@@ -126,8 +126,8 @@ fun VodScreen(
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Surface(
                             onClick = { onPlayItem(heroItem) },
-                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = crimson,
                                 focusedContainerColor = Color(0xFFFF1E27)
                             ),
@@ -150,8 +150,8 @@ fun VodScreen(
 
                         Surface(
                             onClick = { onToggleFavorite(heroItem) },
-                            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = cardBg,
                                 focusedContainerColor = Color(0xFF262638)
                             ),
@@ -186,17 +186,17 @@ fun VodScreen(
                     val isSelected = cat.categoryId == selectedCategory?.categoryId
                     Surface(
                         onClick = { onSelectCategory(cat) },
-                        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(20.dp)),
-                        colors = ClickableSurfaceDefaults.colors(
+                        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(20.dp)),
+                        colors = ClickableClickableSurfaceDefaults.colors(
                             containerColor = if (isSelected) crimson else Color(0xFF181824),
                             focusedContainerColor = Color(0xFF26263A)
                         ),
-                        border = ClickableSurfaceDefaults.border(
+                        border = ClickableClickableSurfaceDefaults.border(
                             focusedBorder = Border(
                                 border = androidx.compose.foundation.BorderStroke(2.dp, crimson)
                             )
                         ),
-                        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.06f),
+                        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.06f),
                         modifier = Modifier.height(34.dp)
                     ) {
                         Box(
@@ -259,17 +259,17 @@ private fun VodPosterCard(
 
     Surface(
         onClick = onClick,
-        colors = ClickableSurfaceDefaults.colors(
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = cardBg,
             focusedContainerColor = Color(0xFF222232)
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = androidx.compose.foundation.BorderStroke(2.dp, crimson)
             )
         ),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1.08f),
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(10.dp)),
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1.08f),
         modifier = Modifier
             .width(140.dp)
             .height(210.dp)

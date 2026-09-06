@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.sv_ui.interaction.TvClickableSurface
@@ -87,13 +87,13 @@ internal fun ProviderEpgAssignmentsCard(
                         val assignActionShape = RoundedCornerShape(8.dp)
                         TvClickableSurface(
                             onClick = { onAssign(source.id) },
-                            shape = ClickableSurfaceDefaults.shape(assignActionShape),
-                            colors = ClickableSurfaceDefaults.colors(
+                            shape = ClickableClickableSurfaceDefaults.shape(assignActionShape),
+                            colors = ClickableClickableSurfaceDefaults.colors(
                                 containerColor = Color(0xFF66BB6A).copy(alpha = 0.12f),
                                 focusedContainerColor = Color(0xFF66BB6A).copy(alpha = 0.25f)
                             ),
                             border = epgActionBorder(assignActionShape),
-                            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                         ) {
                             Text(
                                 "+ ${source.name}",
@@ -143,13 +143,13 @@ private fun ProviderEpgAssignmentRow(
         Spacer(modifier = Modifier.width(6.dp))
         TvClickableSurface(
             onClick = onRemove,
-            shape = ClickableSurfaceDefaults.shape(priorityActionShape),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(priorityActionShape),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color(0xFFEF5350).copy(alpha = 0.12f),
                 focusedContainerColor = Color(0xFFEF5350).copy(alpha = 0.25f)
             ),
             border = epgActionBorder(priorityActionShape),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
         ) {
             Text("Remove", modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), style = MaterialTheme.typography.labelSmall, color = Color(0xFFEF5350))
         }
@@ -166,14 +166,14 @@ private fun ProviderEpgAssignmentButton(
     TvClickableSurface(
         onClick = onClick,
         enabled = enabled,
-        shape = ClickableSurfaceDefaults.shape(shape),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(shape),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = Color.White.copy(alpha = 0.08f),
             focusedContainerColor = Color.White.copy(alpha = 0.16f),
             disabledContainerColor = Color.White.copy(alpha = 0.04f)
         ),
         border = epgActionBorder(shape, enabled = enabled),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+        scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
     ) {
         Text(label, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp), style = MaterialTheme.typography.labelSmall, color = Color.White)
     }

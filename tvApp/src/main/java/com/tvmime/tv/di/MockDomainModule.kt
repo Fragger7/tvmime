@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapLatest
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
@@ -54,6 +55,7 @@ object MockDomainModule {
                     }
                     Unit
                 }
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -64,10 +66,25 @@ object MockDomainModule {
         ) as T
     }
 
-    @Provides @Singleton fun provideProviderRepository(): com.streamvault.domain.repository.ProviderRepository {
+    @Provides @Singleton fun provideProviderRepository(database: com.tvmime.db.AppDatabase): com.streamvault.domain.repository.ProviderRepository {
         return createMock { method, _ ->
             when (method.name) {
-                "getActiveProvider" -> flowOf(LegacyProvider(id = 1L, name = "TVMime Cloud", type = ProviderType.M3U, serverUrl = "https://tvmime.com"))
+                "getActiveProvider" -> {
+                    kotlinx.coroutines.flow.map(database.portalDao().getActivePortal()) { portal ->
+                        if (portal != null) LegacyProvider(id = 1L, name = portal.name, type = ProviderType.M3U, serverUrl = portal.serverUrl)
+                        else LegacyProvider(id = 1L, name = "TVMime Cloud", type = ProviderType.M3U, serverUrl = "https://tvmime.com")
+                    }
+                }
+                "getProviders" -> {
+                    kotlinx.coroutines.flow.map(database.portalDao().getActivePortals()) { portals ->
+                        if (portals.isNotEmpty()) {
+                            portals.map { LegacyProvider(id = 1L, name = it.name, type = ProviderType.M3U, serverUrl = it.serverUrl) }
+                        } else {
+                            listOf(LegacyProvider(id = 1L, name = "TVMime Cloud", type = ProviderType.M3U, serverUrl = "https://tvmime.com"))
+                        }
+                    }
+                }
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -77,6 +94,7 @@ object MockDomainModule {
         return createMock { method, _ ->
             when (method.name) {
                 "getActiveLiveSource" -> flowOf(ActiveLiveSource.ProviderSource(providerId = 1L))
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -86,20 +104,23 @@ object MockDomainModule {
         return createMock { method, args ->
             when (method.name) {
                 "getCategories" -> {
-                    val providerId = args?.get(0) as? Long ?: 1L
-                    kotlinx.coroutines.flow.map(database.categoryDao().getCategories(providerId.toString(), "LIVE")) { entities ->
-                        entities.map { entity ->
-                            com.streamvault.domain.model.Category(
-                                id = entity.categoryId.hashCode().toLong(),
-                                roomId = entity.categoryId.hashCode().toLong(),
-                                name = entity.categoryName,
-                                type = com.streamvault.domain.model.ContentType.LIVE,
-                                count = 10,
-                                providerOrder = entity.sortOrder
-                            )
+                    kotlinx.coroutines.flow.flatMapLatest(database.portalDao().getActivePortal()) { portal ->
+                        val portalId = portal?.id ?: "mock_portal_123"
+                        kotlinx.coroutines.flow.map(database.categoryDao().getCategories(portalId, "LIVE")) { entities ->
+                            entities.map { entity ->
+                                com.streamvault.domain.model.Category(
+                                    id = entity.categoryId.hashCode().toLong(),
+                                    roomId = entity.categoryId.hashCode().toLong(),
+                                    name = entity.categoryName,
+                                    type = com.streamvault.domain.model.ContentType.LIVE,
+                                    count = 10,
+                                    providerOrder = entity.sortOrder
+                                )
+                            }
                         }
                     }
                 }
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -109,36 +130,45 @@ object MockDomainModule {
         return createMock { method, args ->
             when (method.name) {
                 "getChannelsByCategory" -> {
-                    val providerId = args?.get(0) as? Long ?: 1L
                     val catHash = args?.get(1) as? Long ?: 0L
-                    kotlinx.coroutines.flow.map(database.channelDao().getAllChannelsByType(providerId.toString(), "LIVE")) { entities ->
-                        entities.filter { it.categoryId.hashCode().toLong() == catHash }.map { entity ->
-                            com.streamvault.domain.model.Channel(
-                                id = entity.id.hashCode().toLong(),
-                                name = entity.name,
-                                streamUrl = entity.directSourceUrl,
-                                categoryId = catHash,
-                                categoryName = "Live TV",
-                                providerId = providerId,
-                                number = entity.num
-                            )
+                    kotlinx.coroutines.flow.flatMapLatest(database.portalDao().getActivePortal()) { portal ->
+                        val portalId = portal?.id ?: "mock_portal_123"
+                        kotlinx.coroutines.flow.map(database.channelDao().getAllChannelsByType(portalId, "LIVE")) { entities ->
+                            entities.filter { it.categoryId.hashCode().toLong() == catHash }.map { entity ->
+                                com.streamvault.domain.model.Channel(
+                                    id = entity.id.hashCode().toLong(),
+                                    name = entity.name,
+                                    streamUrl = entity.directSourceUrl,
+                                    categoryId = catHash,
+                                    categoryName = "Live TV",
+                                    providerId = 1L,
+                                    number = entity.num,
+                                    epgChannelId = entity.epgChannelId,
+                                    logoUrl = entity.streamIcon
+                                )
+                            }
                         }
                     }
                 }
                 "getChannels" -> {
-                    val providerId = args?.get(0) as? Long ?: 1L
-                    kotlinx.coroutines.flow.map(database.channelDao().getAllChannelsByType(providerId.toString(), "LIVE")) { entities ->
-                        entities.map { entity ->
-                            com.streamvault.domain.model.Channel(
-                                id = entity.id.hashCode().toLong(),
-                                name = entity.name,
-                                streamUrl = entity.directSourceUrl,
-                                providerId = providerId,
-                                number = entity.num
-                            )
+                    kotlinx.coroutines.flow.flatMapLatest(database.portalDao().getActivePortal()) { portal ->
+                        val portalId = portal?.id ?: "mock_portal_123"
+                        kotlinx.coroutines.flow.map(database.channelDao().getAllChannelsByType(portalId, "LIVE")) { entities ->
+                            entities.map { entity ->
+                                com.streamvault.domain.model.Channel(
+                                    id = entity.id.hashCode().toLong(),
+                                    name = entity.name,
+                                    streamUrl = entity.directSourceUrl,
+                                    providerId = 1L,
+                                    number = entity.num,
+                                    epgChannelId = entity.epgChannelId,
+                                    logoUrl = entity.streamIcon
+                                )
+                            }
                         }
                     }
                 }
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -149,41 +179,46 @@ object MockDomainModule {
         return createMock { method, args ->
             when (method.name) {
                 "getProgramsForChannel" -> {
-                    val providerId = args?.get(0) as? Long ?: 1L
                     val channelId = args?.get(1) as? String ?: ""
                     val startTime = args?.get(2) as? Long ?: 0L
-                    kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(providerId.toString(), channelId, startTime)) { entities ->
-                        entities.map { entity ->
-                            com.streamvault.domain.model.Program(
-                                id = entity.id.hashCode().toLong(),
-                                channelId = entity.epgChannelId,
-                                title = entity.title,
-                                description = entity.description ?: "",
-                                startTime = entity.startEpoch,
-                                endTime = entity.endEpoch,
-                                providerId = providerId
-                            )
+                    kotlinx.coroutines.flow.flatMapLatest(database.portalDao().getActivePortal()) { portal ->
+                        val portalId = portal?.id ?: "mock_portal_123"
+                        kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(portalId, channelId, startTime)) { entities ->
+                            entities.map { entity ->
+                                com.streamvault.domain.model.Program(
+                                    id = entity.id.hashCode().toLong(),
+                                    channelId = entity.epgChannelId,
+                                    title = entity.title,
+                                    description = entity.description ?: "",
+                                    startTime = entity.startEpoch * 1000L,
+                                    endTime = entity.endEpoch * 1000L,
+                                    providerId = 1L
+                                )
+                            }
                         }
                     }
                 }
                 "getNowPlaying" -> {
-                    val providerId = args?.get(0) as? Long ?: 1L
                     val channelId = args?.get(1) as? String ?: ""
-                    kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(providerId.toString(), channelId, System.currentTimeMillis(), 1)) { entities ->
-                        entities.firstOrNull()?.let { entity ->
-                            com.streamvault.domain.model.Program(
-                                id = entity.id.hashCode().toLong(),
-                                channelId = entity.epgChannelId,
-                                title = entity.title,
-                                description = entity.description ?: "",
-                                startTime = entity.startEpoch,
-                                endTime = entity.endEpoch,
-                                providerId = providerId,
-                                isNowPlaying = true
-                            )
+                    kotlinx.coroutines.flow.flatMapLatest(database.portalDao().getActivePortal()) { portal ->
+                        val portalId = portal?.id ?: "mock_portal_123"
+                        kotlinx.coroutines.flow.map(database.epgDao().getProgramsForChannel(portalId, channelId, System.currentTimeMillis() / 1000, 1)) { entities ->
+                            entities.firstOrNull()?.let { entity ->
+                                com.streamvault.domain.model.Program(
+                                    id = entity.id.hashCode().toLong(),
+                                    channelId = entity.epgChannelId,
+                                    title = entity.title,
+                                    description = entity.description ?: "",
+                                    startTime = entity.startEpoch * 1000L,
+                                    endTime = entity.endEpoch * 1000L,
+                                    providerId = 1L,
+                                    isNowPlaying = true
+                                )
+                            }
                         }
                     }
                 }
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -225,6 +260,7 @@ object MockDomainModule {
                 "pause" -> Unit
                 "getPlaybackState", "playbackState" -> kotlinx.coroutines.flow.MutableStateFlow(com.streamvault.player.PlaybackState.READY)
                 "getIsPlaying", "isPlaying" -> kotlinx.coroutines.flow.MutableStateFlow(true)
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -236,6 +272,7 @@ object MockDomainModule {
             when (method.name) {
                 "getPlaybackState", "playbackState" -> kotlinx.coroutines.flow.MutableStateFlow(com.streamvault.player.PlaybackState.READY)
                 "getIsPlaying", "isPlaying" -> kotlinx.coroutines.flow.MutableStateFlow(false)
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }
@@ -250,6 +287,7 @@ object MockDomainModule {
                 "getAppTopLevelDestinations", "appTopLevelDestinations" -> flowOf(listOf(com.streamvault.domain.model.AppTopLevelDestination.HOME))
                 "getAppLandingDestination", "appLandingDestination" -> flowOf(com.streamvault.domain.model.AppLandingDestination.HOME)
                 "getShowFavoritesCategory", "showFavoritesCategory" -> flowOf(true)
+                                "getPinnedCategoryIds" -> kotlinx.coroutines.flow.flowOf(emptySet<Long>())
                 else -> null
             }
         }

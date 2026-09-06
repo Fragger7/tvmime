@@ -114,7 +114,7 @@ fun AddToGroupDialog(
             val dialogContent: @Composable (Modifier) -> Unit = { resolvedModifier ->
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    colors = SurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated),
+                    colors = ClickableSurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated),
                     modifier = resolvedModifier
                         .padding(16.dp)
                         .onPreviewKeyEvent(blockOpenGesture)

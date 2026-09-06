@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
@@ -116,12 +116,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         }
         TvClickableSurface(
             onClick = { viewModel.setPreventStandbyDuringPlayback(!uiState.preventStandbyDuringPlayback) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -139,12 +139,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setAutoPlayNextEpisode(!uiState.autoPlayNextEpisode) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -162,12 +162,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setPlayerMediaSessionEnabled(!uiState.playerMediaSessionEnabled) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -187,12 +187,12 @@ internal fun LazyListScope.settingsPlaybackSection(
             onClick = {
                 viewModel.setPlayerFastRetryOnTransientFailures(!uiState.playerFastRetryOnTransientFailures)
             },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -213,12 +213,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setPlayerLiveTranslationEnabled(!uiState.playerLiveTranslationEnabled) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -241,12 +241,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setPlayerTimeshiftEnabled(!uiState.playerTimeshiftEnabled) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -285,12 +285,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setZapAutoRevert(!uiState.zapAutoRevert) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -334,12 +334,12 @@ internal fun LazyListScope.settingsPlaybackSection(
             onClick = {
                 viewModel.setPlayerCompatibilityMemoryEnabled(!uiState.playerCompatibilityMemoryEnabled)
             },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -390,12 +390,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         )
         TvClickableSurface(
             onClick = { viewModel.setPlayerAudioVideoSyncEnabled(!uiState.playerAudioVideoSyncEnabled) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -422,12 +422,12 @@ internal fun LazyListScope.settingsPlaybackSection(
             onClick = {
                 viewModel.setMultiViewRespectProviderConnectionLimit(!uiState.multiViewRespectProviderConnectionLimit)
             },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -448,12 +448,12 @@ internal fun LazyListScope.settingsPlaybackSection(
         HorizontalDivider(color = Color.White.copy(alpha = 0.07f), modifier = Modifier.padding(vertical = 4.dp))
         TvClickableSurface(
             onClick = { viewModel.setCenterTwoSlotMultiviewLayout(!uiState.centerTwoSlotMultiviewLayout) },
-            shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
-            colors = ClickableSurfaceDefaults.colors(
+            shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
+            colors = ClickableClickableSurfaceDefaults.colors(
                 containerColor = Color.Transparent,
                 focusedContainerColor = Primary.copy(alpha = 0.15f)
             ),
-            scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+            scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

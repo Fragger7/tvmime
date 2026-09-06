@@ -795,18 +795,18 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(bottom = 10.dp),
-                                    shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
-                                    colors = ClickableSurfaceDefaults.colors(
+                                    shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(12.dp)),
+                                    colors = ClickableClickableSurfaceDefaults.colors(
                                         containerColor = SurfaceElevated,
                                         focusedContainerColor = SurfaceHighlight.copy(alpha = 0.9f)
                                     ),
-                                    border = ClickableSurfaceDefaults.border(
+                                    border = ClickableClickableSurfaceDefaults.border(
                                         focusedBorder = Border(
                                             border = BorderStroke(2.dp, Primary.copy(alpha = 0.85f)),
                                             shape = RoundedCornerShape(12.dp)
                                         )
                                     ),
-                                    scale = ClickableSurfaceDefaults.scale(focusedScale = 1f)
+                                    scale = ClickableClickableSurfaceDefaults.scale(focusedScale = 1f)
                                 ) {
                                     Column(
                                         modifier = Modifier

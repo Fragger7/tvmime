@@ -85,10 +85,10 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.SurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.Text
 import com.tvmime.tv.R
 import com.streamvault.app.device.rememberIsTelevisionDevice
@@ -790,7 +790,7 @@ private fun GuideStatusCard(
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceHighlight)
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceHighlight)
     ) {
         Column(
             modifier = Modifier
@@ -832,7 +832,7 @@ private fun GuideProviderTroubleshootingCard(
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        colors = SurfaceDefaults.colors(containerColor = SurfaceHighlight.copy(alpha = 0.85f))
+        colors = ClickableSurfaceDefaults.colors(containerColor = SurfaceHighlight.copy(alpha = 0.85f))
     ) {
         Column(
             modifier = Modifier

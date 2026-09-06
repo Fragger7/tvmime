@@ -32,7 +32,7 @@ import com.streamvault.app.device.rememberIsTelevisionDevice
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.ClickableSurfaceDefaults
+import androidx.tv.material3.ClickableClickableSurfaceDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
@@ -126,7 +126,7 @@ fun CategoryRailPanel(
     Surface(
         modifier = modifier.fillMaxSize(),
         shape = RoundedCornerShape(28.dp),
-        colors = androidx.tv.material3.SurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
+        colors = androidx.tv.material3.ClickableClickableSurfaceDefaults.colors(containerColor = AppColors.SurfaceElevated)
     ) {
         Column(
             modifier = Modifier
@@ -178,12 +178,12 @@ fun BrowseSearchLaunchCard(
     TvClickableSurface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(22.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(22.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = AppColors.SurfaceElevated,
             focusedContainerColor = AppColors.SurfaceEmphasis
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = RoundedCornerShape(22.dp)
@@ -224,12 +224,12 @@ fun BrowseHeroPanel(
         modifier = modifier
             .fillMaxWidth()
             .height(240.dp),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(28.dp)),
-        colors = ClickableSurfaceDefaults.colors(
+        shape = ClickableClickableSurfaceDefaults.shape(RoundedCornerShape(28.dp)),
+        colors = ClickableClickableSurfaceDefaults.colors(
             containerColor = AppColors.SurfaceElevated,
             focusedContainerColor = AppColors.SurfaceEmphasis
         ),
-        border = ClickableSurfaceDefaults.border(
+        border = ClickableClickableSurfaceDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(FocusSpec.BorderWidth, AppColors.Focus),
                 shape = RoundedCornerShape(28.dp)
