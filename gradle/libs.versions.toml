@@ -1,4 +1,6 @@
 [versions]
+hilt = "2.48"
+hilt-navigation-compose = "1.1.0-alpha01"
 agp = "8.4.0"
 kotlin = "1.9.24"
 compose-compiler = "1.5.14"
@@ -17,6 +19,9 @@ app-versionCode = "2"
 app-versionName = "1.1.0"
 
 [libraries]
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 # Kotlin & Coroutines
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
@@ -65,6 +70,7 @@ napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 zxing-core = { module = "com.google.zxing:core", version = "3.5.3" }
 
 [plugins]
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
