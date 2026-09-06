@@ -355,7 +355,7 @@ internal class SettingsProviderActions(
             }
         )
 
-        if (result !is SyncProviderResult.Error) {
+        if (result !is com.streamvault.domain.usecase.SyncProviderResult.Error) {
             pendingXtreamTextRefreshGeneration?.let { generation ->
                 preferencesRepository.markXtreamTextImportApplied(providerId, generation)
             }
@@ -408,14 +408,14 @@ internal class SettingsProviderActions(
                 syncSectionLabel = null,
                 syncCanCancel = false,
                 userMessage = when {
-                    result is SyncProviderResult.Error -> "Sync failed: ${result.message}"
+                    result is com.streamvault.domain.usecase.SyncProviderResult.Error -> "Sync failed: ${result.message}"
                     (result as? SyncProviderResult.Success)?.isPartial == true -> "Sync completed with warnings: $warningsMessage"
                     pendingXtreamTextRefreshGeneration != null -> "Sync completed and reapplied Xtream text decoding"
                     !catalogRefreshed -> "Library already up to date"
                     else -> "Sync completed"
                 },
                 syncWarningsByProvider = when {
-                    result is SyncProviderResult.Error -> state.syncWarningsByProvider - providerId
+                    result is com.streamvault.domain.usecase.SyncProviderResult.Error -> state.syncWarningsByProvider - providerId
                     (result as? SyncProviderResult.Success)?.isPartial == true -> state.syncWarningsByProvider + (providerId to partialWarnings)
                     else -> state.syncWarningsByProvider - providerId
                 }
@@ -454,7 +454,7 @@ internal class SettingsProviderActions(
             )
             when (syncResult) {
                 is SyncProviderResult.Success -> Result.success(Unit)
-                is SyncProviderResult.Error -> Result.error(syncResult.message, syncResult.exception)
+                is com.streamvault.domain.usecase.SyncProviderResult.Error -> Result.error(syncResult.message, syncResult.exception)
             }
         }
         if (result !is Result.Error) {

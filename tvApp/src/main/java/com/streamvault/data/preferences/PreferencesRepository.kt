@@ -48,6 +48,7 @@ interface PreferencesRepository {
     suspend fun setAspectRatioForChannel(channelId: Long, ratio: Float?)
     suspend fun setAudioVideoOffsetForChannel(channelId: Long, offsetMs: Long)
     suspend fun setPlayerAudioVideoOffsetMs(offsetMs: Long)
+    suspend fun setPlayerFastRetryOnTransientFailures(enabled: Boolean)
     suspend fun setPlayerMuted(muted: Boolean)
     suspend fun setPlayerPlaybackSpeed(speed: Float)
     suspend fun setPreferredLiveVariant(providerId: Long, logicalGroupId: Long, rawChannelId: String)
