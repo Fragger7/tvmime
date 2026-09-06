@@ -38,3 +38,11 @@ Consolidate these findings into a master document named TVMIME_V3_ARCHITECTURE_B
 ## 5. CI/CD Build Rules
 - All compilation happens remotely via `.github/workflows/build.yml`.
 - You MUST use Conventional Commits (`feat:`, `fix:`) so the pipeline bumps the version correctly.
+
+## 6. Agent Continuity Protocol (Document & Commit First)
+**WHY WE DO THIS:** AI Agent sessions can be unexpectedly interrupted at any time due to rate limits, server restarts, or token timeouts. To prevent catastrophic context loss, every agent must act as if their session could end at any moment. By checking the game plan into Git *first*, the next fanned-out agent can instantly read the repository history and pick up the Master Surgery seamlessly.
+
+**MANDATORY WORKFLOW:** 
+1. Before writing or modifying any application code, you MUST document your exact implementation plan and architecture strategy into the project markdowns (`IMPLEMENTATION_PLAN.md`, `TODO.md`, and/or `TVMIME_V3_ARCHITECTURE_BLUEPRINT.md`). 
+2. Once documented, you MUST immediately commit and push these markdown changes to Git. 
+3. Only after the Git push is confirmed may you begin modifying the `.kt` or `.gradle` files.

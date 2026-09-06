@@ -164,3 +164,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 1: The Autonomous Research Fleet:** We will fan out autonomous AI agents to literally read the execution paths, database ingestion chunks, and `LoadControl` buffers of `OwnTV` (for their dual ExoPlayer/libmpv engine) and `StreamVault` (for their massive M3U Room DB threading).
 - **Step 2: The Evasion Proxy & Hilt DI:** We will abandon the monolithic `TvMainViewModel`. We will implement Dagger Hilt for modularity, and we will build a local proxy (`OkHttp` Interceptor) that strictly spoofs headers to defeat HTTP 403/456 blocks from aggressive IPTV providers.
 - **Step 3: The Native Custom UI:** No more hijacked `R.drawable` resources. We will build a bespoke, featherweight Jetpack Compose interface adhering exclusively to the Deep Black & Crimson Red design language.
+
+### Sprint 8: Execution of V3 Phase 1 (The Iron Core)
+- **Step 1:** Eradicate the old `tvApp` Compose UI layer. Delete `HomeScreen.kt`, `LiveTvScreen.kt`, and `PlayerChrome.kt` to clear the blast radius.
+- **Step 2:** Inject Dagger Hilt into `tvApp/build.gradle.kts`. Build the Application class (`TvMimeApp`) with `@HiltAndroidApp` and configure the root `MainActivity` with `@AndroidEntryPoint`.
+- **Step 3:** Implement the Network Evasion Interceptor. Build the singleton `OkHttpClient` injecting the Chrome User-Agent and `Origin` retry logic defined in the V3 Blueprint.
