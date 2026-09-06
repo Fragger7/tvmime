@@ -1,29 +1,66 @@
-# 🚨 AI AGENT BOOT SEQUENCE & PHOENIX PROTOCOL 🚨
+# 🚨 ACTIVE DIRECTIVE: THE PHOENIX PROTOCOL (START HERE) 🚨
 
-**IF YOU ARE AN AI AGENT (AGY, CLAUDE, GEMINI, CURSOR) READING THIS, STOP WHAT YOU ARE DOING AND READ THIS ENTIRE FILE LINE-BY-LINE. YOU ARE A LITERAL EXECUTION ENGINE. FOLLOW THESE INSTRUCTIONS EXACTLY.**
+**IF YOU ARE AN AI AGENT, READ THIS SECTION FIRST. IT OVERRIDES ALL HISTORICAL APPROACHES.**
 
-## 1. YOUR BOOT SEQUENCE (THE SYMPHONY)
-You must execute your context gathering in this EXACT order:
-1. **Read this file (`AGENTS.md`)** to understand the unbreakable rules, your memory, and current state.
-2. **Read `IMPLEMENTATION_PLAN.md`** to understand the "Phoenix Protocol" (our pivot from a failed monolithic transplant to a Stateless UI).
-3. **Read `TODO.md`** to see the EXACT step-by-step file modifications you need to make right now for Sprint 20.
-4. **DO NOT** make assumptions. **DO NOT** rewrite the backend. **DO NOT** invent features. Follow `TODO.md` literally.
+## 1. THE PHOENIX PROTOCOL (CRITICAL RULES OF ENGAGEMENT)
+1. **NO DAGGER HILT:** You are STRICTLY FORBIDDEN from using, importing, or referencing Dagger Hilt (`@HiltAndroidApp`, `@Inject`, etc.). TVMime uses manual DI or Koin for our lightweight KMP architecture.
+2. **STATELESS VISUAL CLONING ONLY:** When building a UI component (Live TV Grid, EPG, Player HUD), you will use StreamVault’s code PURELY as a *visual mockup*. Extract the colors, padding, focus scaling, and typography. Rewrite the UI as a **100% Stateless `@Composable` function**.
+3. **NO UI BACKEND WIRING:** A UI component (`LiveTvGrid`, `VodCard`) must NEVER query a database, initiate a network call, or hold a ViewModel. It must only accept raw data classes (e.g., `channels: List<ChannelEntity>`) and lambda callbacks (e.g., `onZap: (ChannelEntity) -> Unit`).
+4. **THE ORCHESTRATOR PATTERN:** All data fetching from the V3 backend (SQLite/Ktor) happens in a top-level route (e.g., `LiveTvRoute.kt`), which collects standard Android ViewModels (no Hilt) and passes raw state down to the stateless Compose shells.
 
-## 2. CONTEXT & MEMORY (WHERE WE ARE EXACTLY)
-*   **Git State:** We are on branch `main`. The next tag to push when a build is ready is `v3.0.0-beta13`.
-*   **Code State:** The backend (V3) is perfect (Room DB, zero-OOM parsing, Ktor network evasion). However, the frontend (`tvApp` module) is broken. It is infected with Dagger Hilt annotations, 19 proxy stubs (`MockDomainModule.kt`), and monolithic ViewModels from a failed "StreamVault" transplant.
-*   **Learnings & Concerns (Why we are here):** Previous agents suffered "prompt fatigue". They were asked to "build an IPTV app" and hallucinated massive architectures, resulting in a Frankenstein app that won't compile. We learned we CANNOT ask an AI to build UI and Backend logic at the same time.
-*   **The Goal:** We want the visual aesthetics of StreamVault (deep black, crimson red, glassmorphism, D-Pad focus scaling) but we want it built as **100% Stateless "Dumb" Jetpack Compose functions** powered by our existing, lightweight V3 backend.
+## 2. YOUR IMMEDIATE DIRECTIVE
+Read `TODO.md` and `IMPLEMENTATION_PLAN.md`. You are to execute "Sprint 20: The Purge" to eradicate Dagger Hilt and proxy stubs, followed by "Sprint 21: Stateless Live TV Shell". Stop over-engineering. Build stateless UI and wire it cleanly.
 
-## 3. UNBREAKABLE RULES OF ENGAGEMENT
-*   **RULE 1: NO DAGGER HILT.** You will delete anything related to Hilt. We are using standard Android ViewModels and manual DI for our Kotlin Multiplatform (KMP) future.
-*   **RULE 2: STATELESS VISUAL CLONING.** When building a UI component (e.g., `LiveTvGrid`), it must NOT fetch data, query databases, or hold ViewModels. It MUST look like this: `@Composable fun LiveTvGrid(channels: List<ChannelEntity>, onZap: (ChannelEntity) -> Unit)`.
-*   **RULE 3: THE ORCHESTRATOR.** A single Route file (e.g., `LiveTvRoute.kt`) will fetch the data from the ViewModel and pass it down to the stateless UI. 
-*   **RULE 4: DESIGN SYSTEM ONLY.** You will use `DesignSystemTokens.kt` for all colors. Deep Black (`Background = 0xFF070709`) and Crimson Red (`Crimson = 0xFFE50914`).
+---
 
-## 4. DEPLOYMENT STRATEGY
-*   **Build:** We use GitHub Actions (`.github/workflows/build.yml`). It compiles Mobile and TV APKs.
-*   **OTA (Over The Air):** Vercel hosts `https://tvmime.vercel.app`. It automatically points `/tv.apk` to the latest GitHub Release asset. 
-*   **Versioning:** Your commits must be Conventional (`feat:`, `fix:`). The Gradle script dynamically uses `git rev-list --count HEAD` for the Android Version Code.
+# 📚 HISTORICAL CONTEXT & TRIBAL KNOWLEDGE
+*The following is the original historical paradigm. Keep this context in mind for our long-term goals and architecture choices.*
 
-**END OF BOOT SEQUENCE. PROCEED TO `IMPLEMENTATION_PLAN.md`.**
+# AI Agent Context (TVMime) 🤖
+
+> **Repository**: `https://github.com/Fragger7/tvmime.git`  
+> **Canonical Root**: `/Users/admin/Development/tvmime`  
+> **Production Web**: `https://tvmime.vercel.app`  
+
+**ATTENTION ALL AI AGENTS:** Read this document before modifying the TVMime codebase.
+
+## 1. Project Paradigm
+- **Goal:** Build the fastest, most beautiful IPTV Player for Android TV and Android Mobile.
+- **Architecture:** Kotlin Multiplatform (KMP). Do NOT write Android-specific dependencies in the `shared/` module. Use `Ktor` and Napier for cross-platform support.
+- **UI Framework:** Jetpack Compose (Material 3) and `androidx.tv`. Do NOT use legacy XML fragments.
+
+## 2. Design System Constraints
+- **Visuals:** The app uses a strict "Deep Black & Crimson Red" color palette with flat translucency. 
+
+## 3. The History & The Pivot (V2 -> V3)
+- **The V2 Failure:** We attempted to transplant the `Sohva-TV` UI entirely over the TVMime backend. It resulted in a brittle "Frankenstein" architecture full of dependency conflicts (Coil2 vs Coil3, missing generic resources) that could not compile cleanly through the CI/CD pipeline.
+- **The V3 Pivot:** We have aborted V2. We are now executing the **V3 Master Surgery**. We will measure a billion times and cut once. We will build a highly scalable, Dagger Hilt injected, dual-engine (ExoPlayer + libmpv) architecture with a local proxy for network evasion, based on the best concepts from `StreamVault`, `OwnTV`, and `IPTVMine-Pro`.
+
+## 4. Next Agent Hand-Off: The Research Fleet
+The immediate next step for any agent picking up this project is to execute the deep research mandate. You must use autonomous fanning to read the actual code execution paths of the open-source giants cloned in the `scratch/` directory.
+
+### Exact Prompts for the User / Agent:
+To restart this work, the User should run the `/teamwork-preview` or `/goal` command with the following explicit prompt:
+
+```text
+/goal (or /teamwork-preview)
+I need to spin up a fleet of research agents to execute a deep, file-by-file static analysis of the three IPTV repositories cloned in /Users/admin/.gemini/antigravity-cli/brain/f0f5fec6-8870-43fc-930a-0ee6c7ee712b/scratch/repos/. 
+
+Agent 1 (OwnTV): Read OwnTV's PlayerModule.kt and libmpv/ExoPlayer wrappers. Explain exactly how they hand off streams between the dual engines.
+Agent 2 (StreamVault): Read StreamVault's database layer. Explain exactly how they use Kotlin Coroutines and Room to ingest 50MB M3U playlists without triggering Out-Of-Memory errors.
+Agent 3 (IPTVMine-Pro): Read IPTVMine-Pro's OkHttp layer. Explain exactly how they spoof User-Agents and bypass HTTP redirects to evade provider blocks.
+
+Consolidate these findings into a master document named TVMIME_V3_ARCHITECTURE_BLUEPRINT.md that proves technically how these three systems will be merged into TVMime using Dagger Hilt.
+```
+
+## 5. CI/CD Build Rules
+- All compilation happens remotely via `.github/workflows/build.yml`.
+- You MUST use Conventional Commits (`feat:`, `fix:`) so the pipeline bumps the version correctly.
+
+## 6. Agent Continuity Protocol (Document & Commit First)
+**WHY WE DO THIS:** AI Agent sessions can be unexpectedly interrupted at any time due to rate limits, server restarts, or token timeouts. To prevent catastrophic context loss, every agent must act as if their session could end at any moment. By checking the game plan into Git *first*, the next fanned-out agent can instantly read the repository history and pick up the Master Surgery seamlessly.
+
+**MANDATORY WORKFLOW:** 
+1. Before writing or modifying any application code, you MUST document your exact implementation plan and architecture strategy into the project markdowns (`IMPLEMENTATION_PLAN.md`, `TODO.md`, and/or `TVMIME_V3_ARCHITECTURE_BLUEPRINT.md`). 
+2. Once documented, you MUST immediately commit and push these markdown changes to Git. 
+3. Only after the Git push is confirmed may you begin modifying the `.kt` or `.gradle` files.
