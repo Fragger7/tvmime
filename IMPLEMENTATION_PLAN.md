@@ -203,3 +203,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 1:** Ensure Firebase Firestore dependencies are present in the Gradle configuration.
 - **Step 2:** Implement the `FirebaseSyncManager` (or integrate into `TvMainViewModel`). This service will listen to a specific Firestore document (`/tv_sessions/{sessionCode}`) for incoming IPTV credentials.
 - **Step 3:** Wire the `OnboardingScreen` to trigger this listener upon generating the QR code. When credentials arrive, the app will execute the `SyncManagerM3uImporter` and securely delete the session document.
+
+### Sprint 15: Execution of V3 Phase 8 (Restore Email/Password Auth Flow)
+- **Step 1:** Implement `signInWithEmail` in `TvMainViewModel`. It will call the KMP `FirebaseSyncClient`, retrieve the session token, fetch the user's saved `PortalConfig` list, and trigger the Mass Ingestion Engine for the active portal.
+- **Step 2:** Restore the `OutlinedTextField` inputs for Email and Password in `OnboardingScreen.kt`.
+- **Step 3:** Wire the Login button to execute the ViewModel authentication and handle UI loading/error states.
