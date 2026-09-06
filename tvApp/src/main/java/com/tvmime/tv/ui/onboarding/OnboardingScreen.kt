@@ -34,6 +34,10 @@ fun OnboardingScreen(
         qrBitmap = withContext(Dispatchers.Default) {
             generateQrCode(vercelUrl, 400)
         }
+        
+        viewModel.startFirebaseSyncListener(sessionCode) {
+            onLoginSuccess()
+        }
         // In reality, here we would also start listening to Firebase for this sessionCode
     }
 

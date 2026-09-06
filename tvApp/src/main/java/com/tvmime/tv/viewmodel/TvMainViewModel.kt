@@ -81,4 +81,29 @@ class TvMainViewModel @Inject constructor(
         super.onCleared()
         engineController.teardownAll()
     }
+
+    private val firebaseClient = com.tvmime.sync.FirebaseSyncClient()
+
+    fun startFirebaseSyncListener(sessionCode: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            // 1. Register the pairing code in the cloud
+            firebaseClient.registerTvPairingCode(sessionCode, System.currentTimeMillis())
+            
+            // 2. Poll the REST endpoint (No heavy Android SDK required)
+            while (true) {
+                val result = firebaseClient.checkTvPairingStatus(sessionCode)
+                if (result.isSuccess && result.getOrNull()?.isAuthorized == true) {
+                    val status = result.getOrNull()!!
+                    
+                    // The phone app has authorized this TV! 
+                    // In a real app we would now call fetchPortals(session)
+                    // For the UI demo, we will just trigger the mock ingestion
+                    triggerMockSync("https://iptv-org.github.io/iptv/countries/us.m3u")
+                    onSuccess()
+                    break
+                }
+                kotlinx.coroutines.delay(3000L) // Poll every 3 seconds
+            }
+        }
+    }
 }
