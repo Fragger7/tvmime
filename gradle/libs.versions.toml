@@ -1,4 +1,5 @@
 [versions]
+libmpv = "1.0.1"
 hilt = "2.48"
 hilt-navigation-compose = "1.1.0-alpha01"
 agp = "8.4.0"
@@ -19,6 +20,7 @@ app-versionCode = "2"
 app-versionName = "1.1.0"
 
 [libraries]
+libmpv = { module = "dev.jdtech.mpv:libmpv", version.ref = "libmpv" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
