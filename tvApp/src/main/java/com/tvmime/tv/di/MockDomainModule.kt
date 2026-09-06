@@ -19,6 +19,8 @@ import com.streamvault.domain.model.ActiveLiveSource
 @InstallIn(SingletonComponent::class)
 object MockDomainModule {
 
+    private val memoryPrefs = mutableMapOf<String, kotlinx.coroutines.flow.MutableStateFlow<Any>>()
+
     private inline fun <reified T> createMock(crossinline customHandler: (Method, Array<out Any>?) -> Any? = { _, _ -> null }): T {
         val handler = InvocationHandler { proxy, method, args ->
             val customResult = customHandler(method, args)
@@ -26,13 +28,32 @@ object MockDomainModule {
 
             val returnType = method.returnType
             when {
-                returnType == kotlinx.coroutines.flow.Flow::class.java -> emptyFlow<Any>()
+                returnType == kotlinx.coroutines.flow.Flow::class.java -> {
+                    val propertyName = method.name.removePrefix("get").replaceFirstChar { it.lowercase() }
+                    // Default values for common preference types to avoid cast exceptions
+                    val defaultVal: Any = when {
+                        method.name.contains("Timeout") || method.name.contains("Height") -> 0
+                        method.name.contains("Speed") || method.name.contains("Scale") -> 1.0f
+                        method.name.contains("Language") || method.name.contains("Endpoint") -> ""
+                        else -> false
+                    }
+                    val flow = memoryPrefs.getOrPut(propertyName) { kotlinx.coroutines.flow.MutableStateFlow(defaultVal) }
+                    flow
+                }
                 returnType == List::class.java -> emptyList<Any>()
                 returnType == Boolean::class.java -> false
                 returnType == Int::class.java -> 0
                 returnType == Long::class.java -> 0L
                 returnType == String::class.java -> ""
-                returnType == Unit::class.java -> Unit
+                returnType == Unit::class.java -> {
+                    if (method.name.startsWith("set")) {
+                        val propertyName = method.name.removePrefix("set").replaceFirstChar { it.lowercase() }
+                        args?.firstOrNull()?.let { value ->
+                            (memoryPrefs[propertyName] as? kotlinx.coroutines.flow.MutableStateFlow<Any>)?.value = value
+                        }
+                    }
+                    Unit
+                }
                 else -> null
             }
         }
@@ -83,15 +104,11 @@ object MockDomainModule {
             }
         }
     }
+
     @Provides @Singleton fun provideChannelRepository(database: com.tvmime.db.AppDatabase): com.streamvault.domain.repository.ChannelRepository {
         return createMock { method, args ->
             when (method.name) {
                 "getChannelsByCategory" -> {
-                    // StreamVault calls getChannelsByCategory(providerId, categoryId)
-                    // Unfortunately categoryId in StreamVault is a Long, but in TVMime it's a String.
-                    // But wait, the categories we mapped above used `categoryId.hashCode().toLong()`.
-                    // We can't reverse a hash easily. We should probably just return ALL channels for the provider, 
-                    // or better yet, since it's a proxy hack, we just fetch ALL channels and filter by hash in memory!
                     val providerId = args?.get(0) as? Long ?: 1L
                     val catHash = args?.get(1) as? Long ?: 0L
                     kotlinx.coroutines.flow.map(database.channelDao().getAllChannelsByType(providerId.toString(), "LIVE")) { entities ->
@@ -126,6 +143,7 @@ object MockDomainModule {
             }
         }
     }
+
     @Provides @Singleton fun provideDownloadManager(): com.streamvault.domain.repository.DownloadManager = createMock()
     @Provides @Singleton fun provideEpgRepository(): com.streamvault.domain.repository.EpgRepository = createMock()
     @Provides @Singleton fun provideEpgSourceRepository(): com.streamvault.domain.repository.EpgSourceRepository = createMock()
@@ -152,6 +170,7 @@ object MockDomainModule {
             when (method.name) {
                 "getAppTopLevelDestinations", "appTopLevelDestinations" -> flowOf(listOf(com.streamvault.domain.model.AppTopLevelDestination.HOME))
                 "getAppLandingDestination", "appLandingDestination" -> flowOf(com.streamvault.domain.model.AppLandingDestination.HOME)
+                "getShowFavoritesCategory", "showFavoritesCategory" -> flowOf(true)
                 else -> null
             }
         }
