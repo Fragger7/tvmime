@@ -5,5 +5,13 @@ class CastPlaybackCoordinator @javax.inject.Inject constructor()
 class CastConnectionState
 class CastMediaRequest
 class CastMediaRequestBuildResult
-class CastPlaybackEvent
+
+sealed class CastPlaybackEvent {
+    object MediaLoadSucceeded : CastPlaybackEvent()
+    object MediaLoadFailed : CastPlaybackEvent()
+    object SessionStartFailed : CastPlaybackEvent()
+    object ReceiverUnavailable : CastPlaybackEvent()
+    object RouteSelectionCancelled : CastPlaybackEvent()
+}
+
 class CastStartResult

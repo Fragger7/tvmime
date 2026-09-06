@@ -151,7 +151,7 @@ internal fun PlayerViewModel.observeLastVisitedCategory() {
                     category.copy(
                         count = providerCategories
                             .filter { it.id != ChannelRepository.ALL_CHANNELS_ID && it.id !in hiddenCategoryIds }
-                            .sumOf(Category::count)
+                            .sumOf { it.count }
                     )
                 } else {
                     category
