@@ -181,3 +181,9 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 3:** Implement the `LivePreviewEngine` (ExoPlayer via Media3) configured with a 500ms `LoadControl` for instant zapping.
 - **Step 4:** Implement the `MainPlayer` (libmpv) to handle heavy VOD files and full-screen streams.
 - **Step 5:** Build the `EngineController` singleton (provided via Dagger Hilt). This controller will receive `play()` commands from the UI and internally manage the `0x80001000` hardware codec claim failure by injecting a 508ms suspension delay when hot-swapping between ExoPlayer and libmpv.
+
+### Sprint 11: Execution of V3 Phase 4 (Jetpack Compose TV Foundation)
+- **Step 1:** Create `TvMimeTheme.kt` to enforce the strict "Deep Black & Crimson Red" canonical design palette natively in Compose, eliminating reliance on generic `R.color` or legacy Android XML themes.
+- **Step 2:** Build the `TvNavigation.kt` graph using `androidx.navigation.compose`.
+- **Step 3:** Implement a lightweight, natively compiled `LiveTvScreen` utilizing `androidx.tv.material3` (Compose for TV), replacing the heavy "Sohva-TV" transplants.
+- **Step 4:** Wire the UI layer directly into `MainActivity.kt`, consuming the Hilt-injected backends.
