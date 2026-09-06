@@ -16,7 +16,8 @@ import javax.inject.Inject
 class TvMainViewModel @Inject constructor(
     private val database: AppDatabase,
     private val engineController: EngineController,
-    private val syncManager: SyncManagerM3uImporter
+    private val syncManager: SyncManagerM3uImporter,
+    private val firebaseSyncManager: com.tvmime.tv.sync.FirebaseSyncManager
 ) : ViewModel() {
 
     private val activePortalId = "mock_portal_123" // Hardcoded for this UI sprint
@@ -80,5 +81,22 @@ class TvMainViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         engineController.teardownAll()
+    }
+
+    // 4. Firebase Cloud Sync Listener
+    fun startFirebaseSyncListener(sessionCode: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            firebaseSyncManager.listenForCredentials(sessionCode)
+                .catch { e -> e.printStackTrace() }
+                .collect { credentials ->
+                    // 1. Credentials received from the Cloud!
+                    // 2. Trigger the StreamVault Mass Ingestion Engine
+                    // (If it was Xtream, we would construct the API URL here. For this demo, we assume raw M3U)
+                    triggerMockSync(credentials.portalUrl)
+                    
+                    // 3. Tell the UI to navigate to Live TV
+                    onSuccess()
+                }
+        }
     }
 }
