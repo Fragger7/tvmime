@@ -192,3 +192,9 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 1:** Build the `TvMainViewModel` (injected via `@HiltViewModel`). This acts as the sole bridge between the Compose UI and our backend engines, exposing the database as a reactive `StateFlow` and handling D-Pad intent routing.
 - **Step 2:** Construct the `LiveTvScreen` layout using `androidx.tv.material3`. It will feature a left-side Category Rail (TiviMate style) and a center Channel List.
 - **Step 3:** Mount the `TvMimeVideoEngine` surface behind the UI using an `AndroidView` (since `libmpv` and `ExoPlayer` require raw Android `SurfaceView`s to render hardware-accelerated video).
+
+### Sprint 13: Execution of V3 Phase 6 (Onboarding & Auth Wiring)
+- **Step 1:** Fix the broken QR Code rendering in `OnboardingScreen.kt` and point the payload to `https://tvmime.vercel.app/link?code=`.
+- **Step 2:** Refactor the Onboarding UI to use pure Compose TV `androidx.tv.material3` components, removing legacy XML or mobile modifiers.
+- **Step 3:** Wire the `TvMimeNavHost` to boot into the `OnboardingScreen` first.
+- **Step 4:** Connect the Firebase Email/Password and QR token listeners to the V3 backend. Upon successful credential retrieval, pass the portal URL to the `SyncManagerM3uImporter` and navigate to `LiveTvScreen`.
