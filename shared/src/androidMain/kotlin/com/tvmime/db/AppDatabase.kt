@@ -18,7 +18,8 @@ import com.tvmime.db.entity.PortalEntity
         PortalEntity::class,
         CategoryEntity::class,
         ChannelEntity::class,
-        EpgProgramEntity::class
+        EpgProgramEntity::class,
+        com.tvmime.db.entity.ChannelImportStageEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -28,6 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao
     abstract fun channelDao(): ChannelDao
     abstract fun epgDao(): EpgDao
+    abstract fun catalogSyncDao(): com.tvmime.db.dao.CatalogSyncDao
 
     companion object {
         @Volatile
