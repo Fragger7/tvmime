@@ -38,7 +38,8 @@ fun TvMimeNavHost(
             )
         }
         composable(Destinations.LIVE_TV) {
-            LiveTvScreen(viewModel = sharedViewModel)
+            val svNavViewModel: com.tvmime.tv.sv_navigation.StreamVaultNavViewModel = hiltViewModel()
+            com.tvmime.tv.sv_ui.theme.StreamVaultTheme { com.tvmime.tv.sv_navigation.AppNavigation(svNavViewModel) }
         }
     }
 }
