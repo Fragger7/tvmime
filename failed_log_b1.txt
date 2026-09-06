@@ -1,0 +1,650 @@
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	﻿2026-09-06T04:35:17.3539294Z ##[group]Run gradle :tvApp:assembleDebug :androidApp:assembleDebug -PversionCode=90 -PversionName=3.0.0-beta1 --stacktrace
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3540661Z ^[[36;1mgradle :tvApp:assembleDebug :androidApp:assembleDebug -PversionCode=90 -PversionName=3.0.0-beta1 --stacktrace^[[0m
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3572562Z shell: /usr/bin/bash -e {0}
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3572834Z env:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3573157Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3573711Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3574185Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3574602Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3574957Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3575432Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3575979Z   DEVELOCITY_AUTO_INJECTION_CUSTOM_VALUE: gradle-actions
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3576364Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:17.3576643Z ##[endgroup]
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3977028Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3985089Z Welcome to Gradle 8.7!
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3985754Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3986303Z Here are the highlights of this release:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3987270Z  - Compiling and testing with Java 22
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3987840Z  - Cacheable Groovy script compilation
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3988372Z  - New methods in lazy collection properties
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3988735Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3989077Z For more details see https://docs.gradle.org/8.7/release-notes.html
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.3989596Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:35:18.9957723Z Starting a Gradle Daemon (subsequent builds will be faster)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.1990296Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2038492Z > Configure project :shared
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2081436Z w: Kotlin Multiplatform <-> Android Gradle Plugin compatibility issue:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2140465Z The applied Android Gradle Plugin version (8.4.0) is higher 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2200326Z than the maximum known to the Kotlin Gradle Plugin.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2201459Z Tooling stability in such configuration isn't tested, please report encountered issues to https://kotl.in/issue"
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2202273Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2202534Z Minimum supported Android Gradle Plugin version: 7.0
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2203332Z Maximum tested Android Gradle Plugin version: 8.2
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2203738Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2204447Z To suppress this message add 'kotlin.mpp.androidGradlePluginCompatibility.nowarn=true' to your gradle.properties
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:26.2205305Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8001732Z e: file:///home/runner/work/tvmime/tvmime/tvApp/build.gradle.kts:71:56: Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8003072Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8019971Z public fun ArtifactHandler.implementation(artifactNotation: Any): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8051407Z public fun ArtifactHandler.implementation(artifactNotation: Any, configureAction: Action<ConfigurablePublishArtifact>): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8052932Z > Configure project :tvApp
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8080863Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8111098Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any, block: Action<DependencyConstraint>): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8151209Z public fun <T : Dependency?> DependencyHandler.implementation(dependency: TypeVariable(T), action: Action<TypeVariable(T)>): TypeVariable(T) defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8180711Z public fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8211818Z public fun DependencyHandler.implementation(group: String?, name: String?, version: String? = ..., configuration: String? = ..., classifier: String? = ..., ext: String? = ..., dependencyConfiguration: Action<ExternalModuleDependency>? = ...): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8241293Z public fun DependencyHandler.implementation(dependencyNotation: String?, dependencyConfiguration: Action<ExternalModuleDependency>): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8271100Z public fun DependencyHandler.implementation(dependencyNotation: Provider<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8301126Z public fun DependencyHandler.implementation(dependencyNotation: ProviderConvertible<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8302513Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.8325273Z FAILURE: Build completed with 2 failures.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9020248Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9090697Z 1: Task failed with an exception.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9150356Z -----------
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9176824Z * Where:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9226093Z Build file '/home/runner/work/tvmime/tvmime/tvApp/build.gradle.kts' line: 71
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9289983Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9350235Z * What went wrong:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9374842Z Script compilation error:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9400136Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9460712Z   Line 71:     implementation("io.coil-kt:coil-compose:2.6.0")    implementation(libs.androidx.activity.compose)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9490869Z                                                                   ^ Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9492623Z                                                                       public fun ArtifactHandler.implementation(artifactNotation: Any): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9494687Z                                                                       public fun ArtifactHandler.implementation(artifactNotation: Any, configureAction: Action<ConfigurablePublishArtifact>): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9496858Z                                                                       public fun DependencyConstraintHandler.implementation(constraintNotation: Any): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9499008Z                                                                       public fun DependencyConstraintHandler.implementation(constraintNotation: Any, block: Action<DependencyConstraint>): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9501761Z                                                                       public fun <T : Dependency?> DependencyHandler.implementation(dependency: TypeVariable(T), action: Action<TypeVariable(T)>): TypeVariable(T) defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9504059Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9507171Z                                                                       public fun DependencyHandler.implementation(group: String?, name: String?, version: String? = ..., configuration: String? = ..., classifier: String? = ..., ext: String? = ..., dependencyConfiguration: Action<ExternalModuleDependency>? = ...): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9510991Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: String?, dependencyConfiguration: Action<ExternalModuleDependency>): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9514368Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: Provider<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9517451Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: ProviderConvertible<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9518999Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9519133Z 1 error
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9519317Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9519439Z * Try:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9550287Z > Run with --info or --debug option to get more log output.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9551207Z > Run with --scan to get full insights.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9551824Z > Get more help at https://help.gradle.org.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9552228Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9552388Z * Exception is:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9553833Z ScriptCompilationException(scriptCompilationErrors=[ScriptCompilationError(message=Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9555974Z public fun ArtifactHandler.implementation(artifactNotation: Any): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9557934Z public fun ArtifactHandler.implementation(artifactNotation: Any, configureAction: Action<ConfigurablePublishArtifact>): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9560258Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9562550Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any, block: Action<DependencyConstraint>): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9564485Z public fun <T : Dependency?> DependencyHandler.implementation(dependency: TypeVariable(T), action: Action<TypeVariable(T)>): TypeVariable(T) defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9566247Z public fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9568729Z public fun DependencyHandler.implementation(group: String?, name: String?, version: String? = ..., configuration: String? = ..., classifier: String? = ..., ext: String? = ..., dependencyConfiguration: Action<ExternalModuleDependency>? = ...): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9571977Z public fun DependencyHandler.implementation(dependencyNotation: String?, dependencyConfiguration: Action<ExternalModuleDependency>): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9574349Z public fun DependencyHandler.implementation(dependencyNotation: Provider<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9577330Z public fun DependencyHandler.implementation(dependencyNotation: ProviderConvertible<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl, location=/home/runner/.gradle/.tmp/gradle-kotlin-dsl-1261477333578389533.tmp/build.gradle.kts (71:56))])
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9610248Z 	at org.gradle.kotlin.dsl.support.KotlinCompilerKt.compileKotlinScriptModuleTo(KotlinCompiler.kt:190)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9611843Z 	at org.gradle.kotlin.dsl.support.KotlinCompilerKt.compileKotlinScriptToDirectory(KotlinCompiler.kt:148)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9613434Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler$compileScript$1.invoke(ResidualProgramCompiler.kt:710)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9615091Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler$compileScript$1.invoke(ResidualProgramCompiler.kt:709)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9616944Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost$runCompileBuildOperation$1.call(KotlinScriptEvaluator.kt:179)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9618890Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost$runCompileBuildOperation$1.call(KotlinScriptEvaluator.kt:176)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9621401Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9623515Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9625217Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9626800Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9628396Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9630278Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9631854Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9633413Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9635224Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost.runCompileBuildOperation(KotlinScriptEvaluator.kt:176)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9637151Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1$1$1$1$1.invoke(Interpreter.kt:490)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9638947Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1$1$1$1$1.invoke(Interpreter.kt:490)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9673793Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.compileScript-C5AE47M(ResidualProgramCompiler.kt:709)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9675383Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.compileScript-C5AE47M$default(ResidualProgramCompiler.kt:702)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9676949Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.emitStage2ProgramFor(ResidualProgramCompiler.kt:363)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9678418Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1.invoke(Interpreter.kt:491)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9680077Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1.invoke(Interpreter.kt:467)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9681814Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$KotlinScriptCompilationAndInstrumentation.compile(KotlinScriptEvaluator.kt:386)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9683688Z 	at org.gradle.internal.scripts.BuildScriptCompilationAndInstrumentation.execute(BuildScriptCompilationAndInstrumentation.java:96)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9685127Z 	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9686187Z 	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9687175Z 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9688108Z 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9689487Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9691709Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9693538Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9695114Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9696742Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9698330Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9730524Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9732585Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9733993Z 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9735130Z 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9736399Z 	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9737784Z 	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9739052Z 	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9740743Z 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9742419Z 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9744124Z 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9745826Z 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9747307Z 	at org.gradle.internal.execution.steps.NoInputChangesStep.execute(NoInputChangesStep.java:30)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9748728Z 	at org.gradle.internal.execution.steps.NoInputChangesStep.execute(NoInputChangesStep.java:21)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9750521Z 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9752371Z 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:45)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9754008Z 	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9755351Z 	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9756359Z 	at org.gradle.internal.Either$Right.fold(Either.java:175)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9757234Z 	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9758347Z 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9759511Z 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9791001Z 	at org.gradle.internal.execution.steps.NeverUpToDateStep.execute(NeverUpToDateStep.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9792320Z 	at org.gradle.internal.execution.steps.NeverUpToDateStep.execute(NeverUpToDateStep.java:22)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9794054Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9796175Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9798378Z 	at org.gradle.internal.execution.steps.ResolveNonIncrementalCachingStateStep.executeDelegate(ResolveNonIncrementalCachingStateStep.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9800698Z 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9802551Z 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9804061Z 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:106)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9805232Z 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9806899Z 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9809502Z 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9812078Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9814212Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.lambda$executeInTemporaryWorkspace$3(AssignImmutableWorkspaceStep.java:209)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9816520Z 	at org.gradle.internal.execution.workspace.impl.CacheBasedImmutableWorkspaceProvider$1.withTemporaryWorkspace(CacheBasedImmutableWorkspaceProvider.java:119)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9818865Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.executeInTemporaryWorkspace(AssignImmutableWorkspaceStep.java:199)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9851209Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.lambda$execute$0(AssignImmutableWorkspaceStep.java:121)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9852901Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.execute(AssignImmutableWorkspaceStep.java:121)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9854523Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.execute(AssignImmutableWorkspaceStep.java:90)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9855901Z 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9857124Z 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9858776Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9860939Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9862851Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9864468Z 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9865749Z 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9866796Z 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9867711Z 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9868699Z 	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9870465Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost.cachedDirFor(KotlinScriptEvaluator.kt:270)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9872060Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.compileSecondStageOf(Interpreter.kt:467)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9873048Z 	at Program.loadSecondStageFor(Unknown Source)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9874101Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.evaluateSecondStageOf(Interpreter.kt:431)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9875129Z 	at Program.execute(Unknown Source)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9899894Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.eval(Interpreter.kt:514)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9900988Z 	at org.gradle.kotlin.dsl.execution.Interpreter.eval(Interpreter.kt:213)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9902244Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator.evaluate(KotlinScriptEvaluator.kt:118)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9903751Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPluginFactory$create$1.invoke(KotlinScriptPluginFactory.kt:51)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9905245Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPluginFactory$create$1.invoke(KotlinScriptPluginFactory.kt:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9906541Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPlugin.apply(KotlinScriptPlugin.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9907783Z 	at org.gradle.configuration.BuildOperationScriptPlugin$1.run(BuildOperationScriptPlugin.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9909845Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9911517Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9912877Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9914261Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9915659Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9917071Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9918437Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9920011Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9921426Z 	at org.gradle.configuration.BuildOperationScriptPlugin.lambda$apply$0(BuildOperationScriptPlugin.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9922847Z 	at org.gradle.internal.code.DefaultUserCodeApplicationContext.apply(DefaultUserCodeApplicationContext.java:43)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9924200Z 	at org.gradle.configuration.BuildOperationScriptPlugin.apply(BuildOperationScriptPlugin.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9925775Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9927585Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:425)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9929322Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9975091Z 	at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9976468Z 	at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:27)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9977979Z 	at org.gradle.configuration.project.ConfigureActionsProjectEvaluator.evaluate(ConfigureActionsProjectEvaluator.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9979942Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.lambda$run$0(LifecycleProjectEvaluator.java:109)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9981777Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9983736Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$fromMutableState$2(DefaultProjectStateRegistry.java:430)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9985440Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.withReplacedLocks(DefaultWorkerLeaseService.java:360)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9987080Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:430)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9988942Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9990880Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.run(LifecycleProjectEvaluator.java:100)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9992446Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9993894Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9995409Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9997034Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:27.9998973Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0010814Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0011690Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0012520Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0013354Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator.evaluate(LifecycleProjectEvaluator.java:72)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0014085Z 	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:785)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0014705Z 	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:155)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0015531Z 	at org.gradle.api.internal.project.ProjectLifecycleController.lambda$ensureSelfConfigured$2(ProjectLifecycleController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0016485Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0017321Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0018127Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0019082Z 	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransitionIfNotCurrentlyTransitioning$10(StateTransitionController.java:199)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0020314Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0021195Z 	at org.gradle.internal.model.StateTransitionController.maybeTransitionIfNotCurrentlyTransitioning(StateTransitionController.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0022220Z 	at org.gradle.api.internal.project.ProjectLifecycleController.ensureSelfConfigured(ProjectLifecycleController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0023235Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.ensureConfigured(DefaultProjectStateRegistry.java:381)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0024122Z 	at org.gradle.execution.TaskPathProjectEvaluator.configure(TaskPathProjectEvaluator.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0024873Z 	at org.gradle.execution.TaskPathProjectEvaluator.configureHierarchy(TaskPathProjectEvaluator.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0025656Z 	at org.gradle.configuration.DefaultProjectsPreparer.prepareProjects(DefaultProjectsPreparer.java:42)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0026545Z 	at org.gradle.configuration.BuildTreePreparingProjectsPreparer.prepareProjects(BuildTreePreparingProjectsPreparer.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0027544Z 	at org.gradle.configuration.BuildOperationFiringProjectsPreparer$ConfigureBuild.run(BuildOperationFiringProjectsPreparer.java:52)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0028470Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0029295Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0030286Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0031100Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0031921Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0032754Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0033571Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0034373Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0035321Z 	at org.gradle.configuration.BuildOperationFiringProjectsPreparer.prepareProjects(BuildOperationFiringProjectsPreparer.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0036569Z 	at org.gradle.initialization.VintageBuildModelController.lambda$prepareProjects$2(VintageBuildModelController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0037561Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0038387Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0039170Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0040165Z 	at org.gradle.internal.model.StateTransitionController.lambda$transitionIfNotPreviously$11(StateTransitionController.java:213)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0040956Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0041727Z 	at org.gradle.internal.model.StateTransitionController.transitionIfNotPreviously(StateTransitionController.java:209)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0042635Z 	at org.gradle.initialization.VintageBuildModelController.prepareProjects(VintageBuildModelController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0043542Z 	at org.gradle.initialization.VintageBuildModelController.prepareToScheduleTasks(VintageBuildModelController.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0044517Z 	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$prepareToScheduleTasks$6(DefaultBuildLifecycleController.java:175)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0045460Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0046268Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0047049Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0047863Z 	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransition$9(StateTransitionController.java:190)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0048604Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0049328Z 	at org.gradle.internal.model.StateTransitionController.maybeTransition(StateTransitionController.java:186)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0050346Z 	at org.gradle.internal.build.DefaultBuildLifecycleController.prepareToScheduleTasks(DefaultBuildLifecycleController.java:173)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0051344Z 	at org.gradle.internal.buildtree.DefaultBuildTreeWorkPreparer.scheduleRequestedTasks(DefaultBuildTreeWorkPreparer.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0052367Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController$scheduleAndRunRequestedTasks$1.apply(VintageBuildTreeWorkController.kt:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0053429Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController$scheduleAndRunRequestedTasks$1.apply(VintageBuildTreeWorkController.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0054428Z 	at org.gradle.composite.internal.DefaultIncludedBuildTaskGraph.withNewWorkGraph(DefaultIncludedBuildTaskGraph.java:112)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0055435Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController.scheduleAndRunRequestedTasks(VintageBuildTreeWorkController.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0056532Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$scheduleAndRunTasks$1(DefaultBuildTreeLifecycleController.java:77)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0057619Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$runBuild$4(DefaultBuildTreeLifecycleController.java:120)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0058552Z 	at org.gradle.internal.model.StateTransitionController.lambda$transition$6(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0059361Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0060468Z 	at org.gradle.internal.model.StateTransitionController.lambda$transition$7(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0061335Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0062042Z 	at org.gradle.internal.model.StateTransitionController.transition(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0063031Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.runBuild(DefaultBuildTreeLifecycleController.java:117)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0064118Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.scheduleAndRunTasks(DefaultBuildTreeLifecycleController.java:77)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0065207Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.scheduleAndRunTasks(DefaultBuildTreeLifecycleController.java:72)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0066149Z 	at org.gradle.tooling.internal.provider.ExecuteBuildActionRunner.run(ExecuteBuildActionRunner.java:31)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0066892Z 	at org.gradle.launcher.exec.ChainingBuildActionRunner.run(ChainingBuildActionRunner.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0067683Z 	at org.gradle.internal.buildtree.ProblemReportingBuildActionRunner.run(ProblemReportingBuildActionRunner.java:49)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0068609Z 	at org.gradle.launcher.exec.BuildOutcomeReportingBuildActionRunner.run(BuildOutcomeReportingBuildActionRunner.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0069816Z 	at org.gradle.tooling.internal.provider.FileSystemWatchingBuildActionRunner.run(FileSystemWatchingBuildActionRunner.java:140)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0070831Z 	at org.gradle.launcher.exec.BuildCompletionNotifyingBuildActionRunner.run(BuildCompletionNotifyingBuildActionRunner.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0071831Z 	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.lambda$execute$0(RootBuildLifecycleBuildActionExecutor.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0072671Z 	at org.gradle.composite.internal.DefaultRootBuildState.run(DefaultRootBuildState.java:123)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0073484Z 	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.execute(RootBuildLifecycleBuildActionExecutor.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0074447Z 	at org.gradle.internal.buildtree.InitDeprecationLoggingActionExecutor.execute(InitDeprecationLoggingActionExecutor.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0075224Z 	at org.gradle.internal.buildtree.InitProblems.execute(InitProblems.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0075877Z 	at org.gradle.internal.buildtree.DefaultBuildTreeContext.execute(DefaultBuildTreeContext.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0076749Z 	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.lambda$execute$0(BuildTreeLifecycleBuildActionExecutor.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0077518Z 	at org.gradle.internal.buildtree.BuildTreeState.run(BuildTreeState.java:60)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0078267Z 	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.execute(BuildTreeLifecycleBuildActionExecutor.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0079211Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0080273Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:57)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0081278Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0082339Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0083279Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0084099Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0084914Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0085735Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0086548Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0087483Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0088483Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor.execute(RunAsBuildOperationBuildActionExecutor.java:57)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0089467Z 	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.lambda$execute$0(RunAsWorkerThreadBuildActionExecutor.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0090450Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0091234Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0092124Z 	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.execute(RunAsWorkerThreadBuildActionExecutor.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0093121Z 	at org.gradle.tooling.internal.provider.continuous.ContinuousBuildActionExecutor.execute(ContinuousBuildActionExecutor.java:110)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0094121Z 	at org.gradle.tooling.internal.provider.SubscribableBuildActionExecutor.execute(SubscribableBuildActionExecutor.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0094993Z 	at org.gradle.internal.session.DefaultBuildSessionContext.execute(DefaultBuildSessionContext.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0095971Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:92)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0097183Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:80)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0098082Z 	at org.gradle.internal.session.BuildSessionState.run(BuildSessionState.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0098954Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:62)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0100319Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0101419Z 	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0102458Z 	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:32)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0103780Z 	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:51)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0104862Z 	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0105832Z 	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0106695Z 	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:31)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0107443Z 	at org.gradle.launcher.daemon.server.exec.ExecuteBuild.doBuild(ExecuteBuild.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0108105Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0108867Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0109791Z 	at org.gradle.launcher.daemon.server.exec.WatchForDisconnection.execute(WatchForDisconnection.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0110606Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0111399Z 	at org.gradle.launcher.daemon.server.exec.ResetDeprecationLogger.execute(ResetDeprecationLogger.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0112192Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0113052Z 	at org.gradle.launcher.daemon.server.exec.RequestStopIfSingleUsedDaemon.execute(RequestStopIfSingleUsedDaemon.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0114060Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0114917Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:78)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0115636Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0116205Z 	at org.gradle.util.internal.Swapper.swap(Swapper.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0116770Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput.execute(ForwardClientInput.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0117529Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0118280Z 	at org.gradle.launcher.daemon.server.exec.LogAndCheckHealth.execute(LogAndCheckHealth.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0119029Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0120252Z 	at org.gradle.launcher.daemon.server.exec.LogToClient.doBuild(LogToClient.java:63)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0120981Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0121744Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0122573Z 	at org.gradle.launcher.daemon.server.exec.EstablishBuildEnvironment.doBuild(EstablishBuildEnvironment.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0123345Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0124084Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0124908Z 	at org.gradle.launcher.daemon.server.exec.StartBuildOrRespondWithBusy$1.run(StartBuildOrRespondWithBusy.java:52)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0125708Z 	at org.gradle.launcher.daemon.server.DaemonStateCoordinator$1.run(DaemonStateCoordinator.java:297)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0126485Z 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0127241Z 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0127650Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0127781Z ==============================================================================
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0128015Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0128114Z 2: Task failed with an exception.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0128369Z -----------
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0128558Z * Where:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0128883Z Build file '/home/runner/work/tvmime/tvmime/tvApp/build.gradle.kts' line: 71
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0129202Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0129284Z * What went wrong:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0129509Z Script compilation error:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0129795Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0130125Z   Line 71:     implementation("io.coil-kt:coil-compose:2.6.0")    implementation(libs.androidx.activity.compose)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0130951Z                                                                   ^ Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0132264Z                                                                       public fun ArtifactHandler.implementation(artifactNotation: Any): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0145293Z                                                                       public fun ArtifactHandler.implementation(artifactNotation: Any, configureAction: Action<ConfigurablePublishArtifact>): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0146653Z                                                                       public fun DependencyConstraintHandler.implementation(constraintNotation: Any): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0147985Z                                                                       public fun DependencyConstraintHandler.implementation(constraintNotation: Any, block: Action<DependencyConstraint>): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0149875Z                                                                       public fun <T : Dependency?> DependencyHandler.implementation(dependency: TypeVariable(T), action: Action<TypeVariable(T)>): TypeVariable(T) defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0151077Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0152668Z                                                                       public fun DependencyHandler.implementation(group: String?, name: String?, version: String? = ..., configuration: String? = ..., classifier: String? = ..., ext: String? = ..., dependencyConfiguration: Action<ExternalModuleDependency>? = ...): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0154545Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: String?, dependencyConfiguration: Action<ExternalModuleDependency>): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0156054Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: Provider<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0157560Z                                                                       public fun DependencyHandler.implementation(dependencyNotation: ProviderConvertible<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0158393Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0158472Z 1 error
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0158586Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0158667Z * Try:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0158939Z > Run with --info or --debug option to get more log output.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0159299Z > Run with --scan to get full insights.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0159735Z > Get more help at https://help.gradle.org.
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0159961Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0160042Z * Exception is:
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0160805Z ScriptCompilationException(scriptCompilationErrors=[ScriptCompilationError(message=Unresolved reference. None of the following candidates is applicable because of receiver type mismatch: 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0161903Z public fun ArtifactHandler.implementation(artifactNotation: Any): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0162934Z public fun ArtifactHandler.implementation(artifactNotation: Any, configureAction: Action<ConfigurablePublishArtifact>): PublishArtifact defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0164077Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0165199Z public fun DependencyConstraintHandler.implementation(constraintNotation: Any, block: Action<DependencyConstraint>): DependencyConstraint defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0166414Z public fun <T : Dependency?> DependencyHandler.implementation(dependency: TypeVariable(T), action: Action<TypeVariable(T)>): TypeVariable(T) defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0167418Z public fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0168823Z public fun DependencyHandler.implementation(group: String?, name: String?, version: String? = ..., configuration: String? = ..., classifier: String? = ..., ext: String? = ..., dependencyConfiguration: Action<ExternalModuleDependency>? = ...): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0170764Z public fun DependencyHandler.implementation(dependencyNotation: String?, dependencyConfiguration: Action<ExternalModuleDependency>): ExternalModuleDependency defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0172239Z public fun DependencyHandler.implementation(dependencyNotation: Provider<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0174023Z public fun DependencyHandler.implementation(dependencyNotation: ProviderConvertible<*>, dependencyConfiguration: Action<ExternalModuleDependency>): Unit defined in org.gradle.kotlin.dsl, location=/home/runner/.gradle/.tmp/gradle-kotlin-dsl-1261477333578389533.tmp/build.gradle.kts (71:56))])
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0175456Z 	at org.gradle.kotlin.dsl.support.KotlinCompilerKt.compileKotlinScriptModuleTo(KotlinCompiler.kt:190)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0176268Z 	at org.gradle.kotlin.dsl.support.KotlinCompilerKt.compileKotlinScriptToDirectory(KotlinCompiler.kt:148)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0177105Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler$compileScript$1.invoke(ResidualProgramCompiler.kt:710)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0177961Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler$compileScript$1.invoke(ResidualProgramCompiler.kt:709)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0178927Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost$runCompileBuildOperation$1.call(KotlinScriptEvaluator.kt:179)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0180321Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost$runCompileBuildOperation$1.call(KotlinScriptEvaluator.kt:176)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0181408Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0182479Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0183419Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0184241Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0185079Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0185917Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0186732Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0187542Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0188479Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost.runCompileBuildOperation(KotlinScriptEvaluator.kt:176)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0189450Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1$1$1$1$1.invoke(Interpreter.kt:490)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0190480Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1$1$1$1$1.invoke(Interpreter.kt:490)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0191378Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.compileScript-C5AE47M(ResidualProgramCompiler.kt:709)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0192305Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.compileScript-C5AE47M$default(ResidualProgramCompiler.kt:702)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0193214Z 	at org.gradle.kotlin.dsl.execution.ResidualProgramCompiler.emitStage2ProgramFor(ResidualProgramCompiler.kt:363)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0194077Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1.invoke(Interpreter.kt:491)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0194917Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost$compileSecondStageOf$cacheDir$1.invoke(Interpreter.kt:467)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0195900Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$KotlinScriptCompilationAndInstrumentation.compile(KotlinScriptEvaluator.kt:386)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0196985Z 	at org.gradle.internal.scripts.BuildScriptCompilationAndInstrumentation.execute(BuildScriptCompilationAndInstrumentation.java:96)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0197985Z 	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0198730Z 	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0199329Z 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0200111Z 	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0200928Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0201985Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0202924Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0203990Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0204830Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0205676Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0206498Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0207314Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0208023Z 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0208606Z 	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0209262Z 	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0210110Z 	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0210774Z 	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0211505Z 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0212359Z 	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0213227Z 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0214116Z 	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0214907Z 	at org.gradle.internal.execution.steps.NoInputChangesStep.execute(NoInputChangesStep.java:30)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0215682Z 	at org.gradle.internal.execution.steps.NoInputChangesStep.execute(NoInputChangesStep.java:21)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0216522Z 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0217496Z 	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:45)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0218354Z 	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0219085Z 	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0219928Z 	at org.gradle.internal.Either$Right.fold(Either.java:175)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0220484Z 	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0221132Z 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0221770Z 	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0222646Z 	at org.gradle.internal.execution.steps.NeverUpToDateStep.execute(NeverUpToDateStep.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0223331Z 	at org.gradle.internal.execution.steps.NeverUpToDateStep.execute(NeverUpToDateStep.java:22)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0224357Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0225435Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0226537Z 	at org.gradle.internal.execution.steps.ResolveNonIncrementalCachingStateStep.executeDelegate(ResolveNonIncrementalCachingStateStep.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0227589Z 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0228529Z 	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0229305Z 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:106)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0230085Z 	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0230950Z 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0232046Z 	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0233118Z 	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0234208Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.lambda$executeInTemporaryWorkspace$3(AssignImmutableWorkspaceStep.java:209)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0235394Z 	at org.gradle.internal.execution.workspace.impl.CacheBasedImmutableWorkspaceProvider$1.withTemporaryWorkspace(CacheBasedImmutableWorkspaceProvider.java:119)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0236580Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.executeInTemporaryWorkspace(AssignImmutableWorkspaceStep.java:199)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0237625Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.lambda$execute$0(AssignImmutableWorkspaceStep.java:121)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0238548Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.execute(AssignImmutableWorkspaceStep.java:121)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0239440Z 	at org.gradle.internal.execution.steps.AssignImmutableWorkspaceStep.execute(AssignImmutableWorkspaceStep.java:90)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0240343Z 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0241047Z 	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0241940Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0242991Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0244017Z 	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0244860Z 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0245538Z 	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0246179Z 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0246774Z 	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0247449Z 	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0248308Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator$InterpreterHost.cachedDirFor(KotlinScriptEvaluator.kt:270)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0249269Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.compileSecondStageOf(Interpreter.kt:467)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0250023Z 	at Program.loadSecondStageFor(Unknown Source)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0250550Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.evaluateSecondStageOf(Interpreter.kt:431)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0251065Z 	at Program.execute(Unknown Source)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0251486Z 	at org.gradle.kotlin.dsl.execution.Interpreter$ProgramHost.eval(Interpreter.kt:514)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0252044Z 	at org.gradle.kotlin.dsl.execution.Interpreter.eval(Interpreter.kt:213)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0252700Z 	at org.gradle.kotlin.dsl.provider.StandardKotlinScriptEvaluator.evaluate(KotlinScriptEvaluator.kt:118)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0253499Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPluginFactory$create$1.invoke(KotlinScriptPluginFactory.kt:51)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0254316Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPluginFactory$create$1.invoke(KotlinScriptPluginFactory.kt:48)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0255042Z 	at org.gradle.kotlin.dsl.provider.KotlinScriptPlugin.apply(KotlinScriptPlugin.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0255727Z 	at org.gradle.configuration.BuildOperationScriptPlugin$1.run(BuildOperationScriptPlugin.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0256501Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0257317Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0258137Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0258950Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0259997Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0260844Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0261654Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0262456Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0263272Z 	at org.gradle.configuration.BuildOperationScriptPlugin.lambda$apply$0(BuildOperationScriptPlugin.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0264171Z 	at org.gradle.internal.code.DefaultUserCodeApplicationContext.apply(DefaultUserCodeApplicationContext.java:43)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0264974Z 	at org.gradle.configuration.BuildOperationScriptPlugin.apply(BuildOperationScriptPlugin.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0265907Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0266987Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:425)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0268038Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0268928Z 	at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0269863Z 	at org.gradle.configuration.project.BuildScriptProcessor.execute(BuildScriptProcessor.java:27)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0270711Z 	at org.gradle.configuration.project.ConfigureActionsProjectEvaluator.evaluate(ConfigureActionsProjectEvaluator.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0271661Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.lambda$run$0(LifecycleProjectEvaluator.java:109)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0272697Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$applyToMutableState$1(DefaultProjectStateRegistry.java:407)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0273931Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.lambda$fromMutableState$2(DefaultProjectStateRegistry.java:430)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0274993Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.withReplacedLocks(DefaultWorkerLeaseService.java:360)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0275920Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.fromMutableState(DefaultProjectStateRegistry.java:430)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0276962Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.applyToMutableState(DefaultProjectStateRegistry.java:406)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0277936Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator$EvaluateProject.run(LifecycleProjectEvaluator.java:100)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0278811Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0279749Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0280573Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0281387Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0282203Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0283028Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0283830Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0284629Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0285442Z 	at org.gradle.configuration.project.LifecycleProjectEvaluator.evaluate(LifecycleProjectEvaluator.java:72)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0286163Z 	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:785)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0286767Z 	at org.gradle.api.internal.project.DefaultProject.evaluate(DefaultProject.java:155)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0287566Z 	at org.gradle.api.internal.project.ProjectLifecycleController.lambda$ensureSelfConfigured$2(ProjectLifecycleController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0288486Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0289303Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0290197Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0291146Z 	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransitionIfNotCurrentlyTransitioning$10(StateTransitionController.java:199)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0292008Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0292868Z 	at org.gradle.internal.model.StateTransitionController.maybeTransitionIfNotCurrentlyTransitioning(StateTransitionController.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0293890Z 	at org.gradle.api.internal.project.ProjectLifecycleController.ensureSelfConfigured(ProjectLifecycleController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0294870Z 	at org.gradle.api.internal.project.DefaultProjectStateRegistry$ProjectStateImpl.ensureConfigured(DefaultProjectStateRegistry.java:381)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0295731Z 	at org.gradle.execution.TaskPathProjectEvaluator.configure(TaskPathProjectEvaluator.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0296471Z 	at org.gradle.execution.TaskPathProjectEvaluator.configureHierarchy(TaskPathProjectEvaluator.java:50)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0297245Z 	at org.gradle.configuration.DefaultProjectsPreparer.prepareProjects(DefaultProjectsPreparer.java:42)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0298129Z 	at org.gradle.configuration.BuildTreePreparingProjectsPreparer.prepareProjects(BuildTreePreparingProjectsPreparer.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0299246Z 	at org.gradle.configuration.BuildOperationFiringProjectsPreparer$ConfigureBuild.run(BuildOperationFiringProjectsPreparer.java:52)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0300503Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0301330Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0302144Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0302957Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0303776Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0304857Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0305689Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0306503Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0307431Z 	at org.gradle.configuration.BuildOperationFiringProjectsPreparer.prepareProjects(BuildOperationFiringProjectsPreparer.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0308407Z 	at org.gradle.initialization.VintageBuildModelController.lambda$prepareProjects$2(VintageBuildModelController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0309291Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0310224Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0311017Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0311892Z 	at org.gradle.internal.model.StateTransitionController.lambda$transitionIfNotPreviously$11(StateTransitionController.java:213)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0312689Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0313463Z 	at org.gradle.internal.model.StateTransitionController.transitionIfNotPreviously(StateTransitionController.java:209)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0314360Z 	at org.gradle.initialization.VintageBuildModelController.prepareProjects(VintageBuildModelController.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0315257Z 	at org.gradle.initialization.VintageBuildModelController.prepareToScheduleTasks(VintageBuildModelController.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0316240Z 	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$prepareToScheduleTasks$6(DefaultBuildLifecycleController.java:175)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0317189Z 	at org.gradle.internal.model.StateTransitionController.lambda$doTransition$14(StateTransitionController.java:255)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0318012Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0318801Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:254)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0319740Z 	at org.gradle.internal.model.StateTransitionController.lambda$maybeTransition$9(StateTransitionController.java:190)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0320489Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:34)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0321212Z 	at org.gradle.internal.model.StateTransitionController.maybeTransition(StateTransitionController.java:186)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0322126Z 	at org.gradle.internal.build.DefaultBuildLifecycleController.prepareToScheduleTasks(DefaultBuildLifecycleController.java:173)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0323125Z 	at org.gradle.internal.buildtree.DefaultBuildTreeWorkPreparer.scheduleRequestedTasks(DefaultBuildTreeWorkPreparer.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0324149Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController$scheduleAndRunRequestedTasks$1.apply(VintageBuildTreeWorkController.kt:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0325353Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController$scheduleAndRunRequestedTasks$1.apply(VintageBuildTreeWorkController.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0326457Z 	at org.gradle.composite.internal.DefaultIncludedBuildTaskGraph.withNewWorkGraph(DefaultIncludedBuildTaskGraph.java:112)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0327463Z 	at org.gradle.configurationcache.VintageBuildTreeWorkController.scheduleAndRunRequestedTasks(VintageBuildTreeWorkController.kt:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0328560Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$scheduleAndRunTasks$1(DefaultBuildTreeLifecycleController.java:77)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0329749Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.lambda$runBuild$4(DefaultBuildTreeLifecycleController.java:120)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0330691Z 	at org.gradle.internal.model.StateTransitionController.lambda$transition$6(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0331502Z 	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0332308Z 	at org.gradle.internal.model.StateTransitionController.lambda$transition$7(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0333035Z 	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0333737Z 	at org.gradle.internal.model.StateTransitionController.transition(StateTransitionController.java:169)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0334624Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.runBuild(DefaultBuildTreeLifecycleController.java:117)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0335650Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.scheduleAndRunTasks(DefaultBuildTreeLifecycleController.java:77)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0336726Z 	at org.gradle.internal.buildtree.DefaultBuildTreeLifecycleController.scheduleAndRunTasks(DefaultBuildTreeLifecycleController.java:72)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0337659Z 	at org.gradle.tooling.internal.provider.ExecuteBuildActionRunner.run(ExecuteBuildActionRunner.java:31)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0338402Z 	at org.gradle.launcher.exec.ChainingBuildActionRunner.run(ChainingBuildActionRunner.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0339197Z 	at org.gradle.internal.buildtree.ProblemReportingBuildActionRunner.run(ProblemReportingBuildActionRunner.java:49)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0340322Z 	at org.gradle.launcher.exec.BuildOutcomeReportingBuildActionRunner.run(BuildOutcomeReportingBuildActionRunner.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0341286Z 	at org.gradle.tooling.internal.provider.FileSystemWatchingBuildActionRunner.run(FileSystemWatchingBuildActionRunner.java:140)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0342276Z 	at org.gradle.launcher.exec.BuildCompletionNotifyingBuildActionRunner.run(BuildCompletionNotifyingBuildActionRunner.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0343273Z 	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.lambda$execute$0(RootBuildLifecycleBuildActionExecutor.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0344117Z 	at org.gradle.composite.internal.DefaultRootBuildState.run(DefaultRootBuildState.java:123)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0344927Z 	at org.gradle.launcher.exec.RootBuildLifecycleBuildActionExecutor.execute(RootBuildLifecycleBuildActionExecutor.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0345904Z 	at org.gradle.internal.buildtree.InitDeprecationLoggingActionExecutor.execute(InitDeprecationLoggingActionExecutor.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0346672Z 	at org.gradle.internal.buildtree.InitProblems.execute(InitProblems.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0347317Z 	at org.gradle.internal.buildtree.DefaultBuildTreeContext.execute(DefaultBuildTreeContext.java:40)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0348184Z 	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.lambda$execute$0(BuildTreeLifecycleBuildActionExecutor.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0348955Z 	at org.gradle.internal.buildtree.BuildTreeState.run(BuildTreeState.java:60)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0349807Z 	at org.gradle.launcher.exec.BuildTreeLifecycleBuildActionExecutor.execute(BuildTreeLifecycleBuildActionExecutor.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0350894Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:61)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0351937Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor$3.call(RunAsBuildOperationBuildActionExecutor.java:57)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0352936Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:200)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0353989Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:195)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0354928Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0355745Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0356564Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0357417Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0358248Z 	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0359063Z 	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0360092Z 	at org.gradle.launcher.exec.RunAsBuildOperationBuildActionExecutor.execute(RunAsBuildOperationBuildActionExecutor.java:57)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0361082Z 	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.lambda$execute$0(RunAsWorkerThreadBuildActionExecutor.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0361955Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0362745Z 	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0363671Z 	at org.gradle.launcher.exec.RunAsWorkerThreadBuildActionExecutor.execute(RunAsWorkerThreadBuildActionExecutor.java:36)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0364654Z 	at org.gradle.tooling.internal.provider.continuous.ContinuousBuildActionExecutor.execute(ContinuousBuildActionExecutor.java:110)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0365641Z 	at org.gradle.tooling.internal.provider.SubscribableBuildActionExecutor.execute(SubscribableBuildActionExecutor.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0366502Z 	at org.gradle.internal.session.DefaultBuildSessionContext.execute(DefaultBuildSessionContext.java:46)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0367472Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:92)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0368647Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter$ActionImpl.apply(BuildSessionLifecycleBuildActionExecuter.java:80)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0369531Z 	at org.gradle.internal.session.BuildSessionState.run(BuildSessionState.java:71)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0370497Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:62)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0371646Z 	at org.gradle.tooling.internal.provider.BuildSessionLifecycleBuildActionExecuter.execute(BuildSessionLifecycleBuildActionExecuter.java:41)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0372726Z 	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0373757Z 	at org.gradle.tooling.internal.provider.StartParamsValidatingActionExecuter.execute(StartParamsValidatingActionExecuter.java:32)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0374805Z 	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:51)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0375876Z 	at org.gradle.tooling.internal.provider.SessionFailureReportingActionExecuter.execute(SessionFailureReportingActionExecuter.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0376967Z 	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0377920Z 	at org.gradle.tooling.internal.provider.SetupLoggingActionExecuter.execute(SetupLoggingActionExecuter.java:31)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0378656Z 	at org.gradle.launcher.daemon.server.exec.ExecuteBuild.doBuild(ExecuteBuild.java:65)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0379315Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0380277Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0381077Z 	at org.gradle.launcher.daemon.server.exec.WatchForDisconnection.execute(WatchForDisconnection.java:39)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0381870Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0382661Z 	at org.gradle.launcher.daemon.server.exec.ResetDeprecationLogger.execute(ResetDeprecationLogger.java:29)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0383453Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0384313Z 	at org.gradle.launcher.daemon.server.exec.RequestStopIfSingleUsedDaemon.execute(RequestStopIfSingleUsedDaemon.java:35)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0385175Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0385929Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:78)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0386648Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput$2.create(ForwardClientInput.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0387214Z 	at org.gradle.util.internal.Swapper.swap(Swapper.java:38)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0387778Z 	at org.gradle.launcher.daemon.server.exec.ForwardClientInput.execute(ForwardClientInput.java:75)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0388536Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0389294Z 	at org.gradle.launcher.daemon.server.exec.LogAndCheckHealth.execute(LogAndCheckHealth.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0390168Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0390874Z 	at org.gradle.launcher.daemon.server.exec.LogToClient.doBuild(LogToClient.java:63)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0391528Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0392267Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0393087Z 	at org.gradle.launcher.daemon.server.exec.EstablishBuildEnvironment.doBuild(EstablishBuildEnvironment.java:84)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0393848Z 	at org.gradle.launcher.daemon.server.exec.BuildCommandOnly.execute(BuildCommandOnly.java:37)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0394582Z 	at org.gradle.launcher.daemon.server.api.DaemonCommandExecution.proceed(DaemonCommandExecution.java:104)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0395407Z 	at org.gradle.launcher.daemon.server.exec.StartBuildOrRespondWithBusy$1.run(StartBuildOrRespondWithBusy.java:52)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0396204Z 	at org.gradle.launcher.daemon.server.DaemonStateCoordinator$1.run(DaemonStateCoordinator.java:297)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0396971Z 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0397724Z 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0398130Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0398260Z ==============================================================================
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0398489Z 
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.0398575Z BUILD FAILED in 1m 10s
+Compile TV & Mobile APKs	Build Android TV & Mobile APKs	2026-09-06T04:36:28.3211658Z ##[error]Process completed with exit code 1.
