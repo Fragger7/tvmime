@@ -169,3 +169,8 @@ To ensure we can seamlessly port this application to **Apple TV (tvOS)** and **i
 - **Step 1:** Eradicate the old `tvApp` Compose UI layer. Delete `HomeScreen.kt`, `LiveTvScreen.kt`, and `PlayerChrome.kt` to clear the blast radius.
 - **Step 2:** Inject Dagger Hilt into `tvApp/build.gradle.kts`. Build the Application class (`TvMimeApp`) with `@HiltAndroidApp` and configure the root `MainActivity` with `@AndroidEntryPoint`.
 - **Step 3:** Implement the Network Evasion Interceptor. Build the singleton `OkHttpClient` injecting the Chrome User-Agent and `Origin` retry logic defined in the V3 Blueprint.
+
+### Sprint 9: Execution of V3 Phase 2 (StreamVault Mass Ingestion Engine)
+- **Step 1:** Define the Room Entity `ImportStageEntity` and the `CatalogSyncDao`. This DAO will contain the `@Insert` for 1000-item batch chunks and the raw SQLite `INSERT INTO ... SELECT ... WHERE NOT EXISTS` differential queries.
+- **Step 2:** Build the `BoundedInputStream` and `M3uParser` classes. These will parse the 50MB M3U network streams linearly without buffering the entire string array into RAM.
+- **Step 3:** Build the `SyncManager` repository (provided via Hilt) that orchestrates the streaming parser, batches entities into arrays of 1000, flushes them to the `CatalogSyncDao`, and then executes the final reconciliation transaction.
