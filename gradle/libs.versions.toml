@@ -1,6 +1,4 @@
 [versions]
-google-services = "4.4.1"
-firebase-bom = "32.8.0"
 libmpv = "1.0.1"
 hilt = "2.48"
 hilt-navigation-compose = "1.1.0-alpha01"
@@ -22,8 +20,6 @@ app-versionCode = "2"
 app-versionName = "1.1.0"
 
 [libraries]
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
-firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
 libmpv = { module = "dev.jdtech.mpv:libmpv", version.ref = "libmpv" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
@@ -76,7 +72,6 @@ napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 zxing-core = { module = "com.google.zxing:core", version = "3.5.3" }
 
 [plugins]
-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }

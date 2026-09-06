@@ -62,8 +62,6 @@ android {
 
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.firestore)
     implementation(project(":shared"))
     implementation(libs.room.runtime)
     implementation(libs.hilt.android)
