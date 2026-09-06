@@ -102,7 +102,7 @@ fun StreamMateScreenBackground(
         vertical = spacing.safeVertical,
     )
     val grain = rememberGrainBrush()
-    Box(modifier = modifier.fillMaxSize().background(palette.background)) {
+    Box(modifier = modifier.fillMaxSize().background(Color(0xFF070709))) {
         Canvas(Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
@@ -111,9 +111,9 @@ fun StreamMateScreenBackground(
             // direction without anything on it reading as a separate layer.
             drawRect(
                 brush = Brush.verticalGradient(
-                    0f to palette.backgroundTop,
-                    0.5f to palette.background,
-                    1f to palette.backgroundBottom,
+                    0f to Color(0xFF070709)Top,
+                    0.5f to Color(0xFF070709),
+                    1f to Color(0xFF070709)Bottom,
                     startY = 0f,
                     endY = h,
                 ),
@@ -123,8 +123,8 @@ fun StreamMateScreenBackground(
             // weak enough to read as light rather than as shapes.
             drawRect(
                 brush = Brush.radialGradient(
-                    0f to palette.focus.copy(alpha = 0.10f),
-                    0.6f to palette.focus.copy(alpha = 0.02f),
+                    0f to Color(0xFFE50914).copy(alpha = 0.10f),
+                    0.6f to Color(0xFFE50914).copy(alpha = 0.02f),
                     1f to Color.Transparent,
                     center = Offset(w * 0.12f, h * -0.10f),
                     radius = w * 0.58f,
@@ -178,7 +178,7 @@ fun SohvaTvBrand(
     val palette = com.tvmime.theme.DesignSystemTokens.Colors
     SohvaWordmark(
         name = "TVMime",
-        accent = palette.focus,
+        accent = Color(0xFFE50914),
         fontSize = fontSize,
         modifier = modifier,
     )
@@ -288,7 +288,7 @@ fun TvActionButton(
         enabled = enabled,
         danger = danger,
         resting = palette.surface,
-        restingContent = palette.textPrimary,
+        restingContent = Color(0xFFF3F4F6),
     )
     val background by animateColorAsState(
         if (!enabled) palette.surfaceSubtle else colors.background,
@@ -297,8 +297,8 @@ fun TvActionButton(
     val content by animateColorAsState(
         when {
             !enabled -> palette.textDisabled
-            !focused && danger -> palette.danger
-            !focused && selected -> palette.focus
+            !focused && danger -> Color(0xFFEF4444)
+            !focused && selected -> Color(0xFFE50914)
             else -> colors.content
         },
         label = "button content",
@@ -358,8 +358,8 @@ fun TvActionButton(
                 text = label,
                 color = content,
                 fontWeight = FontWeight.Bold,
-                fontSize = if (compact) typography.caption.fontSize else typography.label.fontSize,
-                lineHeight = if (compact) typography.caption.lineHeight else typography.label.lineHeight,
+                fontSize = if (compact) 12.sp else typography.label.fontSize,
+                lineHeight = if (compact) 16.sp else typography.label.lineHeight,
             )
         }
     }
@@ -395,10 +395,10 @@ fun TvUrlField(
     val fieldFontSize = if (compact) typography.label.fontSize else typography.body.fontSize
     val iconFontSize = if (compact) typography.headline.fontSize else typography.bodyLarge.fontSize
     val iconSpacing = if (compact) 8.dp else 12.dp
-    val fieldBackground = if (displayFocused) palette.textPrimary else palette.surface
-    val fieldContent = if (displayFocused) palette.background else palette.textPrimary
-    val fieldHint = if (displayFocused) palette.background.copy(alpha = 0.62f) else palette.textMuted
-    val fieldIcon = if (displayFocused) palette.background.copy(alpha = 0.72f) else palette.textMuted
+    val fieldBackground = if (displayFocused) Color(0xFFF3F4F6) else palette.surface
+    val fieldContent = if (displayFocused) Color(0xFF070709) else Color(0xFFF3F4F6)
+    val fieldHint = if (displayFocused) Color(0xFF070709).copy(alpha = 0.62f) else Color(0xFF6B7280)
+    val fieldIcon = if (displayFocused) Color(0xFF070709).copy(alpha = 0.72f) else Color(0xFF6B7280)
     val tagModifier = testTag?.let { Modifier.testTag(it) } ?: Modifier
     val completeEditing = {
         keyboardController?.hide()
@@ -435,21 +435,21 @@ fun TvUrlField(
             ),
             keyboardActions = KeyboardActions(onDone = { completeEditing() }),
             visualTransformation = visualTransformation,
-            textStyle = TextStyle(color = palette.textPrimary, fontSize = fieldFontSize),
-            cursorBrush = SolidColor(palette.focus),
+            textStyle = TextStyle(color = Color(0xFFF3F4F6), fontSize = fieldFontSize),
+            cursorBrush = SolidColor(Color(0xFFE50914)),
             modifier = editorModifier.semantics { contentDescription = label },
             decorationBox = { innerField ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TvFieldLeadingIcon(
                         leadingIcon,
                         leadingIconRes,
-                        palette.textMuted,
+                        Color(0xFF6B7280),
                         iconFontSize,
                         iconSpacing,
                     )
                     Box(contentAlignment = Alignment.CenterStart) {
                         if (value.isBlank()) {
-                            Text(text = label, color = palette.textMuted, fontSize = fieldFontSize)
+                            Text(text = label, color = Color(0xFF6B7280), fontSize = fieldFontSize)
                         }
                         innerField()
                     }
@@ -529,12 +529,12 @@ fun TvUrlField(
                         .fillMaxWidth(0.62f)
                         .clip(shapes.large)
                         .background(palette.panel)
-                        .border(2.dp, palette.focus, shapes.large)
+                        .border(2.dp, Color(0xFFE50914), shapes.large)
                         .padding(24.dp),
                 ) {
                     Text(
                         text = label,
-                        color = palette.textPrimary,
+                        color = Color(0xFFF3F4F6),
                         fontSize = typography.headline.fontSize,
                         lineHeight = typography.headline.lineHeight,
                         fontWeight = FontWeight.Bold,
@@ -641,23 +641,23 @@ fun tvSurfaceColors(
             secondaryContent = palette.textDisabled,
         )
         focused && danger -> TvSurfaceColors(
-            background = palette.danger,
-            content = palette.textPrimary,
-            secondaryContent = palette.textPrimary.copy(alpha = 0.72f),
+            background = Color(0xFFEF4444),
+            content = Color(0xFFF3F4F6),
+            secondaryContent = Color(0xFFF3F4F6).copy(alpha = 0.72f),
         )
         focused -> TvSurfaceColors(
-            background = palette.textPrimary,
-            content = palette.background,
-            secondaryContent = palette.background.copy(alpha = 0.62f),
+            background = Color(0xFFF3F4F6),
+            content = Color(0xFF070709),
+            secondaryContent = Color(0xFF070709).copy(alpha = 0.62f),
         )
         selected -> TvSurfaceColors(
             background = palette.surfaceFocused,
-            content = palette.textPrimary,
-            secondaryContent = palette.textMuted,
+            content = Color(0xFFF3F4F6),
+            secondaryContent = Color(0xFF6B7280),
         )
         else -> TvSurfaceColors(
             background = resting ?: Color.Transparent,
-            content = restingContent ?: palette.textMuted,
+            content = restingContent ?: Color(0xFF6B7280),
             secondaryContent = palette.textDim,
         )
     }
@@ -731,7 +731,7 @@ fun TvSurface(
             .background(background)
             .then(
                 if (focusRing && focused) {
-                    Modifier.border(FOCUS_RING_WIDTH, palette.textPrimary, resolvedShape)
+                    Modifier.border(FOCUS_RING_WIDTH, Color(0xFFF3F4F6), resolvedShape)
                 } else {
                     Modifier
                 },
@@ -787,8 +787,8 @@ fun TvListRow(
                 Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .padding(horizontal = spacing.md)
-                    .background(palette.divider),
+                    .padding(horizontal = 12.dp)
+                    .background(Color(0xFF262632)),
             )
         }
         TvSurface(
@@ -799,7 +799,7 @@ fun TvListRow(
             focusScale = 1f,
             focusRequester = focusRequester,
             testTag = testTag,
-            contentPadding = PaddingValues(horizontal = spacing.md, vertical = spacing.sm),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
         ) { colors ->
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 if (selected) {
@@ -810,11 +810,11 @@ fun TvListRow(
                             .clip(androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
                             // On the focused fill the bar has to invert too,
                             // or cyan-on-white swallows it.
-                            .background(if (focused) palette.background else palette.focus),
+                            .background(if (focused) Color(0xFF070709) else Color(0xFFE50914)),
                     )
-                    Spacer(Modifier.width(spacing.md))
+                    Spacer(Modifier.width(12.dp))
                 } else {
-                    Spacer(Modifier.width(3.dp + spacing.md))
+                    Spacer(Modifier.width(3.dp + 12.dp))
                 }
                 icon?.let { iconRes ->
                     Image(
@@ -823,7 +823,7 @@ fun TvListRow(
                         colorFilter = ColorFilter.tint(colors.content),
                         modifier = Modifier.size(18.dp).clearAndSetSemantics { },
                     )
-                    Spacer(Modifier.width(spacing.sm))
+                    Spacer(Modifier.width(8.dp))
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -839,19 +839,19 @@ fun TvListRow(
                         Text(
                             text = it,
                             color = colors.secondaryContent,
-                            fontSize = typography.caption.fontSize,
-                            lineHeight = typography.caption.lineHeight,
+                            fontSize = 12.sp,
+                            lineHeight = 16.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
                 trailing?.let {
-                    Spacer(Modifier.width(spacing.sm))
+                    Spacer(Modifier.width(8.dp))
                     Text(
                         text = it,
                         color = colors.secondaryContent,
-                        fontSize = typography.caption.fontSize,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
                     )
@@ -894,20 +894,20 @@ fun TvTagChip(
     val palette = com.tvmime.theme.DesignSystemTokens.Colors
     val typography = androidx.compose.material3.Typography()
     val color = when (tone) {
-        TvTagTone.PRIMARY -> palette.focus
-        TvTagTone.ACCENT -> palette.accent
-        TvTagTone.MUTED -> palette.textMuted
-        TvTagTone.RATING -> palette.rating
-        TvTagTone.LIVE -> palette.danger
+        TvTagTone.PRIMARY -> Color(0xFFE50914)
+        TvTagTone.ACCENT -> Color(0xFFF3F4F6)
+        TvTagTone.MUTED -> Color(0xFF6B7280)
+        TvTagTone.RATING -> Color(0xFFF59E0B)
+        TvTagTone.LIVE -> Color(0xFFEF4444)
     }
     // Live is filled rather than tinted. A tint reads as a quiet fact, and
     // "on now" is the one thing here that should not be quiet.
     val filled = tone == TvTagTone.LIVE
     Text(
         text = label,
-        color = if (filled) palette.textPrimary else color,
-        fontSize = typography.caption.fontSize,
-        lineHeight = typography.caption.lineHeight,
+        color = if (filled) Color(0xFFF3F4F6) else color,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
         fontWeight = FontWeight.Bold,
         maxLines = 1,
         modifier = modifier
