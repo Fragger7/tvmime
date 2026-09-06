@@ -154,9 +154,10 @@ fun ChannelRow(channel: ChannelEntity, database: AppDatabase, portalId: String) 
     var upcoming by remember { mutableStateOf<List<EpgProgramEntity>>(emptyList()) }
 
     LaunchedEffect(channel.epgChannelId, portalId) {
-        if (!channel.epgChannelId.isNullOrBlank()) {
+        val epgId = channel.epgChannelId
+        if (!epgId.isNullOrBlank()) {
             val epoch = System.currentTimeMillis() / 1000
-            val programs = database.epgDao().getProgramsForChannel(portalId, channel.epgChannelId, epoch, 5).firstOrNull()
+            val programs = database.epgDao().getProgramsForChannel(portalId, epgId, epoch, 5).firstOrNull()
             if (programs != null && programs.isNotEmpty()) {
                 nowPlaying = programs.firstOrNull { it.startEpoch <= epoch && it.endEpoch >= epoch } ?: programs.first()
                 upcoming = programs.filter { it.id != nowPlaying?.id }

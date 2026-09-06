@@ -111,9 +111,9 @@ fun StreamMateScreenBackground(
             // direction without anything on it reading as a separate layer.
             drawRect(
                 brush = Brush.verticalGradient(
-                    0f to Color(0xFF070709)Top,
+                    0f to Color(0xFF1A1A24),
                     0.5f to Color(0xFF070709),
-                    1f to Color(0xFF070709)Bottom,
+                    1f to Color(0xFF000000),
                     startY = 0f,
                     endY = h,
                 ),
