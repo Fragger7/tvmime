@@ -1,20 +1,34 @@
-# TVMime Sprint Backlog
+# 🚨 STRICT EXECUTION BACKLOG 🚨
 
-## 🚨 IMMEDIATE ACTION REQUIRED: THE PHOENIX PURGE
+**AGENT INSTRUCTION:** You are to execute "Sprint 20" sequentially. Do not skip steps. Do not modify files outside of these instructions unless absolutely necessary to fix a compile error caused by these steps.
 
-**Context:** We are abandoning the Dagger Hilt monolithic UI transplant. We are moving to Stateless Compose UIs powered by Orchestrator Routes.
+## Sprint 20: The Purge & The Orchestrator (Current)
 
-### Sprint 20: The Purge & The Orchestrator
-- [ ] **Purge Hilt:** Remove all Dagger Hilt dependencies, annotations (`@HiltAndroidApp`, `@AndroidEntryPoint`), and the `MockDomainModule.kt` stubs.
-- [ ] **Clean AppDatabase Wiring:** Ensure `AppDatabase` (Room) is accessible via standard manual DI or ViewModel factories.
-- [ ] **Build Stateless `LiveTvGrid`:** Create a pure, dumb `@Composable` that accepts lists of categories and channels. Clone the visual modifiers (focus, padding) from StreamVault, but use `DesignSystemTokens`.
-- [ ] **Wire `LiveTvRoute`:** Create the orchestrator. Collect state from `LiveTvViewModel` (which reads from our Room DB) and pass it to `LiveTvGrid`. Verify clicking a channel hands off the stream URL to ExoPlayer.
+### Step 1: The Hilt Purge (Delete, Do Not Fix)
+1. **Delete File:** `tvApp/src/main/java/com/tvmime/tv/di/MockDomainModule.kt` (and any related `Stubs.kt` files).
+2. **Modify File:** `tvApp/src/main/java/com/tvmime/tv/MainActivity.kt`. Remove the `@AndroidEntryPoint` annotation. Remove any Hilt injection imports.
+3. **Modify File:** Find the Application class (e.g., `TvMimeApp.kt` if it exists) and remove `@HiltAndroidApp`.
+4. **Modify File:** `tvApp/build.gradle.kts`. Remove `id("dagger.hilt.android.plugin")` and the `implementation("com.google.dagger:hilt-android:...")` dependencies.
+5. **Modify File:** Remove Hilt compiler dependencies from the root `build.gradle.kts` if present.
 
-### Sprint 21: VOD & EPG (Stateless)
-- [ ] **Stateless EPG Grid:** Clone the visual timeline grid from StreamVault. Wire to `EpgRoute`.
-- [ ] **Stateless VOD Grid:** Clone TMDB poster grid. Wire to `VodRoute`.
-- [ ] **Timeshift/DVR:** Connect `Media3PlayerEngine` timeshift parameters for Catch-up TV.
+### Step 2: Build the Stateless UI Shell
+1. **Create File:** `tvApp/src/main/java/com/tvmime/tv/ui/livetv/LiveTvGrid.kt`.
+2. **Action:** Write a `@Composable` function. It must take `categories: List<CategoryEntity>` and `channels: List<ChannelEntity>`.
+3. **Aesthetics:** Use a left-side `TvLazyColumn` for categories and a center `TvLazyVerticalGrid` for channels. Use `DesignSystemTokens` colors. Look at the previous StreamVault UI for padding/focus ideas, but KEEP IT STATELESS.
 
-### Sprint 22: Settings & Polish
-- [ ] **DataStore Migration:** Migrate the `MemoryPrefs` settings map to actual Android `DataStore` or `SharedPreferences` so settings persist across reboots.
-- [ ] **OTA Verification:** Tag `v3.0.0-RC1` and ensure the GitHub Actions pipeline builds the APK and Vercel OTA URL points to it correctly.
+### Step 3: Build the Orchestrator
+1. **Create/Modify File:** `tvApp/src/main/java/com/tvmime/tv/ui/livetv/LiveTvViewModel.kt`. Use a standard `androidx.lifecycle.ViewModel`. Inject `AppDatabase` via a standard ViewModelFactory (no Hilt). Query the database and expose a `StateFlow`.
+2. **Create File:** `tvApp/src/main/java/com/tvmime/tv/ui/livetv/LiveTvRoute.kt`. Collect the StateFlow from the ViewModel. Pass the data into `LiveTvGrid`. 
+3. **Action:** Pass an `onChannelClick` lambda that triggers `EngineController.startLivePreview(url)`.
+
+### Step 4: Verify & Push
+1. Ensure the project builds (`./gradlew :tvApp:assembleDebug` mentally or via pipeline).
+2. Git commit with `fix: Purge Hilt and implement stateless LiveTvRoute`.
+3. Git tag with `v3.0.0-beta13`.
+4. Git push origin main --tags.
+
+---
+*(Do not look at Sprint 21 until Sprint 20 compiles and passes the GitHub Actions pipeline).*
+
+## Sprint 21: VOD & EPG (Stateless)
+- *Pending Completion of Sprint 20*
