@@ -78,12 +78,6 @@ jobs:
             echo "Computed semantic version: $VERSION_NAME (Build $TOTAL_COMMITS)"
           fi
 
-      - name: Inject Firebase google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > tvApp/google-services.json
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > androidApp/google-services.json
       - name: Build Android TV & Mobile APKs
         run: gradle :tvApp:assembleDebug :androidApp:assembleDebug -PversionCode=${{ steps.semver.outputs.version_code }} -PversionName=${{ steps.semver.outputs.version_name }} --stacktrace
 
