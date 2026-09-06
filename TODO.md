@@ -1,15 +1,20 @@
 # TVMime Sprint Backlog
 
-## ✅ Completed (V3 Master Surgery & Sprint 16-19)
-- [x] Extracted StreamVault `ui/`, `domain/`, and `player/` packages natively to avoid compiler crashes.
-- [x] Stubbed 19 StreamVault Repositories using `java.lang.reflect.Proxy` via `MockDomainModule.kt` to satisfy Dagger Hilt dynamically.
-- [x] Built the `PreferencesRepository` memory state map to support the Settings Screen natively.
-- [x] Decoupled `AppNavigation` from StreamVault's God-Object `MainActivity` via `StreamVaultNavViewModel`.
-- [x] Wired StreamVault UI to TVMime's `AppDatabase` via custom `CategoryRepository` and `ChannelRepository` Proxy Adapters. 
-- [x] Routed TVMime's `TvNavigation.kt` to boot into `AppNavigation()` upon successful Firebase Authentication.
-- [x] **Sprint 19: Player Execution:** Bridged StreamVault's `@MainPlayerEngine` to TVMime's `EngineController`. StreamVault's `prepare()` and `renewStreamUrl()` now successfully hand off to TVMime's `LivePreviewEngine` and `MainPlayer`!
-- [x] **Sprint 19: EPG Data:** Bridged StreamVault's `EpgRepository` to read directly from TVMime's `EpgDao`.
+## 🚨 IMMEDIATE ACTION REQUIRED: THE PHOENIX PURGE
 
-## 🏃 Next Up (Post-MVP Enhancements)
-- [ ] Connect `Media3PlayerEngine` timeshift parameters for DVR functionality.
-- [ ] Persist the Settings in-memory map to actual Android DataStore.
+**Context:** We are abandoning the Dagger Hilt monolithic UI transplant. We are moving to Stateless Compose UIs powered by Orchestrator Routes.
+
+### Sprint 20: The Purge & The Orchestrator
+- [ ] **Purge Hilt:** Remove all Dagger Hilt dependencies, annotations (`@HiltAndroidApp`, `@AndroidEntryPoint`), and the `MockDomainModule.kt` stubs.
+- [ ] **Clean AppDatabase Wiring:** Ensure `AppDatabase` (Room) is accessible via standard manual DI or ViewModel factories.
+- [ ] **Build Stateless `LiveTvGrid`:** Create a pure, dumb `@Composable` that accepts lists of categories and channels. Clone the visual modifiers (focus, padding) from StreamVault, but use `DesignSystemTokens`.
+- [ ] **Wire `LiveTvRoute`:** Create the orchestrator. Collect state from `LiveTvViewModel` (which reads from our Room DB) and pass it to `LiveTvGrid`. Verify clicking a channel hands off the stream URL to ExoPlayer.
+
+### Sprint 21: VOD & EPG (Stateless)
+- [ ] **Stateless EPG Grid:** Clone the visual timeline grid from StreamVault. Wire to `EpgRoute`.
+- [ ] **Stateless VOD Grid:** Clone TMDB poster grid. Wire to `VodRoute`.
+- [ ] **Timeshift/DVR:** Connect `Media3PlayerEngine` timeshift parameters for Catch-up TV.
+
+### Sprint 22: Settings & Polish
+- [ ] **DataStore Migration:** Migrate the `MemoryPrefs` settings map to actual Android `DataStore` or `SharedPreferences` so settings persist across reboots.
+- [ ] **OTA Verification:** Tag `v3.0.0-RC1` and ensure the GitHub Actions pipeline builds the APK and Vercel OTA URL points to it correctly.
