@@ -41,7 +41,7 @@ fun StatelessAppShell(
                     text = "TVMime",
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(horizontal = 24.dp, bottom = 24.dp)
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
                 )
 
                 StatelessRailButton(
