@@ -9,11 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class SyncManagerM3uImporter @Inject constructor(
+class SyncManagerM3uImporter constructor(
     private val okHttpClient: OkHttpClient,
     private val catalogSyncDao: CatalogSyncDao,
     private val appDatabase: AppDatabase

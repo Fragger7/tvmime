@@ -1,12 +1,14 @@
 package com.tvmime.tv.ui.navigation
 
+import android.app.Application
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tvmime.tv.ui.livetv.LiveTvScreen
+import com.tvmime.tv.ui.livetv.LiveTvRoute
 import com.tvmime.tv.ui.onboarding.OnboardingScreen
 import com.tvmime.tv.viewmodel.TvMainViewModel
 
@@ -20,8 +22,13 @@ fun TvMimeNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String = Destinations.ONBOARDING
 ) {
-    // Shared ViewModel across the graph
-    val sharedViewModel: TvMainViewModel = hiltViewModel()
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+    
+    // Fallback simple factory if we don't have DI. TvMainViewModel might need to be refactored too.
+    val sharedViewModel: TvMainViewModel = viewModel(
+        factory = TvMainViewModel.Factory(application)
+    )
 
     NavHost(
         navController = navController,
@@ -38,8 +45,11 @@ fun TvMimeNavHost(
             )
         }
         composable(Destinations.LIVE_TV) {
-            val svNavViewModel: com.tvmime.tv.sv_navigation.StreamVaultNavViewModel = hiltViewModel()
-            com.tvmime.tv.sv_ui.theme.StreamVaultTheme { com.tvmime.tv.sv_navigation.AppNavigation(svNavViewModel) }
+            LiveTvRoute(
+                onNavigateToPlayer = { streamUrl ->
+                    // Navigate to player. To be implemented in next sprint.
+                }
+            )
         }
     }
 }

@@ -1,23 +1,27 @@
 package com.tvmime.tv.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.tvmime.db.AppDatabase
 import com.tvmime.db.entity.CategoryEntity
 import com.tvmime.db.entity.ChannelEntity
 import com.tvmime.tv.player.EngineController
+import com.tvmime.tv.player.LivePreviewEngine
+import com.tvmime.tv.player.MainPlayer
 import com.tvmime.tv.sync.SyncManagerM3uImporter
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import okhttp3.OkHttpClient
 
-@HiltViewModel
-class TvMainViewModel @Inject constructor(
+class TvMainViewModel(
+    application: Application,
     private val database: AppDatabase,
     private val engineController: EngineController,
     private val syncManager: SyncManagerM3uImporter
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val activePortalId = "mock_portal_123" // Hardcoded for this UI sprint
 
@@ -138,6 +142,22 @@ class TvMainViewModel @Inject constructor(
             } else {
                 onError("No active M3U portal found on this account.")
             }
+        }
+    }
+
+    class Factory(private val application: Application) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(TvMainViewModel::class.java)) {
+                val db = AppDatabase.getInstance(application)
+                val okHttpClient = OkHttpClient()
+                val mainPlayer = MainPlayer(application)
+                val livePreviewEngine = LivePreviewEngine(application, okHttpClient) { false } // Mock mainPlayerIsActive
+                val engineController = EngineController(livePreviewEngine, mainPlayer)
+                val syncManager = SyncManagerM3uImporter(okHttpClient, db.catalogSyncDao(), db)
+                return TvMainViewModel(application, db, engineController, syncManager) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
