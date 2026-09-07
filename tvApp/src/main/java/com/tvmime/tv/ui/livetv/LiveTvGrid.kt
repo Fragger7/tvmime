@@ -57,7 +57,6 @@ fun LiveTvGrid(
                 val isSelected = category.categoryId == selectedCategoryId
                 Surface(
                     onClick = { onCategorySelected(category) },
-                    selected = isSelected,
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(8.dp)),
                     colors = ClickableSurfaceDefaults.colors(
                         containerColor = if (isSelected) MaterialTheme.colorScheme.surfaceVariant else Color.Transparent,
