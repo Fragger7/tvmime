@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -64,9 +62,6 @@ android {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.room.runtime)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation(libs.androidx.activity.compose)
