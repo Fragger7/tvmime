@@ -107,6 +107,19 @@ class TvMainViewModel(
         engineController.teardownAll()
     }
 
+    private val prefs = application.getSharedPreferences("tvmime_prefs", Context.MODE_PRIVATE)
+
+    val isUserLoggedIn: Boolean
+        get() = prefs.getBoolean("is_logged_in", false)
+
+    fun logout(onComplete: () -> Unit) {
+        prefs.edit().putBoolean("is_logged_in", false).apply()
+        viewModelScope.launch {
+            database.clearAllTables() // Clear the local cache
+            onComplete()
+        }
+    }
+
     private val firebaseClient = com.tvmime.sync.FirebaseSyncClient()
 
     fun startFirebaseSyncListener(sessionCode: String, onSuccess: () -> Unit) {
@@ -124,6 +137,7 @@ class TvMainViewModel(
                     // In a real app we would now call fetchPortals(session)
                     // For the UI demo, we will just trigger the mock ingestion
                     triggerMockSync("https://iptv-org.github.io/iptv/countries/us.m3u")
+                    prefs.edit().putBoolean("is_logged_in", true).apply()
                     onSuccess()
                     break
                 }
@@ -165,6 +179,7 @@ class TvMainViewModel(
                         com.tvmime.db.entity.PortalEntity.fromDomain(activePortal, System.currentTimeMillis())
                     )
                     syncManager.importPlaylist(activePortal.id, activePortal.m3uUrl!!)
+                    prefs.edit().putBoolean("is_logged_in", true).apply()
                     onSuccess()
                 }.onFailure {
                     onError("Failed to ingest playlist.")

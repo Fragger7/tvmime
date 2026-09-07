@@ -28,18 +28,48 @@ object Destinations {
     }
 }
 
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.tvmime.tv.ui.common.StatelessAppShell
+
 @Composable
 fun TvMimeNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Destinations.ONBOARDING
+    startDestination: String = Destinations.ONBOARDING,
+    sharedViewModel: TvMainViewModel
 ) {
-    val context = LocalContext.current
-    val application = context.applicationContext as Application
-    
-    val sharedViewModel: TvMainViewModel = viewModel(
-        factory = TvMainViewModel.Factory(application)
-    )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: startDestination
 
+    val isFullScreen = currentRoute == Destinations.ONBOARDING || currentRoute == Destinations.PLAYER
+
+    if (isFullScreen) {
+        NavHostComponent(navController, sharedViewModel, startDestination)
+    } else {
+        StatelessAppShell(
+            currentRoute = currentRoute,
+            onNavigate = { route ->
+                val dest = when(route) {
+                    "LIVETV" -> Destinations.LIVE_TV
+                    else -> Destinations.LIVE_TV
+                }
+                navController.navigate(dest) {
+                    popUpTo(navController.graph.startDestinationId)
+                    launchSingleTop = true
+                }
+            }
+        ) {
+            NavHostComponent(navController, sharedViewModel, startDestination)
+        }
+    }
+}
+
+@Composable
+fun NavHostComponent(
+    navController: NavHostController,
+    sharedViewModel: TvMainViewModel,
+    startDestination: String
+) {
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -69,6 +99,16 @@ fun TvMimeNavHost(
             PlayerRoute(
                 streamUrl = streamUrl,
                 viewModel = sharedViewModel
+            )
+        }
+        composable("SETTINGS") {
+            com.tvmime.tv.ui.settings.SettingsScreen(
+                viewModel = sharedViewModel,
+                onLogoutSuccess = {
+                    navController.navigate(Destinations.ONBOARDING) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
             )
         }
     }

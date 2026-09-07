@@ -33,7 +33,7 @@ fun LiveTvGrid(
     Row(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            
     ) {
         // Left Column: Categories
         TvLazyColumn(
