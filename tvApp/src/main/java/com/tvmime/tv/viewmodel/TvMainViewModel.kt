@@ -28,6 +28,11 @@ class TvMainViewModel(
     private val _selectedCategoryId = MutableStateFlow<String?>(null)
     val selectedCategoryId = _selectedCategoryId.asStateFlow()
 
+    val activeEngineState = engineController.activeEngine
+        .flatMapLatest { it.currentState }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), com.tvmime.tv.player.EngineState.IDLE)
+
+
     // 1. Reactive Data Streams from SQLite
     val categories: StateFlow<List<CategoryEntity>> = database.categoryDao()
         .getCategories(activePortalId, "LIVE")

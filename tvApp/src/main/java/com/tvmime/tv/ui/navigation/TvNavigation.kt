@@ -5,16 +5,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.tvmime.tv.ui.livetv.LiveTvRoute
+import com.tvmime.tv.ui.player.PlayerRoute
 import com.tvmime.tv.ui.onboarding.OnboardingScreen
 import com.tvmime.tv.viewmodel.TvMainViewModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 object Destinations {
     const val ONBOARDING = "onboarding"
     const val LIVE_TV = "live_tv"
+    const val PLAYER = "player/{streamUrl}"
+    
+    fun createPlayerRoute(streamUrl: String): String {
+        val encodedUrl = URLEncoder.encode(streamUrl, StandardCharsets.UTF_8.toString())
+        return "player/$encodedUrl"
+    }
 }
 
 @Composable
@@ -25,7 +36,6 @@ fun TvMimeNavHost(
     val context = LocalContext.current
     val application = context.applicationContext as Application
     
-    // Fallback simple factory if we don't have DI. TvMainViewModel might need to be refactored too.
     val sharedViewModel: TvMainViewModel = viewModel(
         factory = TvMainViewModel.Factory(application)
     )
@@ -47,8 +57,18 @@ fun TvMimeNavHost(
         composable(Destinations.LIVE_TV) {
             LiveTvRoute(
                 onNavigateToPlayer = { streamUrl ->
-                    // Navigate to player. To be implemented in next sprint.
+                    navController.navigate(Destinations.createPlayerRoute(streamUrl))
                 }
+            )
+        }
+        composable(
+            route = Destinations.PLAYER,
+            arguments = listOf(navArgument("streamUrl") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val streamUrl = backStackEntry.arguments?.getString("streamUrl") ?: ""
+            PlayerRoute(
+                streamUrl = streamUrl,
+                viewModel = sharedViewModel
             )
         }
     }
