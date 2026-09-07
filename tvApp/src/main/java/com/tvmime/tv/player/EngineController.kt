@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class EngineController constructor(
-    private val livePreviewEngine: LivePreviewEngine,
-    private val mainPlayer: MainPlayer
+    val livePreviewEngine: LivePreviewEngine,
+    val mainPlayer: MainPlayer
 ) {
     companion object {
         const val SURFACE_HANDOFF_MS = 508L // Solves 0x80001000 MediaCodec claim failure

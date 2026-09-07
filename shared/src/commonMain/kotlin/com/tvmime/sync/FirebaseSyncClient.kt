@@ -123,7 +123,7 @@ class FirebaseSyncClient(
                 val syncSeries = fields["syncSeries"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
                 val expiryDate = fields["expiryDate"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.contentOrNull
 
-                if (serverUrl.isNotBlank() && username.isNotBlank()) {
+                if (serverUrl.isNotBlank() || !m3uUrl.isNullOrBlank()) {
                     portals.add(
                         PortalConfig(
                             id = docId,
@@ -197,7 +197,7 @@ class FirebaseSyncClient(
                 val syncSeries = fields["syncSeries"]?.jsonObject?.get("booleanValue")?.jsonPrimitive?.booleanOrNull ?: true
                 val expiryDate = fields["expiryDate"]?.jsonObject?.get("stringValue")?.jsonPrimitive?.contentOrNull
 
-                if (serverUrl.isNotBlank() && username.isNotBlank()) {
+                if (serverUrl.isNotBlank() || !m3uUrl.isNullOrBlank()) {
                     portals.add(
                         PortalConfig(
                             id = docId,
